@@ -2,8 +2,6 @@
 -- Last modification date: 2016-03-24 18:47:45.761
 
 
-
-
 -- tables
 -- Table Challenges
 CREATE TABLE Challenges (
@@ -16,32 +14,28 @@ CREATE TABLE Challenges (
 
 -- Table Goal
 CREATE TABLE Goal (
-    id int  NOT NULL,
+    id int  NOT NULL AUTO_INCREMENT,
     GoalWeight int  NOT NULL,
-    FinishDate int  NOT NULL,
     ActivityGoal varchar(255)  NOT NULL,
     MuscleGroup varchar(255)  NOT NULL,
-    Steps int  NOT NULL,
     CONSTRAINT Goal_pk PRIMARY KEY (id)
 );
 
 -- Table Progress
 CREATE TABLE Progress (
-    id int  NOT NULL,
+    id int NOT NULL AUTO_INCREMENT,
     Day date  NOT NULL,
-    CaloriesIn int  NOT NULL,
-    CaloriesOut int  NOT NULL,
-    Weight int  NOT NULL,
-    Carbs int  NOT NULL,
-    Protein int  NOT NULL,
-    Fat int  NOT NULL,
-    Steps int  NOT NULL,
+    CaloriesIn int,
+    CaloriesOut int,
+    Weight int,
+    Miles int, 
+    Steps int,
     CONSTRAINT Progress_pk PRIMARY KEY (id)
 );
 
 -- Table User
 CREATE TABLE User (
-    id int  NOT NULL,
+    id int  NOT NULL AUTO_INCREMENT,
     FirstName varchar(255)  NOT NULL,
     LastName varchar(255)  NOT NULL,
     Username varchar(255)  NOT NULL,
@@ -56,13 +50,10 @@ CREATE TABLE User (
     Points int  NOT NULL,
     ActivityLevel int  NOT NULL,
     BMR int  NOT NULL,
-    CurrentDailyChallenge varchar(255)  NOT NULL,
-    CurrentWeeklyChallenge varchar(255)  NOT NULL,
+    CurrentDailyChallenge varchar(255),
+    CurrentWeeklyChallenge varchar(255),
     CONSTRAINT User_pk PRIMARY KEY (id)
 );
-
-
-
 
 
 
