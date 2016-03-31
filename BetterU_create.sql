@@ -14,7 +14,7 @@ CREATE TABLE Challenges (
 
 -- Table Goal
 CREATE TABLE Goal (
-    id int  NOT NULL AUTO_INCREMENT,
+    id int  NOT NULL,
     GoalWeight int  NOT NULL,
     ActivityGoal varchar(255)  NOT NULL,
     MuscleGroup varchar(255)  NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE Goal (
 
 -- Table Progress
 CREATE TABLE Progress (
-    id int NOT NULL AUTO_INCREMENT,
+    id int NOT NULL,
     Day date  NOT NULL,
     CaloriesIn int,
     CaloriesOut int,
