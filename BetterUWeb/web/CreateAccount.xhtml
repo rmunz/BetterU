@@ -81,6 +81,20 @@ Copyright © 2016 Ojas Mhetar. All rights reserved.
                                 required="true" label="Confirm Password">
                     </h:inputSecret>
                     <p:message for="confirmPassword" display="icon"/>
+                    
+                    <p:outputLabel for="security_ques" value="Security Question" />
+                    <h:selectOneMenu id="security_ques" value="#{accountManager.security_question}" required="true">
+                        <f:selectItems value="#{accountManager.security_questions}"/>
+                    </h:selectOneMenu>
+                    <p:message for="security_ques" display="icon" />                    
+                  
+                    <p:outputLabel for="security_ans" value="Answer" />
+                    <h:inputText id="security_ans" value="#{accountManager.security_answer}" 
+                                 required="true" label="city">
+                        <f:validateLength minimum="4" />
+                    </h:inputText>
+                    <p:message for="security_ans" display="icon" />
+                    
                 </h:panelGrid>
             </p:panel>
             <h:outputLabel id="error" value="#{accountManager.statusMessage}"  />

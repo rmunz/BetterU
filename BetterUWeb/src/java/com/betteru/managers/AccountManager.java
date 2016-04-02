@@ -281,8 +281,8 @@ public class AccountManager implements Serializable {
                 user.setHeight(height);
                 user.setWeight(weight);
                 user.setAge(20);
-                //user.setSecurityQuestion(security_question);
-                //user.setSecurityAnswer(security_answer);
+                user.setSecurityQuestion(security_question);
+                user.setSecurityAnswer(security_answer);
                 user.setEmail(email);
                 user.setUsername(username);                
                 user.setPassword(password);

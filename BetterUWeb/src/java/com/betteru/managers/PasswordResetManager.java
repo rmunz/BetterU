@@ -66,22 +66,22 @@ public class PasswordResetManager implements Serializable{
         }
     }
     
-//    public String securityquestionSubmit() {
-//        User user = userFacade.findByUsername(username);
-//        if (user.getSecurityAnswer().equals(answer)) {
-//            message = "";
-//            return "ResetPassword?faces-redirect=true";
-//        }
-//        else {
-//            message = "Answer incorrect";
-//            return "SecurityQuestion?faces-redirect=true";
-//        }
-//    }
-//    
-//    public String getSecurityQuestion() {
-//        int question = userFacade.findByUsername(username).getSecurityQuestion();
-//        return Constants.QUESTIONS[question];
-//    }
+    public String securityquestionSubmit() {
+        User user = userFacade.findByUsername(username);
+        if (user.getSecurityAnswer().equals(answer)) {
+            message = "";
+            return "ResetPassword?faces-redirect=true";
+        }
+        else {
+            message = "Answer incorrect";
+            return "SecurityQuestion?faces-redirect=true";
+        }
+    }
+    
+    public String getSecurityQuestion() {
+        int question = userFacade.findByUsername(username).getSecurityQuestion();
+        return Constants.QUESTIONS[question];
+    }
 
     public String getAnswer() {
         return answer;

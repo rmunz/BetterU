@@ -41,6 +41,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
     @NamedQuery(name = "User.findByPoints", query = "SELECT u FROM User u WHERE u.points = :points"),
     @NamedQuery(name = "User.findByActivityLevel", query = "SELECT u FROM User u WHERE u.activityLevel = :activityLevel"),
+    @NamedQuery(name = "User.findBySecurityQuestion", query = "SELECT u FROM User u WHERE u.securityQuestion = :securityQuestion"),
+    @NamedQuery(name = "User.findBySecurityAnswer", query = "SELECT u FROM User u WHERE u.securityAnswer = :securityAnswer"),
     @NamedQuery(name = "User.findByBmr", query = "SELECT u FROM User u WHERE u.bmr = :bmr"),
     @NamedQuery(name = "User.findByCurrentDailyChallenge", query = "SELECT u FROM User u WHERE u.currentDailyChallenge = :currentDailyChallenge"),
     @NamedQuery(name = "User.findByCurrentWeeklyChallenge", query = "SELECT u FROM User u WHERE u.currentWeeklyChallenge = :currentWeeklyChallenge")})
@@ -112,6 +114,15 @@ public class User implements Serializable {
     private int activityLevel;
     @Basic(optional = false)
     @NotNull
+    @Column(name = "security_question")
+    private int securityQuestion;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    @Column(name = "security_answer")
+    private String securityAnswer;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "BMR")
     private int bmr;
     @Size(max = 255)
@@ -128,7 +139,7 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public User(Integer id, String firstName, String lastName, String username, String password, int age, Character gender, int height, int weight, int goalID, Character units, String email, int points, int activityLevel, int bmr) {
+    public User(Integer id, String firstName, String lastName, String username, String password, int age, Character gender, int height, int weight, int goalID, Character units, String email, int points, int activityLevel, int securityQuestion, String securityAnswer, int bmr) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -143,6 +154,8 @@ public class User implements Serializable {
         this.email = email;
         this.points = points;
         this.activityLevel = activityLevel;
+        this.securityQuestion = securityQuestion;
+        this.securityAnswer = securityAnswer;
         this.bmr = bmr;
     }
 
@@ -280,6 +293,22 @@ public class User implements Serializable {
 
     public void setCurrentWeeklyChallenge(String currentWeeklyChallenge) {
         this.currentWeeklyChallenge = currentWeeklyChallenge;
+    }
+    
+    public int getSecurityQuestion() {
+        return securityQuestion;
+    }
+
+    public void setSecurityQuestion(int securityQuestion) {
+        this.securityQuestion = securityQuestion;
+    }
+
+    public String getSecurityAnswer() {
+        return securityAnswer;
+    }
+
+    public void setSecurityAnswer(String securityAnswer) {
+        this.securityAnswer = securityAnswer;
     }
 
     @Override
