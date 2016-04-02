@@ -58,6 +58,15 @@ CREATE TABLE UsersProgress (
     PRIMARY KEY (uid, pid)
 );
 
+-- User profile picture
+CREATE TABLE Photo
+(
+   id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
+   extension ENUM('jpeg', 'jpg', 'png') NOT NULL,
+   user_id INT,
+   FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE
+);
+
 INSERT INTO User (FirstName, LastName, Username, Password, Age, Gender, Height, Weight, Units, Email, Points, ActivityLevel, BMR, GoalType,
     GoalWeight, ActivityGoal, DailyChallengeIndex, DCSkipped, WeeklyChallengeIndex, WCSkipped, SecurityQuestion, SecurityAnswer) VALUES
 ('John', 'Doe', 'jdoe', 'password', '20', 'M', '65', '155', 'I', 'jdoe@vt.edu', '0', '0', '1724', '4', '130', 'Very Active', '4', '1', '2', '1', '3', 'Virginia'),
