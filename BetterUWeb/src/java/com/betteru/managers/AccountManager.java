@@ -280,11 +280,22 @@ public class AccountManager implements Serializable {
                 user.setLastName(lastName);                
                 user.setHeight(height);
                 user.setWeight(weight);
+                user.setAge(20);
                 //user.setSecurityQuestion(security_question);
                 //user.setSecurityAnswer(security_answer);
                 user.setEmail(email);
                 user.setUsername(username);                
                 user.setPassword(password);
+                user.setBmr(height);
+                user.setActivityLevel(1);
+                user.setCurrentDailyChallenge("Test");
+                user.setCurrentWeeklyChallenge("Test");
+                user.setGender('F');
+                user.setGoalID(1);
+                user.setPoints(0);
+                user.setUnits('I');
+              
+             
                 userFacade.create(user);                
             } catch (EJBException e) {
                 username = "";
