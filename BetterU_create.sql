@@ -49,6 +49,8 @@ CREATE TABLE User (
     Email varchar(255)  NOT NULL,
     Points int  NOT NULL,
     ActivityLevel int  NOT NULL,
+    security_question INT NOT NULL,
+    security_answer VARCHAR (255) NOT NULL,
     BMR int  NOT NULL,
     CurrentDailyChallenge varchar(255),
     CurrentWeeklyChallenge varchar(255),
