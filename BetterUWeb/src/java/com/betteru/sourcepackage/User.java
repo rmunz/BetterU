@@ -179,6 +179,28 @@ public class User implements Serializable {
         this.securityAnswer = securityAnswer;
     }
 
+    public Integer calcTargetCals() {
+        int baseline = 0;
+        switch (this.activityLevel) {
+            case 0:
+                baseline = 11;
+                break;
+            case 1:
+                baseline = 12;
+                break;
+            case 2:
+                baseline = 13;
+                break;
+            default:
+                break;
+        }
+        int target = this.weight * baseline + 450; 
+        if (this.goalWeight < this.weight) {
+            target -= 750;
+        }
+        return target;
+    }
+    
     public Integer getId() {
         return id;
     }
