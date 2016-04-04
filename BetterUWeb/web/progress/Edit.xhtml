@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ProgressEditDlg" widgetVar="ProgressEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditProgressTitle}">
+            <h:form id="ProgressEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{progressController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditProgressLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{progressController.selected.id}" title="#{bundle.EditProgressTitle_id}" required="true" requiredMessage="#{bundle.EditProgressRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditProgressLabel_day}" for="day" />
+                        <p:calendar id="day" pattern="MM/dd/yyyy" value="#{progressController.selected.day}" title="#{bundle.EditProgressTitle_day}" required="true" requiredMessage="#{bundle.EditProgressRequiredMessage_day}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditProgressLabel_caloriesIn}" for="caloriesIn" />
+                        <p:inputText id="caloriesIn" value="#{progressController.selected.caloriesIn}" title="#{bundle.EditProgressTitle_caloriesIn}" />
+                        <p:outputLabel value="#{bundle.EditProgressLabel_caloriesOut}" for="caloriesOut" />
+                        <p:inputText id="caloriesOut" value="#{progressController.selected.caloriesOut}" title="#{bundle.EditProgressTitle_caloriesOut}" />
+                        <p:outputLabel value="#{bundle.EditProgressLabel_weight}" for="weight" />
+                        <p:inputText id="weight" value="#{progressController.selected.weight}" title="#{bundle.EditProgressTitle_weight}" />
+                        <p:outputLabel value="#{bundle.EditProgressLabel_miles}" for="miles" />
+                        <p:inputText id="miles" value="#{progressController.selected.miles}" title="#{bundle.EditProgressTitle_miles}" />
+                        <p:outputLabel value="#{bundle.EditProgressLabel_steps}" for="steps" />
+                        <p:inputText id="steps" value="#{progressController.selected.steps}" title="#{bundle.EditProgressTitle_steps}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{progressController.update}" value="#{bundle.Save}" update="display,:ProgressListForm:datalist,:growl" oncomplete="handleSubmit(args, 'ProgressEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="ProgressEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

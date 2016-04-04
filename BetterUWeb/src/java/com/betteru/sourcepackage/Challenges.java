@@ -1,5 +1,5 @@
 /*
- * Created by Ojas Mhetar on 2016.03.30  * 
+ * Created by Ojas Mhetar on 2016.04.03  * 
  * Copyright © 2016 Ojas Mhetar. All rights reserved. * 
  */
 package com.betteru.sourcepackage;
@@ -28,7 +28,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Challenges.findByName", query = "SELECT c FROM Challenges c WHERE c.name = :name"),
     @NamedQuery(name = "Challenges.findByDescription", query = "SELECT c FROM Challenges c WHERE c.description = :description"),
     @NamedQuery(name = "Challenges.findByChallengeType", query = "SELECT c FROM Challenges c WHERE c.challengeType = :challengeType"),
-    @NamedQuery(name = "Challenges.findByPointsAwarded", query = "SELECT c FROM Challenges c WHERE c.pointsAwarded = :pointsAwarded")})
+    @NamedQuery(name = "Challenges.findByPointsAwarded", query = "SELECT c FROM Challenges c WHERE c.pointsAwarded = :pointsAwarded"),
+    @NamedQuery(name = "Challenges.findByInd", query = "SELECT c FROM Challenges c WHERE c.ind = :ind"),
+    @NamedQuery(name = "Challenges.findByGoalType", query = "SELECT c FROM Challenges c WHERE c.goalType = :goalType")})
 public class Challenges implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,6 +54,14 @@ public class Challenges implements Serializable {
     @NotNull
     @Column(name = "PointsAwarded")
     private int pointsAwarded;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Ind")
+    private int ind;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "GoalType")
+    private int goalType;
 
     public Challenges() {
     }
@@ -60,11 +70,13 @@ public class Challenges implements Serializable {
         this.name = name;
     }
 
-    public Challenges(String name, String description, String challengeType, int pointsAwarded) {
+    public Challenges(String name, String description, String challengeType, int pointsAwarded, int ind, int goalType) {
         this.name = name;
         this.description = description;
         this.challengeType = challengeType;
         this.pointsAwarded = pointsAwarded;
+        this.ind = ind;
+        this.goalType = goalType;
     }
 
     public String getName() {
@@ -97,6 +109,22 @@ public class Challenges implements Serializable {
 
     public void setPointsAwarded(int pointsAwarded) {
         this.pointsAwarded = pointsAwarded;
+    }
+
+    public int getInd() {
+        return ind;
+    }
+
+    public void setInd(int ind) {
+        this.ind = ind;
+    }
+
+    public int getGoalType() {
+        return goalType;
+    }
+
+    public void setGoalType(int goalType) {
+        this.goalType = goalType;
     }
 
     @Override
