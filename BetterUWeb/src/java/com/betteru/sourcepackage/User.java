@@ -286,11 +286,27 @@ public class User implements Serializable {
     public int getBmr() {
         return bmr;
     }
-
+     
     public void setBmr(int bmr) {
         this.bmr = bmr;
     }
 
+    /**
+     * Sets the BMR to the appropriate value according to gender, height, height, and age
+     */
+    public void calculateBMR() {
+        //Women: BMR = 655 + ( 4.35 x weight in pounds ) + ( 4.7 x height in inches ) - ( 4.7 x age in years )
+        //Men: BMR = 66 + ( 6.23 x weight in pounds ) + ( 12.7 x height in inches ) - ( 6.8 x age in year )
+        
+        if (this.gender == 'f') {
+            this.bmr = (int) (655 + (4.35 * this.weight) + (4.7 * this.height) - (4.7 * this.age));
+        }
+        else {
+            this.bmr = (int) (66 + (6.23 * this.weight) + (12.7 * this.height) - (6.8 * this.age));
+        }
+
+    }
+     
     public Integer getGoalType() {
         return goalType;
     }
