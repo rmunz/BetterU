@@ -323,7 +323,7 @@ public class User implements Serializable {
         //Women: BMR = 655 + ( 4.35 x weight in pounds ) + ( 4.7 x height in inches ) - ( 4.7 x age in years )
         //Men: BMR = 66 + ( 6.23 x weight in pounds ) + ( 12.7 x height in inches ) - ( 6.8 x age in year )
         
-        if (this.gender == 'f') {
+        if (this.gender == 'F') {
             this.bmr = (int) (655 + (4.35 * this.weight) + (4.7 * this.height) - (4.7 * this.age));
         }
         else {
