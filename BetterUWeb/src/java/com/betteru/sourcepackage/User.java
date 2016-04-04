@@ -198,6 +198,9 @@ public class User implements Serializable {
         if (this.goalWeight < this.weight) {
             target -= 750;
         }
+        if (this.goalWeight > this.weight) {
+            target += 750;
+        }
         return target;
     }
     
