@@ -36,6 +36,8 @@ CREATE TABLE User (
     Email varchar(255)  NOT NULL,
     Points int  NOT NULL,
     ActivityLevel int  NOT NULL,
+    security_question INT NOT NULL,
+    security_answer VARCHAR (255) NOT NULL,
     BMR int  NOT NULL,
     GoalType int,
     GoalWeight int  NOT NULL,
