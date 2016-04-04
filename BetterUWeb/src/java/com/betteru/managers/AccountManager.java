@@ -29,25 +29,21 @@ public class AccountManager implements Serializable {
  
     // Instance Variables (Properties)
     private String firstName;
-    private String middleName;
     private String lastName;
     private String username;
     private String password;
     private String email;
-    private String statusMessage;
+    private int age;
     private int height;
     private int weight;
-    private String address1;
-    private String address2;
-    private String city;
-    private String state;
-    private int zipcode;
+    private int activityLevel;
+    private String activityGoal;
+    private char gender;
     private int security_question;
     private String security_answer;
         
-    private final String[] listOfStates = Constants.STATES;
     private Map<String, Object> security_questions;
-    
+    private String statusMessage;
     private User selected;
     
     /**
@@ -66,10 +62,15 @@ public class AccountManager implements Serializable {
 //    @EJB
 //    private PhotoFacade photoFacade;
 
-    public String[] getListOfStates() {
-        return listOfStates;
-    }
 
+    public int getAge() {
+        return age;
+    }
+    
+    public void setAge(int age) {
+       this.age = age; 
+    }
+    
     public int getHeight() {
         return height;
     }
@@ -86,6 +87,29 @@ public class AccountManager implements Serializable {
         this.weight = weight;
     }
 
+    public int getActivityLevel(){
+        return activityLevel;
+    }
+    
+    public void setActivityLevel(int level) {
+        this.activityLevel = level;
+    }
+    
+    public String getActivityGoal() {
+        return this.activityGoal;
+    }
+    
+    public void setActivityGoal(String goal) {
+        this.activityGoal = goal;
+    }
+    
+    public char getGender() {
+        return gender;
+    }
+    
+    public void setGender(char gender) {
+        this.gender = gender;
+    }
     /**
      * Creates a new instance of AccountManager
      */
@@ -104,14 +128,6 @@ public class AccountManager implements Serializable {
      */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
     }
 
     /**
@@ -168,46 +184,6 @@ public class AccountManager implements Serializable {
      */
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getAddress1() {
-        return address1;
-    }
-
-    public void setAddress1(String address1) {
-        this.address1 = address1;
-    }
-
-    public String getAddress2() {
-        return address2;
-    }
-
-    public void setAddress2(String address2) {
-        this.address2 = address2;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public int getZipcode() {
-        return zipcode;
-    }
-
-    public void setZipcode(int zipcode) {
-        this.zipcode = zipcode;
     }
     
     public int getSecurity_question() {
@@ -280,20 +256,19 @@ public class AccountManager implements Serializable {
                 user.setLastName(lastName);                
                 user.setHeight(height);
                 user.setWeight(weight);
-                user.setAge(20);
+                user.setAge(age);
                 user.setSecurityQuestion(security_question);
                 user.setSecurityAnswer(security_answer);
                 user.setEmail(email);
                 user.setUsername(username);                
                 user.setPassword(password);
-                user.setBmr(height);
-                user.setActivityLevel(1);
-                user.setActivityGoal("Lose weight");
-                user.setGender('F');
+                user.calculateBMR();
+                user.setActivityLevel(activityLevel);
+                user.setActivityGoal(activityGoal);
+                user.setGender(gender);
                 user.setPoints(0);
                 user.setUnits('I');
               
-             
                 userFacade.create(user);                
             } catch (EJBException e) {
                 username = "";
@@ -399,8 +374,8 @@ public class AccountManager implements Serializable {
 
     public String logout() {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().clear();
-        username = firstName = middleName = lastName = password = email = statusMessage = "";
-        address1 = address2 = city = state = security_answer = "";
+        username = firstName = lastName = password = email = statusMessage = "";
+        security_answer = "";
         height = weight = security_question = 0;
         
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();

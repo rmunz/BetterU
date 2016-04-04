@@ -179,6 +179,31 @@ public class User implements Serializable {
         this.securityAnswer = securityAnswer;
     }
 
+    public Integer calcTargetCals() {
+        int baseline = 0;
+        switch (this.activityLevel) {
+            case 0:
+                baseline = 11;
+                break;
+            case 1:
+                baseline = 12;
+                break;
+            case 2:
+                baseline = 13;
+                break;
+            default:
+                break;
+        }
+        int target = this.weight * baseline + 450; 
+        if (this.goalWeight < this.weight) {
+            target -= 750;
+        }
+        if (this.goalWeight > this.weight) {
+            target += 750;
+        }
+        return target;
+    }
+    
     public Integer getId() {
         return id;
     }
@@ -298,7 +323,7 @@ public class User implements Serializable {
         //Women: BMR = 655 + ( 4.35 x weight in pounds ) + ( 4.7 x height in inches ) - ( 4.7 x age in years )
         //Men: BMR = 66 + ( 6.23 x weight in pounds ) + ( 12.7 x height in inches ) - ( 6.8 x age in year )
         
-        if (this.gender == 'f') {
+        if (this.gender == 'F') {
             this.bmr = (int) (655 + (4.35 * this.weight) + (4.7 * this.height) - (4.7 * this.age));
         }
         else {
