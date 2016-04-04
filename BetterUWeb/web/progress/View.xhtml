@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ProgressViewDlg" widgetVar="ProgressViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewProgressTitle}">
+            <h:form id="ProgressViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{progressController.selected != null}">
+                        <h:outputText value="#{bundle.ViewProgressLabel_id}"/>
+                        <h:outputText value="#{progressController.selected.id}" title="#{bundle.ViewProgressTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewProgressLabel_day}"/>
+                        <h:outputText value="#{progressController.selected.day}" title="#{bundle.ViewProgressTitle_day}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewProgressLabel_caloriesIn}"/>
+                        <h:outputText value="#{progressController.selected.caloriesIn}" title="#{bundle.ViewProgressTitle_caloriesIn}"/>
+                        <h:outputText value="#{bundle.ViewProgressLabel_caloriesOut}"/>
+                        <h:outputText value="#{progressController.selected.caloriesOut}" title="#{bundle.ViewProgressTitle_caloriesOut}"/>
+                        <h:outputText value="#{bundle.ViewProgressLabel_weight}"/>
+                        <h:outputText value="#{progressController.selected.weight}" title="#{bundle.ViewProgressTitle_weight}"/>
+                        <h:outputText value="#{bundle.ViewProgressLabel_miles}"/>
+                        <h:outputText value="#{progressController.selected.miles}" title="#{bundle.ViewProgressTitle_miles}"/>
+                        <h:outputText value="#{bundle.ViewProgressLabel_steps}"/>
+                        <h:outputText value="#{progressController.selected.steps}" title="#{bundle.ViewProgressTitle_steps}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="ProgressViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

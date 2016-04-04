@@ -1,9 +1,9 @@
 package com.betteru.jsfclassespackage;
 
-import com.betteru.sourcepackage.Goal;
+import com.betteru.sourcepackage.Photo;
 import com.betteru.jsfclassespackage.util.JsfUtil;
 import com.betteru.jsfclassespackage.util.JsfUtil.PersistAction;
-import com.betteru.sessionbeanpackage.GoalFacade;
+import com.betteru.sessionbeanpackage.PhotoFacade;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,23 +19,23 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@Named("goalController")
+@Named("photoController")
 @SessionScoped
-public class GoalController implements Serializable {
+public class PhotoController implements Serializable {
 
     @EJB
-    private com.betteru.sessionbeanpackage.GoalFacade ejbFacade;
-    private List<Goal> items = null;
-    private Goal selected;
+    private com.betteru.sessionbeanpackage.PhotoFacade ejbFacade;
+    private List<Photo> items = null;
+    private Photo selected;
 
-    public GoalController() {
+    public PhotoController() {
     }
 
-    public Goal getSelected() {
+    public Photo getSelected() {
         return selected;
     }
 
-    public void setSelected(Goal selected) {
+    public void setSelected(Photo selected) {
         this.selected = selected;
     }
 
@@ -45,36 +45,36 @@ public class GoalController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private GoalFacade getFacade() {
+    private PhotoFacade getFacade() {
         return ejbFacade;
     }
 
-    public Goal prepareCreate() {
-        selected = new Goal();
+    public Photo prepareCreate() {
+        selected = new Photo();
         initializeEmbeddableKey();
         return selected;
     }
 
     public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("GoalCreated"));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PhotoCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("GoalUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("PhotoUpdated"));
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("GoalDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("PhotoDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<Goal> getItems() {
+    public List<Photo> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
@@ -109,29 +109,29 @@ public class GoalController implements Serializable {
         }
     }
 
-    public Goal getGoal(java.lang.Integer id) {
+    public Photo getPhoto(java.lang.Integer id) {
         return getFacade().find(id);
     }
 
-    public List<Goal> getItemsAvailableSelectMany() {
+    public List<Photo> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<Goal> getItemsAvailableSelectOne() {
+    public List<Photo> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = Goal.class)
-    public static class GoalControllerConverter implements Converter {
+    @FacesConverter(forClass = Photo.class)
+    public static class PhotoControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            GoalController controller = (GoalController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "goalController");
-            return controller.getGoal(getKey(value));
+            PhotoController controller = (PhotoController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "photoController");
+            return controller.getPhoto(getKey(value));
         }
 
         java.lang.Integer getKey(String value) {
@@ -151,11 +151,11 @@ public class GoalController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Goal) {
-                Goal o = (Goal) object;
+            if (object instanceof Photo) {
+                Photo o = (Photo) object;
                 return getStringKey(o.getId());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Goal.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Photo.class.getName()});
                 return null;
             }
         }

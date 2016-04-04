@@ -1,10 +1,11 @@
 /*
- * Created by Ojas Mhetar on 2016.03.30  * 
+ * Created by Ojas Mhetar on 2016.04.03  * 
  * Copyright © 2016 Ojas Mhetar. All rights reserved. * 
  */
 package com.betteru.sourcepackage;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,10 +14,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -36,16 +39,20 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "User.findByGender", query = "SELECT u FROM User u WHERE u.gender = :gender"),
     @NamedQuery(name = "User.findByHeight", query = "SELECT u FROM User u WHERE u.height = :height"),
     @NamedQuery(name = "User.findByWeight", query = "SELECT u FROM User u WHERE u.weight = :weight"),
-    @NamedQuery(name = "User.findByGoalID", query = "SELECT u FROM User u WHERE u.goalID = :goalID"),
     @NamedQuery(name = "User.findByUnits", query = "SELECT u FROM User u WHERE u.units = :units"),
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
     @NamedQuery(name = "User.findByPoints", query = "SELECT u FROM User u WHERE u.points = :points"),
     @NamedQuery(name = "User.findByActivityLevel", query = "SELECT u FROM User u WHERE u.activityLevel = :activityLevel"),
-    @NamedQuery(name = "User.findBySecurityQuestion", query = "SELECT u FROM User u WHERE u.securityQuestion = :securityQuestion"),
-    @NamedQuery(name = "User.findBySecurityAnswer", query = "SELECT u FROM User u WHERE u.securityAnswer = :securityAnswer"),
     @NamedQuery(name = "User.findByBmr", query = "SELECT u FROM User u WHERE u.bmr = :bmr"),
-    @NamedQuery(name = "User.findByCurrentDailyChallenge", query = "SELECT u FROM User u WHERE u.currentDailyChallenge = :currentDailyChallenge"),
-    @NamedQuery(name = "User.findByCurrentWeeklyChallenge", query = "SELECT u FROM User u WHERE u.currentWeeklyChallenge = :currentWeeklyChallenge")})
+    @NamedQuery(name = "User.findByGoalType", query = "SELECT u FROM User u WHERE u.goalType = :goalType"),
+    @NamedQuery(name = "User.findByGoalWeight", query = "SELECT u FROM User u WHERE u.goalWeight = :goalWeight"),
+    @NamedQuery(name = "User.findByActivityGoal", query = "SELECT u FROM User u WHERE u.activityGoal = :activityGoal"),
+    @NamedQuery(name = "User.findByDailyChallengeIndex", query = "SELECT u FROM User u WHERE u.dailyChallengeIndex = :dailyChallengeIndex"),
+    @NamedQuery(name = "User.findByDCSkipped", query = "SELECT u FROM User u WHERE u.dCSkipped = :dCSkipped"),
+    @NamedQuery(name = "User.findByWeeklyChallengeIndex", query = "SELECT u FROM User u WHERE u.weeklyChallengeIndex = :weeklyChallengeIndex"),
+    @NamedQuery(name = "User.findByWCSkipped", query = "SELECT u FROM User u WHERE u.wCSkipped = :wCSkipped"),
+    @NamedQuery(name = "User.findBySecurityQuestion", query = "SELECT u FROM User u WHERE u.securityQuestion = :securityQuestion"),
+    @NamedQuery(name = "User.findBySecurityAnswer", query = "SELECT u FROM User u WHERE u.securityAnswer = :securityAnswer")})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -92,10 +99,6 @@ public class User implements Serializable {
     private int weight;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "GoalID")
-    private int goalID;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "Units")
     private Character units;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
@@ -114,23 +117,39 @@ public class User implements Serializable {
     private int activityLevel;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "security_question")
+    @Column(name = "BMR")
+    private int bmr;
+    @Column(name = "GoalType")
+    private Integer goalType;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "GoalWeight")
+    private int goalWeight;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    @Column(name = "ActivityGoal")
+    private String activityGoal;
+    @Column(name = "DailyChallengeIndex")
+    private Integer dailyChallengeIndex;
+    @Size(max = 255)
+    @Column(name = "DCSkipped")
+    private String dCSkipped;
+    @Column(name = "WeeklyChallengeIndex")
+    private Integer weeklyChallengeIndex;
+    @Column(name = "WCSkipped")
+    private Integer wCSkipped;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "SecurityQuestion")
     private int securityQuestion;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "security_answer")
+    @Column(name = "SecurityAnswer")
     private String securityAnswer;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "BMR")
-    private int bmr;
-    @Size(max = 255)
-    @Column(name = "CurrentDailyChallenge")
-    private String currentDailyChallenge;
-    @Size(max = 255)
-    @Column(name = "CurrentWeeklyChallenge")
-    private String currentWeeklyChallenge;
+    @OneToMany(mappedBy = "userId")
+    private Collection<Photo> photoCollection;
 
     public User() {
     }
@@ -139,7 +158,7 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public User(Integer id, String firstName, String lastName, String username, String password, int age, Character gender, int height, int weight, int goalID, Character units, String email, int points, int activityLevel, int securityQuestion, String securityAnswer, int bmr) {
+    public User(Integer id, String firstName, String lastName, String username, String password, int age, Character gender, int height, int weight, Character units, String email, int points, int activityLevel, int bmr, int goalWeight, String activityGoal, int securityQuestion, String securityAnswer) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -149,14 +168,15 @@ public class User implements Serializable {
         this.gender = gender;
         this.height = height;
         this.weight = weight;
-        this.goalID = goalID;
         this.units = units;
         this.email = email;
         this.points = points;
         this.activityLevel = activityLevel;
+        this.bmr = bmr;
+        this.goalWeight = goalWeight;
+        this.activityGoal = activityGoal;
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
-        this.bmr = bmr;
     }
 
     public Integer getId() {
@@ -231,14 +251,6 @@ public class User implements Serializable {
         this.weight = weight;
     }
 
-    public int getGoalID() {
-        return goalID;
-    }
-
-    public void setGoalID(int goalID) {
-        this.goalID = goalID;
-    }
-
     public Character getUnits() {
         return units;
     }
@@ -279,22 +291,62 @@ public class User implements Serializable {
         this.bmr = bmr;
     }
 
-    public String getCurrentDailyChallenge() {
-        return currentDailyChallenge;
+    public Integer getGoalType() {
+        return goalType;
     }
 
-    public void setCurrentDailyChallenge(String currentDailyChallenge) {
-        this.currentDailyChallenge = currentDailyChallenge;
+    public void setGoalType(Integer goalType) {
+        this.goalType = goalType;
     }
 
-    public String getCurrentWeeklyChallenge() {
-        return currentWeeklyChallenge;
+    public int getGoalWeight() {
+        return goalWeight;
     }
 
-    public void setCurrentWeeklyChallenge(String currentWeeklyChallenge) {
-        this.currentWeeklyChallenge = currentWeeklyChallenge;
+    public void setGoalWeight(int goalWeight) {
+        this.goalWeight = goalWeight;
     }
-    
+
+    public String getActivityGoal() {
+        return activityGoal;
+    }
+
+    public void setActivityGoal(String activityGoal) {
+        this.activityGoal = activityGoal;
+    }
+
+    public Integer getDailyChallengeIndex() {
+        return dailyChallengeIndex;
+    }
+
+    public void setDailyChallengeIndex(Integer dailyChallengeIndex) {
+        this.dailyChallengeIndex = dailyChallengeIndex;
+    }
+
+    public String getDCSkipped() {
+        return dCSkipped;
+    }
+
+    public void setDCSkipped(String dCSkipped) {
+        this.dCSkipped = dCSkipped;
+    }
+
+    public Integer getWeeklyChallengeIndex() {
+        return weeklyChallengeIndex;
+    }
+
+    public void setWeeklyChallengeIndex(Integer weeklyChallengeIndex) {
+        this.weeklyChallengeIndex = weeklyChallengeIndex;
+    }
+
+    public Integer getWCSkipped() {
+        return wCSkipped;
+    }
+
+    public void setWCSkipped(Integer wCSkipped) {
+        this.wCSkipped = wCSkipped;
+    }
+
     public int getSecurityQuestion() {
         return securityQuestion;
     }
@@ -309,6 +361,15 @@ public class User implements Serializable {
 
     public void setSecurityAnswer(String securityAnswer) {
         this.securityAnswer = securityAnswer;
+    }
+
+    @XmlTransient
+    public Collection<Photo> getPhotoCollection() {
+        return photoCollection;
+    }
+
+    public void setPhotoCollection(Collection<Photo> photoCollection) {
+        this.photoCollection = photoCollection;
     }
 
     @Override

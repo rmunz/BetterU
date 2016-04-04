@@ -288,10 +288,8 @@ public class AccountManager implements Serializable {
                 user.setPassword(password);
                 user.setBmr(height);
                 user.setActivityLevel(1);
-                user.setCurrentDailyChallenge("Test");
-                user.setCurrentWeeklyChallenge("Test");
+                user.setActivityGoal("Lose weight");
                 user.setGender('F');
-                user.setGoalID(1);
                 user.setPoints(0);
                 user.setUnits('I');
               

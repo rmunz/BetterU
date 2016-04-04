@@ -4,7 +4,7 @@
  */
 package com.betteru.sessionbeanpackage;
 
-import com.betteru.sourcepackage.Progress;
+import com.betteru.sourcepackage.Photo;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
  * @author ojmhetar
  */
 @Stateless
-public class ProgressFacade extends AbstractFacade<Progress> {
+public class PhotoFacade extends AbstractFacade<Photo> {
 
     @PersistenceContext(unitName = "BetterUWebPU")
     private EntityManager em;
@@ -24,8 +24,8 @@ public class ProgressFacade extends AbstractFacade<Progress> {
         return em;
     }
 
-    public ProgressFacade() {
-        super(Progress.class);
+    public PhotoFacade() {
+        super(Photo.class);
     }
     
 }

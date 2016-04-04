@@ -1,10 +1,10 @@
 /*
- * Created by Ojas Mhetar on 2016.03.30  * 
+ * Created by Ojas Mhetar on 2016.04.03  * 
  * Copyright © 2016 Ojas Mhetar. All rights reserved. * 
  */
 package com.betteru.sessionbeanpackage;
 
-import com.betteru.sourcepackage.Goal;
+import com.betteru.sourcepackage.UsersProgress;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
  * @author ojmhetar
  */
 @Stateless
-public class GoalFacade extends AbstractFacade<Goal> {
+public class UsersProgressFacade extends AbstractFacade<UsersProgress> {
 
     @PersistenceContext(unitName = "BetterUWebPU")
     private EntityManager em;
@@ -24,8 +24,8 @@ public class GoalFacade extends AbstractFacade<Goal> {
         return em;
     }
 
-    public GoalFacade() {
-        super(Goal.class);
+    public UsersProgressFacade() {
+        super(UsersProgress.class);
     }
     
 }
