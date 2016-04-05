@@ -37,11 +37,19 @@ public class AccountManager implements Serializable {
     private String statusMessage;
     private int height;
     private int weight;
-    private String address1;
-    private String address2;
-    private String city;
-    private String state;
-    private int zipcode;
+    private int age; 
+    private char gender; 
+    private char units; 
+    private int points; 
+    private int activityLevel;
+    private int bmr; 
+    private int goalType; 
+    private int goalWeight; 
+    private String activityGoal;
+    private String dCSkipped; 
+    private int dailyChallengeIndex; 
+    private String wCSkipped; 
+    private int weeklyChallengeIndex; 
     private int security_question;
     private String security_answer;
         
@@ -170,44 +178,100 @@ public class AccountManager implements Serializable {
         this.email = email;
     }
 
-    public String getAddress1() {
-        return address1;
+    public int getAge() {
+        return age;
     }
 
-    public void setAddress1(String address1) {
-        this.address1 = address1;
+    public void setAge(int age) {
+        this.age = age;
     }
 
-    public String getAddress2() {
-        return address2;
+    public Character getGender() {
+        return gender;
     }
 
-    public void setAddress2(String address2) {
-        this.address2 = address2;
+    public void setGender(Character gender) {
+        this.gender = gender;
+    }
+    
+    public int getActivityLevel() {
+        return activityLevel;
     }
 
-    public String getCity() {
-        return city;
+    public void setActivityLevel(int activityLevel) {
+        this.activityLevel = activityLevel;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public int getBmr() {
+        return bmr;
+    }
+     
+    public void setBmr(int bmr) {
+        this.bmr = bmr;
+    }
+    
+    public int getPoints() {
+        return points;
     }
 
-    public String getState() {
-        return state;
+    public void setPoints(int points) {
+        this.points = points;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public Integer getGoalType() {
+        return goalType;
     }
 
-    public int getZipcode() {
-        return zipcode;
+    public void setGoalType(Integer goalType) {
+        this.goalType = goalType;
     }
 
-    public void setZipcode(int zipcode) {
-        this.zipcode = zipcode;
+    public int getGoalWeight() {
+        return goalWeight;
+    }
+
+    public void setGoalWeight(int goalWeight) {
+        this.goalWeight = goalWeight;
+    }
+
+    public String getActivityGoal() {
+        return activityGoal;
+    }
+
+    public void setActivityGoal(String activityGoal) {
+        this.activityGoal = activityGoal;
+    }
+
+    public Integer getDailyChallengeIndex() {
+        return dailyChallengeIndex;
+    }
+
+    public void setDailyChallengeIndex(Integer dailyChallengeIndex) {
+        this.dailyChallengeIndex = dailyChallengeIndex;
+    }
+
+    public String getDCSkipped() {
+        return dCSkipped;
+    }
+
+    public void setDCSkipped(String dCSkipped) {
+        this.dCSkipped = dCSkipped;
+    }
+
+    public Integer getWeeklyChallengeIndex() {
+        return weeklyChallengeIndex;
+    }
+
+    public void setWeeklyChallengeIndex(Integer weeklyChallengeIndex) {
+        this.weeklyChallengeIndex = weeklyChallengeIndex;
+    }
+
+    public String getWCSkipped() {
+        return wCSkipped;
+    }
+
+    public void setWCSkipped(String wCSkipped) {
+        this.wCSkipped = wCSkipped;
     }
     
     public int getSecurity_question() {
@@ -400,8 +464,8 @@ public class AccountManager implements Serializable {
     public String logout() {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().clear();
         username = firstName = middleName = lastName = password = email = statusMessage = "";
-        address1 = address2 = city = state = security_answer = "";
-        height = weight = security_question = 0;
+        security_answer = wCSkipped = dCSkipped = activityGoal = "";
+        height = weight = security_question = points = bmr = age = activityLevel = goalType = goalWeight = dailyChallengeIndex = weeklyChallengeIndex = security_question = 0;
         
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "/index.xhtml?faces-redirect=true";
