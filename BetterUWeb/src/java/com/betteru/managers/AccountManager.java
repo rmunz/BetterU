@@ -274,6 +274,14 @@ public class AccountManager implements Serializable {
         this.wCSkipped = wCSkipped;
     }
     
+    public char getUnits() {
+        return units; 
+    }
+    
+    public void setUnits(char units) { 
+        this.units = units; 
+    }
+    
     public int getSecurity_question() {
         return security_question;
     }
@@ -325,6 +333,7 @@ public class AccountManager implements Serializable {
     public void setSelected(User selected) {
         this.selected = selected;
     }
+   
 
     public String createAccount() {
         
