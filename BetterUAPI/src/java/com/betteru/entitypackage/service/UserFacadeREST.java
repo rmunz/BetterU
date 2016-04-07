@@ -4,7 +4,8 @@
  */
 package com.betteru.entitypackage.service;
 
-import com.betteru.entitypackage.User;
+
+import com.betteru.entitypackage.*;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -72,6 +73,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_JSON})
     public List<User> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+        
         return super.findRange(new int[]{from, to});
     }
 
@@ -85,6 +87,23 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+    
+    /* Added methods */
+     
+    @GET
+    @Path("nextChallenge")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Challenges setNextDailyChallenge() {
+        
+        if (em.createQuery("SELECT c FROM Challenges c WHERE c.ind = 3")
+                .getResultList().isEmpty()) {
+            return null;
+        }
+        else {
+            return (Challenges) em.createQuery("SELECT c FROM Challenges c WHERE c.ind = 3")
+                .getSingleResult();   
+        }
     }
     
 }
