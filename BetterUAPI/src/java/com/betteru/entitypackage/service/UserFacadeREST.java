@@ -91,19 +91,48 @@ public class UserFacadeREST extends AbstractFacade<User> {
     
     /* Added methods */
      
+    /**
+     * Gets (and TODO: sets) the next daily challenge for a specified User
+     * by incrementing to the next Challenge index in the Challenges table.
+     * 
+     * @param id
+     * @return 
+     */
     @GET
-    @Path("nextChallenge")
+    @Path("nextChallenge={uid}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Challenges setNextDailyChallenge() {
+    public Challenges getNextDailyChallenge(@PathParam("uid") int id) {
         
-        if (em.createQuery("SELECT c FROM Challenges c WHERE c.ind = 3")
-                .getResultList().isEmpty()) {
+        if (em.createQuery("SELECT u FROM User u WHERE u.id = :uid")
+                .setParameter("uid", id)
+                .getResultList().isEmpty())
+                {
             return null;
         }
         else {
-            return (Challenges) em.createQuery("SELECT c FROM Challenges c WHERE c.ind = 3")
-                .getSingleResult();   
+            User user = (User) em.createQuery("SELECT u FROM User u WHERE u.id = :uid")
+                .setParameter("uid", id).getSingleResult();
+            // Attempt to increment to next Challenge in Challenges table
+            Integer currentDailyChallengeIndex = this.getProperIndex(user.getDailyChallengeIndex() + 1);
+            return (Challenges) em.createQuery("SELECT c FROM Challenges c WHERE c.ind = :cind")
+                    .setParameter("cind", currentDailyChallengeIndex).getSingleResult();
         }
     }
     
+    /**
+     * Ensures that the index returned by getNextDailyChallenge() does not
+     * exceed the bounds of the Challenges table. Counting for Challenge
+     * indices starts at 1 in the DB.
+     * 
+     * @param currIndex
+     * @return 
+     */
+    private Integer getProperIndex(Integer currIndex) {
+        
+        /**if(challengesFacadeRest.count() < currIndex)
+        {
+            currIndex = 0;
+        }    */   
+        return currIndex;
+    }
 }
