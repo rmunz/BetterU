@@ -59,8 +59,7 @@ public class Progress implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "Day")
-    @Temporal(TemporalType.DATE)
-    private Date day;
+    private Integer day;
     @Column(name = "CaloriesIn")
     private Integer caloriesIn;
     @Column(name = "CaloriesOut")
@@ -71,10 +70,6 @@ public class Progress implements Serializable {
     private Integer miles;
     @Column(name = "Steps")
     private Integer steps;
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date aWeekAgo;
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date aMonthAgo;
     
     public Progress() {
     }
@@ -83,13 +78,11 @@ public class Progress implements Serializable {
         this.id = id;
     }
 
-    public Progress(Integer id, Date day) {
+    public Progress(Integer id, Integer day) {
         this.id = id;
         this.day = day;
         
         DateTime thisDate = new DateTime(day);
-        aWeekAgo = thisDate.minusDays(7).toDate();
-        aMonthAgo = thisDate.minusDays(30).toDate();  
     }
 
     public Integer getId() {
@@ -100,11 +93,11 @@ public class Progress implements Serializable {
         this.id = id;
     }
 
-    public Date getDay() {
+    public Integer getDay() {
         return day;
     }
 
-    public void setDay(Date day) {
+    public void setDay(Integer day) {
         this.day = day;
     }
 

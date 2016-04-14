@@ -28,4 +28,6 @@ public class ProgressFacade extends AbstractFacade<Progress> {
         super(Progress.class);
     }
     
+    
+    
 }

@@ -12,7 +12,7 @@ CREATE TABLE Challenges (
 -- Table Progress
 CREATE TABLE Progress (
     id int NOT NULL,
-    Day date  NOT NULL,
+    Day int  NOT NULL,
     CaloriesIn int,
     CaloriesOut int,
     Weight int,
@@ -48,6 +48,11 @@ CREATE TABLE User (
     WCSkipped int,
     SecurityQuestion int NOT NULL,
     SecurityAnswer varchar(255) NOT NULL,   
+    Breakfast varchar(255),
+    Lunch varchar(255),
+    Dinner varchar(255),
+    Snack varchar(255),
+    Photo varchar(255),
     CONSTRAINT User_pk PRIMARY KEY (id)
 );
 
