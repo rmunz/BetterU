@@ -5,9 +5,6 @@
 package com.betteru.entitypackage;
 
 import java.io.Serializable;
-import java.util.Date;
-import org.joda.time.DateTime;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,8 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -27,21 +22,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "Progress")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Progress.findIdByMonth", query = "SELECT p FROM Progress p WHERE p.id = :id AND p.date BETWEEN :date - 2628000 AND :date"),
-    @NamedQuery(name = "Progress.findIdByWeek", query = "SELECT p FROM Progress p WHERE p.id = :id AND p.date BETWEEN :date - 604800 AND :date"),
-    @NamedQuery(name = "Progress.findIdCaloriesInByMonth", query = "SELECT p.caloriesIn FROM Progress p WHERE p.id = :id AND p.date BETWEEN :date - 2628000 AND :date"),
-    @NamedQuery(name = "Progress.findIdCaloriesInByWeek", query = "SELECT p.caloriesIn FROM Progress p WHERE p.id = :id AND p.date BETWEEN :date - 604800 AND :date"),
-    @NamedQuery(name = "Progress.findIdByCaloriesOutMonth", query = "SELECT p.caloriesOut FROM Progress p WHERE p.date BETWEEN :date - 2628000 AND :date"),
-    @NamedQuery(name = "Progress.findIdByCaloriesOutWeek", query = "SELECT p.caloriesOut FROM Progress p WHERE p.id = :id AND p.date BETWEEN :date - 604800 AND :date"),
-    
-    @NamedQuery(name = "Progress.findIdByWeightMonth", query = "SELECT p.weight FROM Progress p WHERE p.id = :id"),
-    @NamedQuery(name = "Progress.findIdByWeightWeek", query = "SELECT p.weight FROM Progress p WHERE p.id = :id AND p.date BETWEEN :date - 604800 AND :date"),
-    @NamedQuery(name = "Progress.findIdByMilesMonth", query = "SELECT p.miles FROM Progress p WHERE p.id = :id AND p.date BETWEEN :date - 2628000 AND :date"),
-    @NamedQuery(name = "Progress.findIdByMilesWeek", query = "SELECT p.miles FROM Progress p WHERE p.id = :id AND p.date BETWEEN :date - 604800 AND :date"),
-    @NamedQuery(name = "Progress.findIdByStepsMonth", query = "SELECT p.steps FROM Progress p WHERE p.id = :id AND p.date BETWEEN (:date - 2628000) AND :date"),
-    @NamedQuery(name = "Progress.findIdByStepsWeek", query = "SELECT p.steps FROM Progress p WHERE p.id = :id AND p.date BETWEEN (:date - 604800) AND :date"), 
-    
+@NamedQueries({ 
+    @NamedQuery(name = "Progress.findMonth", query = "SELECT p FROM Progress p WHERE p.id = :id AND p.date BETWEEN :aMonthAgo AND :date"),
+    @NamedQuery(name = "Progress.findWeek", query = "SELECT p FROM Progress p WHERE p.id = :id AND p.date BETWEEN :aWeekAgo AND :date"),
+   
     @NamedQuery(name = "Progress.findAll", query = "SELECT p FROM Progress p"),
     @NamedQuery(name = "Progress.findById", query = "SELECT p FROM Progress p WHERE p.id = :id"),
     @NamedQuery(name = "Progress.findByDay", query = "SELECT p FROM Progress p WHERE p.date = :date"),
@@ -61,7 +45,7 @@ public class Progress implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "Day")
-    private Long date;
+    private Integer date;
     @Column(name = "CaloriesIn")
     private Integer caloriesIn;
     @Column(name = "CaloriesOut")
@@ -72,13 +56,7 @@ public class Progress implements Serializable {
     private Integer miles;
     @Column(name = "Steps")
     private Integer steps;
-    //@Column(name = "aWeekAgo")
-   //@Temporal(javax.persistence.TemporalType.DATE)
-   // private Date aWeekAgo;
-   // @Column(name = "aMonthAgo")
-   //@Column(name = "aMonthAgo")
-    //@Temporal(javax.persistence.TemporalType.DATE)
-    //private Date aMonthAgo;
+    
     public Progress() {
         
     }
@@ -87,23 +65,10 @@ public class Progress implements Serializable {
         this.id = id;
     }
 
-    public Progress(Integer id, Long date) {
+    public Progress(Integer id, Integer date) {
         this.id = id;
         this.date = date;
-       /*
-        DateTime thisDate = new DateTime(day);
-        aWeekAgo = thisDate.minusDays(7).toDate();
-        aMonthAgo = thisDate.minusDays(30).toDate();*/
     }
-
-    /*
-    public Date getAMonthAgo() {
-        return aMonthAgo;
-    }
-    
-    public Date getAWeekAgo() {
-        return aWeekAgo;
-    }*/
     
     public Integer getId() {
         return id;
@@ -113,11 +78,11 @@ public class Progress implements Serializable {
         this.id = id;
     }
 
-    public Long getDate() {
+    public Integer getDate() {
         return date;
     }
 
-    public void setDate(Long date) {
+    public void setDate(Integer date) {
         this.date = date;
     }
 

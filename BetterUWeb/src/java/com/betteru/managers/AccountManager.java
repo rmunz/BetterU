@@ -41,6 +41,11 @@ public class AccountManager implements Serializable {
     private char gender;
     private int security_question;
     private String security_answer;
+    private String breakfast;
+    private String lunch;
+    private String dinner;
+    private String snack;
+    private String photo;
         
     private Map<String, Object> security_questions;
     private String statusMessage;
@@ -184,6 +189,46 @@ public class AccountManager implements Serializable {
      */
     public void setEmail(String email) {
         this.email = email;
+    }
+    
+public String getBreakfast() {
+        return breakfast;
+    }
+
+    public void setBreakfast(String breakfast) {
+        this.breakfast = breakfast;
+    }
+    
+        public String getLunch() {
+        return lunch;
+    }
+
+    public void setLunh(String lunch) {
+        this.lunch = lunch;
+    }
+    
+    public String getDinner() {
+        return dinner;
+    }
+
+    public void setDinenr(String dinner) {
+        this.dinner = dinner;
+    }
+    
+    public String getSnack() {
+        return snack;
+    }
+
+    public void setSnack(String snack) {
+        this.snack = snack;
+    }
+    
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
     
     public int getSecurity_question() {

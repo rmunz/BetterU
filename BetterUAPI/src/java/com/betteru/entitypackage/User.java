@@ -164,7 +164,8 @@ public class User implements Serializable {
     @Size(max = 255)
     @Column(name = "Photo")
     private String photo;
-            ;
+    
+    @OneToMany(mappedBy = "userId")
     private Collection<Photo> photoCollection;
 
     public User() {

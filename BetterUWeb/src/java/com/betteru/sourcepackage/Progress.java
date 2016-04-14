@@ -27,18 +27,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "Progress")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Progress.findIdByMonth", query = "SELECT p FROM Progress p WHERE p.id = :id AND p.day BETWEEN :aMonthAgo AND :day"),
-    @NamedQuery(name = "Progress.findIdByWeek", query = "SELECT p FROM Progress p WHERE p.id = :id AND p.day BETWEEN :aWeekAgo AND :day"),
-    @NamedQuery(name = "Progress.findIdCaloriesInByMonth", query = "SELECT p.caloriesIn FROM Progress p WHERE p.id = :id AND p.day BETWEEN :aMonthAgo AND :day"),
-    @NamedQuery(name = "Progress.findIdCaloriesInByWeek", query = "SELECT p.caloriesIn FROM Progress p WHERE p.id = :id AND p.day BETWEEN :aWeekAgo AND :day"),
-    @NamedQuery(name = "Progress.findIdByCaloriesOutMonth", query = "SELECT p.caloriesOut FROM Progress p WHERE p.day BETWEEN :aMonthAgo AND :day"),
-    @NamedQuery(name = "Progress.findIdByCaloriesOutWeek", query = "SELECT p.caloriesOut FROM Progress p WHERE p.id = :id AND p.day BETWEEN :aWeekAgo AND :day"),
-    @NamedQuery(name = "Progress.findIdByWeightMonth", query = "SELECT p.weight FROM Progress p WHERE p.id = :id AND p.day BETWEEN :aMonthAgo AND :day"),
-    @NamedQuery(name = "Progress.findIdByWeightWeek", query = "SELECT p.weight FROM Progress p WHERE p.id = :id AND p.day BETWEEN :aWeekAgo AND :day"),
-    @NamedQuery(name = "Progress.findIdByMilesMonth", query = "SELECT p.miles FROM Progress p WHERE p.id = :id AND p.day BETWEEN :aMonthAgo AND :day"),
-    @NamedQuery(name = "Progress.findIdByMilesWeek", query = "SELECT p.miles FROM Progress p WHERE p.id = :id AND p.day BETWEEN :aWeekAgo AND :day"),
-    @NamedQuery(name = "Progress.findIdByStepsMonth", query = "SELECT p.steps FROM Progress p WHERE p.id = :id AND p.day BETWEEN :aMonthAgo AND :day"),
-    @NamedQuery(name = "Progress.findIdByStepsWeek", query = "SELECT p.steps FROM Progress p WHERE p.id = :id AND p.day BETWEEN :aWeekAgo AND :day"),
+  @NamedQuery(name = "Progress.findMonth", query = "SELECT p FROM Progress p WHERE p.id = :id AND p.date BETWEEN :aMonthAgo AND :date"),
+    @NamedQuery(name = "Progress.findWeek", query = "SELECT p FROM Progress p WHERE p.id = :id AND p.date BETWEEN :aWeekAgo AND :date"),
     
     @NamedQuery(name = "Progress.findAll", query = "SELECT p FROM Progress p"),
     @NamedQuery(name = "Progress.findById", query = "SELECT p FROM Progress p WHERE p.id = :id"),
@@ -81,8 +71,6 @@ public class Progress implements Serializable {
     public Progress(Integer id, Integer day) {
         this.id = id;
         this.day = day;
-        
-        DateTime thisDate = new DateTime(day);
     }
 
     public Integer getId() {
