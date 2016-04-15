@@ -409,7 +409,7 @@ public class User implements Serializable {
         return dinner;
     }
 
-    public void setDinenr(String dinner) {
+    public void setDinner(String dinner) {
         this.dinner = dinner;
     }
     

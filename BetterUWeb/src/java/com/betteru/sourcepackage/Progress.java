@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -60,6 +62,9 @@ public class Progress implements Serializable {
     private Integer miles;
     @Column(name = "Steps")
     private Integer steps;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne
+    private User userId;
     
     public Progress() {
     }
@@ -73,6 +78,15 @@ public class Progress implements Serializable {
         this.day = day;
     }
 
+    public User getUserId() {
+            return userId;
+    }
+    
+    public void setUserId(User userId) {
+            this.userId = userId;
+    }
+    
+    
     public Integer getId() {
         return id;
     }
