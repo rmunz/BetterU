@@ -5,7 +5,6 @@
 package com.betteru.entitypackage;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,8 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -25,10 +22,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "Progress")
 @XmlRootElement
-@NamedQueries({
+@NamedQueries({ 
+    @NamedQuery(name = "Progress.findMonth", query = "SELECT p FROM Progress p WHERE p.id = :id AND p.date BETWEEN :aMonthAgo AND :date"),
+    @NamedQuery(name = "Progress.findWeek", query = "SELECT p FROM Progress p WHERE p.id = :id AND p.date BETWEEN :aWeekAgo AND :date"),
+   
     @NamedQuery(name = "Progress.findAll", query = "SELECT p FROM Progress p"),
     @NamedQuery(name = "Progress.findById", query = "SELECT p FROM Progress p WHERE p.id = :id"),
-    @NamedQuery(name = "Progress.findByDay", query = "SELECT p FROM Progress p WHERE p.day = :day"),
+    @NamedQuery(name = "Progress.findByDay", query = "SELECT p FROM Progress p WHERE p.date = :date"),
     @NamedQuery(name = "Progress.findByCaloriesIn", query = "SELECT p FROM Progress p WHERE p.caloriesIn = :caloriesIn"),
     @NamedQuery(name = "Progress.findByCaloriesOut", query = "SELECT p FROM Progress p WHERE p.caloriesOut = :caloriesOut"),
     @NamedQuery(name = "Progress.findByWeight", query = "SELECT p FROM Progress p WHERE p.weight = :weight"),
@@ -45,8 +45,7 @@ public class Progress implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "Day")
-    @Temporal(TemporalType.DATE)
-    private Date day;
+    private Integer date;
     @Column(name = "CaloriesIn")
     private Integer caloriesIn;
     @Column(name = "CaloriesOut")
@@ -57,19 +56,20 @@ public class Progress implements Serializable {
     private Integer miles;
     @Column(name = "Steps")
     private Integer steps;
-
+    
     public Progress() {
+        
     }
 
     public Progress(Integer id) {
         this.id = id;
     }
 
-    public Progress(Integer id, Date day) {
+    public Progress(Integer id, Integer date) {
         this.id = id;
-        this.day = day;
+        this.date = date;
     }
-
+    
     public Integer getId() {
         return id;
     }
@@ -78,12 +78,12 @@ public class Progress implements Serializable {
         this.id = id;
     }
 
-    public Date getDay() {
-        return day;
+    public Integer getDate() {
+        return date;
     }
 
-    public void setDay(Date day) {
-        this.day = day;
+    public void setDate(Integer date) {
+        this.date = date;
     }
 
     public Integer getCaloriesIn() {
@@ -151,4 +151,5 @@ public class Progress implements Serializable {
         return "com.betteru.entitypackage.Progress[ id=" + id + " ]";
     }
     
+   
 }

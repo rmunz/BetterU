@@ -18,6 +18,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -81,7 +82,27 @@ public class ProgressFacadeREST extends AbstractFacade<Progress> {
     public String countREST() {
         return String.valueOf(super.count());
     }
-
+    
+    @GET
+    @Path("{id}/week/{day}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Progress> getWeek(@PathParam("id") Integer id, @PathParam("day") Integer day) {
+        int aWeekAgo = day - 604800;
+        TypedQuery<Progress> query = em.createNamedQuery("Progress.findWeek", Progress.class)
+                                        .setParameter("date", day).setParameter("id", id).setParameter("aWeekAgo", aWeekAgo);               
+        return query.getResultList();
+    }
+    
+    @GET
+    @Path("{id}/month/{day}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Progress> getMonth(@PathParam("id") Integer id, @PathParam("day") Integer day) {
+        int aMonthAgo = day - 2628000;
+        TypedQuery<Progress> query = em.createNamedQuery("Progress.findMonth", Progress.class)
+                                        .setParameter("date", day).setParameter("id", id).setParameter("aMonthAgo", aMonthAgo);               
+        return query.getResultList();
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
