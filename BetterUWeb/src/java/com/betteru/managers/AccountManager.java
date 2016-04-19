@@ -4,6 +4,7 @@
  */
 package com.betteru.managers;
 
+import com.betteru.sessionbeanpackage.ProgressFacade;
 import com.betteru.sourcepackage.User;
 import com.betteru.sessionbeanpackage.UserFacade;
 import com.betteru.sourcepackage.Progress;
@@ -62,7 +63,16 @@ public class AccountManager implements Serializable {
      */
     @EJB
     private UserFacade userFacade;
-
+    
+    
+ /**
+     * The instance variable 'progressFacade' is annotated with the @EJB annotation.
+     * This means that the GlassFish application server, at runtime, will inject in
+     * this instance variable a reference to the @Stateless session bean UserFacade.
+     */
+    @EJB
+    private ProgressFacade progressFacade;
+    
     /**
      * The instance variable 'photoFacade' is annotated with the @EJB annotation.
      * This means that the GlassFish application server, at runtime, will inject in
@@ -329,7 +339,7 @@ public String getBreakfast() {
                         progress.setMiles(0);
                         progress.setWeight(user.getWeight());
                         progress.setSteps(0);
-                        
+                        progressFacade.create(progress);
                     }
                 };
             
