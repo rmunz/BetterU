@@ -19,7 +19,7 @@ CREATE TABLE Progress (
     Miles int, 
     Steps int,
     UserId int,
-    CONSTRAINT Progress_pk PRIMARY KEY (id),
+    CONSTRAINT Progress_pk PRIMARY KEY (id, Day),
     FOREIGN KEY (UserId) REFERENCES User(id) ON DELETE CASCADE
 );
 

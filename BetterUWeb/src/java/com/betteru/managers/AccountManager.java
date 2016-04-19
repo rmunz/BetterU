@@ -322,7 +322,7 @@ public String getBreakfast() {
               
                 userFacade.create(user);    
                 
-                    ActionListener taskPerformer = new ActionListener() {
+                ActionListener taskPerformer = new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         //...Perform a task...
                         Progress progress = new Progress(user.getId(), (int)Calendar.getInstance().getTimeInMillis());
