@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
-import java.util.List;
 import javax.swing.Timer;
 import java.util.Map;
 import javax.ejb.EJB;
@@ -23,7 +22,6 @@ import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Named;
-import org.joda.time.LocalDate;
  
 @Named(value = "accountManager")
 @SessionScoped
