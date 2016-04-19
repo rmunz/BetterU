@@ -109,10 +109,6 @@ public class Progress implements Serializable {
         this.caloriesIn = caloriesIn;
     }
     
-    public void addCaloriesIn(Integer caloriesIn) {
-        this.caloriesIn += caloriesIn;
-    }
-
     public Integer getCaloriesOut() {
         return caloriesOut;
     }
