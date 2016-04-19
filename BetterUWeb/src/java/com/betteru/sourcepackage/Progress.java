@@ -5,19 +5,16 @@
 package com.betteru.sourcepackage;
 
 import java.io.Serializable;
-import java.util.Date;
-import org.joda.time.DateTime;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -27,6 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "Progress")
+@IdClass(value=ProgressPK.class)
 @XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Progress.findMonth", query = "SELECT p FROM Progress p WHERE p.id = :id AND p.date BETWEEN :aMonthAgo AND :date"),

@@ -5,6 +5,7 @@
 package com.betteru.entitypackage.service;
 
 import com.betteru.entitypackage.Progress;
+import com.betteru.entitypackage.ProgressPK;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -41,25 +42,34 @@ public class ProgressFacadeREST extends AbstractFacade<Progress> {
     public void create(Progress entity) {
         super.create(entity);
     }
-
+    
     @PUT
-    @Path("{id}")
+    @Path("{id}/{day}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, Progress entity) {
+    public void edit(@PathParam("id") Integer id, @PathParam("day") Integer day, Progress entity) {
+        ProgressPK pk = new ProgressPK();
+        pk.setDay(day);
+        pk.setId(id);
         super.edit(entity);
     }
 
     @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") Integer id) {
-        super.remove(super.find(id));
+    @Path("{id}/{day}")
+    public void remove(@PathParam("id") Integer id, @PathParam("day") Integer day) {
+        ProgressPK pk = new ProgressPK();
+        pk.setDay(day);
+        pk.setId(id);
+        super.remove(super.find(pk));
     }
 
     @GET
-    @Path("{id}")
+    @Path("{id}/{day}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Progress find(@PathParam("id") Integer id) {
-        return super.find(id);
+    public Progress find(@PathParam("id") Integer id, @PathParam("day") Integer day) {
+        ProgressPK pk = new ProgressPK();
+        pk.setDay(day);
+        pk.setId(id);
+        return super.find(pk);
     }
 
     @GET

@@ -6,9 +6,13 @@ package com.betteru.managers;
 
 import com.betteru.sourcepackage.User;
 import com.betteru.sessionbeanpackage.UserFacade;
+import com.betteru.sourcepackage.Progress;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.LinkedHashMap;
-import java.util.List;
+import javax.swing.Timer;
 import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -314,18 +318,52 @@ public String getBreakfast() {
                 user.setPoints(0);
                 user.setUnits('I');
               
-                userFacade.create(user);                
+                userFacade.create(user);    
+                
+                ActionListener taskPerformer = new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        //...Perform a task...
+                        Progress progress = new Progress(user.getId(), (int)Calendar.getInstance().getTimeInMillis());
+                        progress.setCaloriesIn(0);
+                        progress.setCaloriesOut(0);
+                        progress.setMiles(0);
+                        progress.setWeight(user.getWeight());
+                        progress.setSteps(0);
+                        
+                    }
+                };
+            
+            //set up refresh timer
+           // Timer timer = new Timer(86400000, taskPerformer);//set delay to 24 hours
+            
+            //test timer set for every 10 minutes
+            Timer timer = new Timer(600000, taskPerformer);
+
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.DAY_OF_MONTH, 1);
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+            c.set(Calendar.MILLISECOND, 0);
+            int msToMidnight = (int)(c.getTimeInMillis()-System.currentTimeMillis());
+            //timer.setInitialDelay(msToMidnight);
+            timer.start(); 
+            
             } catch (EJBException e) {
                 username = "";
                 statusMessage = "Something went wrong while creating your account!";
                 return "";
             }
             initializeSessionMap();
+            
+            
             return "Profile";
         }
         return "";
     }
 
+      
+      
     public String updateAccount() {
         if (statusMessage.isEmpty()) {
             int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
@@ -427,6 +465,5 @@ public String getBreakfast() {
         return "/index.xhtml?faces-redirect=true";
     }
    
-
-
+   
 }

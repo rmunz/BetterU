@@ -9,6 +9,9 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -21,6 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "Progress")
+@IdClass(value=ProgressPK.class)
 @XmlRootElement
 @NamedQueries({ 
     @NamedQuery(name = "Progress.findMonth", query = "SELECT p FROM Progress p WHERE p.id = :id AND p.date BETWEEN :aMonthAgo AND :date"),
@@ -56,6 +60,9 @@ public class Progress implements Serializable {
     private Integer miles;
     @Column(name = "Steps")
     private Integer steps;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne
+    private User userId;
     
     public Progress() {
         
@@ -68,6 +75,14 @@ public class Progress implements Serializable {
     public Progress(Integer id, Integer date) {
         this.id = id;
         this.date = date;
+    }
+    
+    public User getUserId() {
+            return userId;
+    }
+    
+    public void setUserId(User userId) {
+            this.userId = userId;
     }
     
     public Integer getId() {
@@ -93,7 +108,7 @@ public class Progress implements Serializable {
     public void setCaloriesIn(Integer caloriesIn) {
         this.caloriesIn = caloriesIn;
     }
-
+    
     public Integer getCaloriesOut() {
         return caloriesOut;
     }
