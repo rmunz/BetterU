@@ -334,7 +334,11 @@ public String getBreakfast() {
                 };
             
             //set up refresh timer
-            Timer timer = new Timer(86400000, taskPerformer);//set delay to 24 hours
+           // Timer timer = new Timer(86400000, taskPerformer);//set delay to 24 hours
+            
+            //test timer set for every 10 minutes
+            Timer timer = new Timer(600000, taskPerformer);
+
             Calendar c = Calendar.getInstance();
             c.add(Calendar.DAY_OF_MONTH, 1);
             c.set(Calendar.HOUR_OF_DAY, 0);
@@ -342,7 +346,7 @@ public String getBreakfast() {
             c.set(Calendar.SECOND, 0);
             c.set(Calendar.MILLISECOND, 0);
             int msToMidnight = (int)(c.getTimeInMillis()-System.currentTimeMillis());
-            timer.setInitialDelay(msToMidnight);
+            //timer.setInitialDelay(msToMidnight);
             timer.start(); 
             
             } catch (EJBException e) {
