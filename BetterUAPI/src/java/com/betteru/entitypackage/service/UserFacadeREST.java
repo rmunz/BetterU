@@ -46,7 +46,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
         ActionListener taskPerformer = new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         //...Perform a task...
-                        Progress progress = new Progress(entity.getId(), (int)Calendar.getInstance().getTimeInMillis());
+                        Progress progress = new Progress(entity.getId(), (int)Calendar.getInstance().getTimeInMillis()/1000);
                         progress.setCaloriesIn(0);
                         progress.setCaloriesOut(0);
                         progress.setMiles(0);
