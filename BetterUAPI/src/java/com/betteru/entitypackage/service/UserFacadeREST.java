@@ -69,7 +69,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
             c.set(Calendar.MINUTE, 0);
             c.set(Calendar.SECOND, 0);
             c.set(Calendar.MILLISECOND, 0);
-            int msToMidnight = (int)(c.getTimeInMillis()-System.currentTimeMillis());
+           // int msToMidnight = (int)(c.getTimeInMillis()-System.currentTimeMillis());
             //timer.setInitialDelay(msToMidnight);
             timer.start(); 
         super.create(entity);

@@ -44,31 +44,31 @@ public class ProgressFacadeREST extends AbstractFacade<Progress> {
     }
     
     @PUT
-    @Path("{id}/{day}")
+    @Path("{UserId}/{LogDate}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, @PathParam("day") Integer day, Progress entity) {
+    public void edit(@PathParam("UserId") Integer userId, @PathParam("LogDate") Integer logDate, Progress entity) {
         ProgressPK pk = new ProgressPK();
-        pk.setDay(day);
-        pk.setId(id);
+        pk.setDay(logDate);
+        pk.setId(userId);
         super.edit(entity);
     }
 
     @DELETE
-    @Path("{id}/{day}")
-    public void remove(@PathParam("id") Integer id, @PathParam("day") Integer day) {
+    @Path("{UserId}/{LogDate}")
+    public void remove(@PathParam("UserId") Integer userId, @PathParam("LogDate") Integer logDate) {
         ProgressPK pk = new ProgressPK();
-        pk.setDay(day);
-        pk.setId(id);
+        pk.setDay(logDate);
+        pk.setId(userId);
         super.remove(super.find(pk));
     }
 
     @GET
-    @Path("{id}/{day}")
+    @Path("{UserId}/{LogDate}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Progress find(@PathParam("id") Integer id, @PathParam("day") Integer day) {
+    public Progress find(@PathParam("UserId") Integer userId, @PathParam("LogDate") Integer logDate) {
         ProgressPK pk = new ProgressPK();
-        pk.setDay(day);
-        pk.setId(id);
+        pk.setDay(logDate);
+        pk.setId(userId);
         return super.find(pk);
     }
 
@@ -79,12 +79,12 @@ public class ProgressFacadeREST extends AbstractFacade<Progress> {
         return super.findAll();
     }
 
-    @GET
+   /* @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_JSON})
     public List<Progress> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
-    }
+    }*/
 
     @GET
     @Path("count")
@@ -94,22 +94,22 @@ public class ProgressFacadeREST extends AbstractFacade<Progress> {
     }
     
     @GET
-    @Path("{id}/week/{day}")
+    @Path("{UserId}/week/{LogDate}")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<Progress> getWeek(@PathParam("id") Integer id, @PathParam("day") Integer day) {
-        int aWeekAgo = day - 604800;
+    public List<Progress> getWeek(@PathParam("UserId") Integer userId, @PathParam("LogDate") Integer logDate) {
+        int aWeekAgo = logDate - 604800;
         TypedQuery<Progress> query = em.createNamedQuery("Progress.findWeek", Progress.class)
-                                        .setParameter("date", day).setParameter("id", id).setParameter("aWeekAgo", aWeekAgo);               
+                                        .setParameter("LogDate", logDate).setParameter("userId", userId).setParameter("aWeekAgo", aWeekAgo);               
         return query.getResultList();
     }
     
     @GET
-    @Path("{id}/month/{day}")
+    @Path("{UserId}/month/{LogDate}")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<Progress> getMonth(@PathParam("id") Integer id, @PathParam("day") Integer day) {
-        int aMonthAgo = day - 2628000;
+    public List<Progress> getMonth(@PathParam("UserId") Integer userId, @PathParam("LogDate") Integer logDate) {
+        int aMonthAgo = logDate - 2628000;
         TypedQuery<Progress> query = em.createNamedQuery("Progress.findMonth", Progress.class)
-                                        .setParameter("date", day).setParameter("id", id).setParameter("aMonthAgo", aMonthAgo);               
+                                        .setParameter("LogDate", logDate).setParameter("userId", userId).setParameter("aMonthAgo", aMonthAgo);               
         return query.getResultList();
     }
     
