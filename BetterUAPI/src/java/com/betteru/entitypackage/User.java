@@ -164,7 +164,8 @@ public class User implements Serializable {
     @Size(max = 255)
     @Column(name = "Photo")
     private String photo;
-    
+    @Column(name = "TargetCalories")
+    private Integer targetCalories;
     @OneToMany(mappedBy = "userId")
     private Collection<Photo> photoCollection;
 
@@ -438,6 +439,14 @@ public class User implements Serializable {
         this.photoCollection = photoCollection;
     }
 
+    public Integer getTargetCalories() {
+        return targetCalories;
+    }
+    
+    public void setTargetCalories(Integer targetCalories) {
+        this.targetCalories = targetCalories;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

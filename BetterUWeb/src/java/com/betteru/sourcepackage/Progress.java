@@ -27,8 +27,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @IdClass(value=ProgressPK.class)
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Progress.findMonth", query = "SELECT p FROM Progress p WHERE p.userId = :userId AND p.date BETWEEN :aMonthAgo AND :date"),
-    @NamedQuery(name = "Progress.findWeek", query = "SELECT p FROM Progress p WHERE p.userId = :userId AND p.date BETWEEN :aWeekAgo AND :date"),
+  @NamedQuery(name = "Progress.findMonth", query = "SELECT p FROM Progress p WHERE p.userId = :userId AND p.logDate BETWEEN :aMonthAgo AND :logDate"),
+    @NamedQuery(name = "Progress.findWeek", query = "SELECT p FROM Progress p WHERE p.userId = :userId AND p.logDate BETWEEN :aWeekAgo AND :logDate"),
     
     @NamedQuery(name = "Progress.findAll", query = "SELECT p FROM Progress p"),
     @NamedQuery(name = "Progress.findByUserId", query = "SELECT p FROM Progress p WHERE p.userId = :userId"),
@@ -46,7 +46,8 @@ public class Progress implements Serializable {
     @NotNull
     @Column(name = "UserId")
     private Integer userId;
-    //@Basic(optional = false)
+    @Id
+    @Basic(optional = false)
     @NotNull
     @Column(name = "LogDate")
     private Integer logDate;
@@ -60,9 +61,9 @@ public class Progress implements Serializable {
     private Integer miles;
     @Column(name = "Steps")
     private Integer steps;
-    @JoinColumn(name = "user_id", referencedColumnName = "UserId")
-    @ManyToOne
-    private User user;
+    //@JoinColumn(name = "user_id", referencedColumnName = "UserId")
+    //@ManyToOne
+    //private User user;
     
     public Progress() {
     }
@@ -76,6 +77,7 @@ public class Progress implements Serializable {
         this.logDate = logDate;
     }
 
+    /*
     public User getUser() {
             return user;
     }
@@ -83,7 +85,7 @@ public class Progress implements Serializable {
     public void setUser(User user) {
             this.user = user;
     }
-    
+    */
     
     public Integer getUserId() {
         return userId;
