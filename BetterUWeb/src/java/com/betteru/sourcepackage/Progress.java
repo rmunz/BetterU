@@ -44,11 +44,11 @@ public class Progress implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
-    @Column(name = "id")
+    @Column(name = "UserId")
     private Integer id;
-    @Basic(optional = false)
+    //@Basic(optional = false)
     @NotNull
-    @Column(name = "Day")
+    @Column(name = "LogDate")
     private Integer day;
     @Column(name = "CaloriesIn")
     private Integer caloriesIn;
@@ -60,9 +60,9 @@ public class Progress implements Serializable {
     private Integer miles;
     @Column(name = "Steps")
     private Integer steps;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "UserId")
     @ManyToOne
-    private User userId;
+    private User user;
     
     public Progress() {
     }
@@ -76,12 +76,12 @@ public class Progress implements Serializable {
         this.day = day;
     }
 
-    public User getUserId() {
-            return userId;
+    public User getUser() {
+            return user;
     }
     
-    public void setUserId(User userId) {
-            this.userId = userId;
+    public void setUser(User user) {
+            this.user = user;
     }
     
     
