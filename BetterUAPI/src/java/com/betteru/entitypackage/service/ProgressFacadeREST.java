@@ -99,17 +99,17 @@ public class ProgressFacadeREST extends AbstractFacade<Progress> {
     public List<Progress> getWeek(@PathParam("UserId") Integer userId, @PathParam("LogDate") Integer logDate) {
         int aWeekAgo = logDate - 604800;
         TypedQuery<Progress> query = em.createNamedQuery("Progress.findWeek", Progress.class)
-                                        .setParameter("LogDate", logDate).setParameter("UserId", userId).setParameter("aWeekAgo", aWeekAgo);               
+                                        .setParameter("LogDate", logDate).setParameter("userId", userId).setParameter("aWeekAgo", aWeekAgo);               
         return query.getResultList();
     }
     
     @GET
     @Path("{UserId}/month/{LogDate}")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<Progress> getMonth(@PathParam("id") Integer userId, @PathParam("LogDate") Integer logDate) {
+    public List<Progress> getMonth(@PathParam("UserId") Integer userId, @PathParam("LogDate") Integer logDate) {
         int aMonthAgo = logDate - 2628000;
         TypedQuery<Progress> query = em.createNamedQuery("Progress.findMonth", Progress.class)
-                                        .setParameter("LogDate", logDate).setParameter("UserId", userId).setParameter("aMonthAgo", aMonthAgo);               
+                                        .setParameter("LogDate", logDate).setParameter("userId", userId).setParameter("aMonthAgo", aMonthAgo);               
         return query.getResultList();
     }
     

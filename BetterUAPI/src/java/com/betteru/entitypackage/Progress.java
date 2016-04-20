@@ -26,13 +26,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "Progress")
 @IdClass(value=ProgressPK.class)
 @XmlRootElement
-@NamedQueries({ 
-    @NamedQuery(name = "Progress.findMonth", query = "SELECT p FROM Progress p WHERE p.id = :id AND p.date BETWEEN :aMonthAgo AND :date"),
-    @NamedQuery(name = "Progress.findWeek", query = "SELECT p FROM Progress p WHERE p.id = :id AND p.date BETWEEN :aWeekAgo AND :date"),
-   
+@NamedQueries({
+  @NamedQuery(name = "Progress.findMonth", query = "SELECT p FROM Progress p WHERE p.userId = :userId AND p.date BETWEEN :aMonthAgo AND :date"),
+    @NamedQuery(name = "Progress.findWeek", query = "SELECT p FROM Progress p WHERE p.userId = :userId AND p.date BETWEEN :aWeekAgo AND :date"),
+    
     @NamedQuery(name = "Progress.findAll", query = "SELECT p FROM Progress p"),
-    @NamedQuery(name = "Progress.findById", query = "SELECT p FROM Progress p WHERE p.id = :id"),
-    @NamedQuery(name = "Progress.findByDay", query = "SELECT p FROM Progress p WHERE p.date = :date"),
+    @NamedQuery(name = "Progress.findByUserID", query = "SELECT p FROM Progress p WHERE p.userId = :userId"),
+    @NamedQuery(name = "Progress.findByLogDate", query = "SELECT p FROM Progress p WHERE p.logDate = :logDate"),
     @NamedQuery(name = "Progress.findByCaloriesIn", query = "SELECT p FROM Progress p WHERE p.caloriesIn = :caloriesIn"),
     @NamedQuery(name = "Progress.findByCaloriesOut", query = "SELECT p FROM Progress p WHERE p.caloriesOut = :caloriesOut"),
     @NamedQuery(name = "Progress.findByWeight", query = "SELECT p FROM Progress p WHERE p.weight = :weight"),
@@ -45,11 +45,11 @@ public class Progress implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "UserId")
-    private Integer id;
-   // @Basic(optional = false)
+    private Integer userId;
+    //@Basic(optional = false)
     @NotNull
     @Column(name = "LogDate")
-    private Integer date;
+    private Integer logDate;
     @Column(name = "CaloriesIn")
     private Integer caloriesIn;
     @Column(name = "CaloriesOut")
@@ -65,18 +65,17 @@ public class Progress implements Serializable {
     private User user;
     
     public Progress() {
-        
     }
 
-    public Progress(Integer id) {
-        this.id = id;
+    public Progress(Integer userId) {
+        this.userId = userId;
     }
 
-    public Progress(Integer id, Integer date) {
-        this.id = id;
-        this.date = date;
+    public Progress(Integer userId, Integer logDate) {
+        this.userId = userId;
+        this.logDate = logDate;
     }
-    
+
     public User getUser() {
             return user;
     }
@@ -85,20 +84,21 @@ public class Progress implements Serializable {
             this.user = user;
     }
     
-    public Integer getId() {
-        return id;
+    
+    public Integer getUserID() {
+        return userId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserID(Integer userId) {
+        this.userId = userId;
     }
 
-    public Integer getDate() {
-        return date;
+    public Integer getLogDate() {
+        return logDate;
     }
 
-    public void setDate(Integer date) {
-        this.date = date;
+    public void setLogDate(Integer logDate) {
+        this.logDate = logDate;
     }
 
     public Integer getCaloriesIn() {
@@ -108,7 +108,7 @@ public class Progress implements Serializable {
     public void setCaloriesIn(Integer caloriesIn) {
         this.caloriesIn = caloriesIn;
     }
-    
+
     public Integer getCaloriesOut() {
         return caloriesOut;
     }
@@ -144,7 +144,7 @@ public class Progress implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (userId != null ? userId.hashCode() : 0);
         return hash;
     }
 
@@ -155,7 +155,7 @@ public class Progress implements Serializable {
             return false;
         }
         Progress other = (Progress) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.userId == null && other.userId != null) || (this.userId != null && !this.userId.equals(other.userId))) {
             return false;
         }
         return true;
@@ -163,8 +163,7 @@ public class Progress implements Serializable {
 
     @Override
     public String toString() {
-        return "com.betteru.entitypackage.Progress[ id=" + id + " ]";
+        return "com.betteru.sourcepackage.Progress[ userId=" + userId + " ]";
     }
     
-   
 }
