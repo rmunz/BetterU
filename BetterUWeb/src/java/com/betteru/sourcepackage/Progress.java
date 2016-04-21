@@ -167,5 +167,9 @@ public class Progress implements Serializable {
     public String toString() {
         return "com.betteru.sourcepackage.Progress[ userId=" + userId + " ]";
     }
+
+    public Integer getId() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

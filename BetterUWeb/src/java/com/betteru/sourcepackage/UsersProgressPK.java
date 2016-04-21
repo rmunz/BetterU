@@ -1,6 +1,6 @@
 /*
- * Created by Ojas Mhetar on 2016.04.03  * 
- * Copyright © 2016 Ojas Mhetar. All rights reserved. * 
+ * Created by Jared Schwalbe on 2016.04.05  * 
+ * Copyright © 2016 Osman Balci. All rights reserved. * 
  */
 package com.betteru.sourcepackage;
 
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author ojmhetar
+ * @author Jared
  */
 @Embeddable
 public class UsersProgressPK implements Serializable {
@@ -76,7 +76,7 @@ public class UsersProgressPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.betteru.sourcepackage.UsersProgressPK[ uid=" + uid + ", pid=" + pid + " ]";
+        return "com.mycompany.entitypackage.UsersProgressPK[ uid=" + uid + ", pid=" + pid + " ]";
     }
     
 }
