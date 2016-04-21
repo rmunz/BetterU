@@ -1,22 +1,23 @@
 /*
- * Created by Ojas Mhetar on 2016.04.03  * 
- * Copyright © 2016 Ojas Mhetar. All rights reserved. * 
+ * Created by Jared Schwalbe on 2016.04.08  * 
+ * Copyright © 2016 Osman Balci. All rights reserved. * 
  */
 package com.betteru.sessionbeanpackage;
 
 import com.betteru.sourcepackage.Progress;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author ojmhetar
+ * @author Jared
  */
 @Stateless
 public class ProgressFacade extends AbstractFacade<Progress> {
 
-    @PersistenceContext(unitName = "BetterUWebPU")
+    @PersistenceContext(unitName = "BetterU-WebPU")
     private EntityManager em;
 
     @Override
@@ -28,6 +29,19 @@ public class ProgressFacade extends AbstractFacade<Progress> {
         super(Progress.class);
     }
     
-    
+    public List<Progress> findAllProgressEntriesByUid(int uid) {
+        String query = "SELECT p FROM Progress p WHERE p.uid = :uid";
+        
+        if (em.createQuery(query)
+                .setParameter("uid", uid)
+                .getResultList().isEmpty()) {
+            return null;
+        }
+        else {
+            return (List<Progress>) (em.createQuery(query)
+                .setParameter("uid", uid)
+                .getResultList());        
+        }
+    }
     
 }

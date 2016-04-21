@@ -43,6 +43,8 @@ public class AccountManager implements Serializable {
     private int weight;
     private int activityLevel;
     private String activityGoal;
+    private int goalWeight;
+    private int targetCalories;
     private char gender;
     private int security_question;
     private String security_answer;
@@ -120,6 +122,23 @@ public class AccountManager implements Serializable {
     
     public void setActivityGoal(String goal) {
         this.activityGoal = goal;
+    }
+    
+    
+    public int getGoalWeight() {
+        return goalWeight;
+    }
+
+    public void setGoalWeight(int goalWeight) {
+        this.goalWeight = goalWeight;
+    }
+
+    public int getTargetCalories() {
+        return targetCalories;
+    }
+
+    public void setTargetCalories(int targetCalories) {
+        this.targetCalories = targetCalories;
     }
     
     public char getGender() {
@@ -321,10 +340,12 @@ public String getBreakfast() {
                 user.setEmail(email);
                 user.setUsername(username);                
                 user.setPassword(password);
+                user.setGender(gender);
                 user.calculateBMR();
                 user.setActivityLevel(activityLevel);
                 user.setActivityGoal(activityGoal);
-                user.setGender(gender);
+                user.setGoalWeight(goalWeight);
+                user.setTargetCalories(targetCalories);
                 user.setPoints(0);
                 user.setUnits('I');
               

@@ -1,6 +1,6 @@
 /*
- * Created by Ojas Mhetar on 2016.02.27  * 
- * Copyright © 2016 Ojas Mhetar. All rights reserved. * 
+ * Created by Jared Schwalbe on 2016.04.08  * 
+ * Copyright © 2016 Osman Balci. All rights reserved. * 
  */
 package com.betteru.managers;
 
@@ -16,7 +16,7 @@ import javax.faces.context.FacesContext;
 @SessionScoped
 /**
  *
- * @author Mhetar
+ * @author Balci
  */
 public class LoginManager implements Serializable {
 
@@ -54,6 +54,10 @@ public class LoginManager implements Serializable {
 
   public String createUser() {
     return "CreateAccount";
+  }
+  
+  public String userSignInPage() {
+    return "SignIn";
   }
   
   public String resetPassword() {
@@ -97,7 +101,7 @@ public class LoginManager implements Serializable {
       if (user.getUsername().equals(getUsername()) && user.getPassword().equals(getPassword())) {
         errorMessage = "";
         initializeSessionMap(user);
-        return "Profile";
+        return "MyAccount?faces-redirect=true";
       }
       errorMessage = "Invalid username or password!";
       return "";

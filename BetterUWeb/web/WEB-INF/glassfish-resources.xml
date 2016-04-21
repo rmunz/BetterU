@@ -6,7 +6,7 @@
         <property name="portNumber" value="3306"/>
         <property name="databaseName" value="BetterU"/>
         <property name="User" value="root"/>
-        <property name="Password" value=""/>
+        <property name="Password" value="Cap(Stone)1872"/>
         <property name="URL" value="jdbc:mysql://jupiter.cs.vt.edu:3306/BetterU?zeroDateTimeBehavior=convertToNull"/>
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>
     </jdbc-connection-pool>
