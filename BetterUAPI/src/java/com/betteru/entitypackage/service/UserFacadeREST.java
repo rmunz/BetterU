@@ -50,7 +50,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
         ActionListener taskPerformer = new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         //...Perform a task...
-                        Progress progress = new Progress(entity.getId(), (int)(System.currentTimeMillis()/1000));
+                        Progress progress = new Progress(entity.getId(), ((int)(System.currentTimeMillis()/100000)) * 100);
                         progress.setCaloriesIn(0);
                         progress.setCaloriesOut(0);
                         progress.setMiles(0);
@@ -62,10 +62,10 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 };
             
             //set up refresh timer
-           // Timer timer = new Timer(86400000, taskPerformer);//set delay to 24 hours
+            Timer timer = new Timer(86400000, taskPerformer);//set delay to 24 hours
             
             //test timer set for every 10 minutes
-            Timer timer = new Timer(600000, taskPerformer);
+            //Timer timer = new Timer(600000, taskPerformer);
 
             Calendar c = Calendar.getInstance();
             c.add(Calendar.DAY_OF_MONTH, 1);
@@ -73,8 +73,8 @@ public class UserFacadeREST extends AbstractFacade<User> {
             c.set(Calendar.MINUTE, 0);
             c.set(Calendar.SECOND, 0);
             c.set(Calendar.MILLISECOND, 0);
-           // int msToMidnight = (int)(c.getTimeInMillis()-System.currentTimeMillis());
-            //timer.setInitialDelay(msToMidnight);
+            int msToMidnight = (int)(c.getTimeInMillis()-System.currentTimeMillis());
+            timer.setInitialDelay(msToMidnight);
             timer.start(); 
         super.create(entity);
     }
