@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -31,7 +32,9 @@ import javax.ws.rs.core.MediaType;
 @Stateless
 @Path("com.betteru.entitypackage.user")
 public class UserFacadeREST extends AbstractFacade<User> {
-
+    @EJB
+    private ProgressFacadeREST pf;
+    
     @PersistenceContext(unitName = "BetterUAPIPU")
     private EntityManager em;
 
@@ -43,16 +46,17 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Override
     @Consumes({MediaType.APPLICATION_JSON})
     public void create(User entity) {
+        
         ActionListener taskPerformer = new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         //...Perform a task...
-                        Progress progress = new Progress(entity.getId(), (int)Calendar.getInstance().getTimeInMillis()/1000);
+                        Progress progress = new Progress(entity.getId(), (int)(System.currentTimeMillis()/1000));
                         progress.setCaloriesIn(0);
                         progress.setCaloriesOut(0);
                         progress.setMiles(0);
                         progress.setWeight(entity.getWeight());
                         progress.setSteps(0);
-                        ProgressFacadeREST pf = new ProgressFacadeREST();
+                       // ProgressFacadeREST pf = new ProgressFacadeREST();
                         pf.create(progress);
                     }
                 };

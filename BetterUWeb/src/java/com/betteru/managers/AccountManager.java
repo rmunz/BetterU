@@ -345,7 +345,7 @@ public String getBreakfast() {
                 user.setActivityLevel(activityLevel);
                 user.setActivityGoal(activityGoal);
                 user.setGoalWeight(goalWeight);
-                user.setTargetCalories(targetCalories);
+                user.setTargetCalories(user.calcTargetCals());
                 user.setPoints(0);
                 user.setUnits('I');
               
@@ -354,7 +354,7 @@ public String getBreakfast() {
                 ActionListener taskPerformer = new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         //...Perform a task...
-                        Progress progress = new Progress(user.getId(), (int)Calendar.getInstance().getTimeInMillis()/1000);
+                        Progress progress = new Progress(user.getId(), (int)(System.currentTimeMillis()/1000));
                         progress.setCaloriesIn(0);
                         progress.setCaloriesOut(0);
                         progress.setMiles(0);
