@@ -1,6 +1,6 @@
 /*
- * Created by Ojas Mhetar on 2016.04.02  * 
- * Copyright © 2016 Ojas Mhetar. All rights reserved. * 
+ * Created by Timothy Street on 2016.04.23  * 
+ * Copyright © 2016 Timothy Street. All rights reserved. * 
  */
 package com.betteru.entitypackage;
 
@@ -18,28 +18,27 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author ojmhetar
+ * @author Tim
  */
 @Entity
-@Table(name = "Challenges")
+@Table(name = "DailyChallenges")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Challenges.findAll", query = "SELECT c FROM Challenges c"),
-    @NamedQuery(name = "Challenges.findByName", query = "SELECT c FROM Challenges c WHERE c.name = :name"),
-    @NamedQuery(name = "Challenges.findByDescription", query = "SELECT c FROM Challenges c WHERE c.description = :description"),
-    @NamedQuery(name = "Challenges.findByChallengeType", query = "SELECT c FROM Challenges c WHERE c.challengeType = :challengeType"),
-    @NamedQuery(name = "Challenges.findByPointsAwarded", query = "SELECT c FROM Challenges c WHERE c.pointsAwarded = :pointsAwarded"),
-    @NamedQuery(name = "Challenges.findByInd", query = "SELECT c FROM Challenges c WHERE c.ind = :ind"),
-    @NamedQuery(name = "Challenges.findByGoalType", query = "SELECT c FROM Challenges c WHERE c.goalType = :goalType")})
-public class Challenges implements Serializable {
+    @NamedQuery(name = "DailyChallenges.findAll", query = "SELECT d FROM DailyChallenges d"),
+    @NamedQuery(name = "DailyChallenges.findByChallengeName", query = "SELECT d FROM DailyChallenges d WHERE d.challengeName = :challengeName"),
+    @NamedQuery(name = "DailyChallenges.findByDescription", query = "SELECT d FROM DailyChallenges d WHERE d.description = :description"),
+    @NamedQuery(name = "DailyChallenges.findByChallengeType", query = "SELECT d FROM DailyChallenges d WHERE d.challengeType = :challengeType"),
+    @NamedQuery(name = "DailyChallenges.findByPointsAwarded", query = "SELECT d FROM DailyChallenges d WHERE d.pointsAwarded = :pointsAwarded"),
+    @NamedQuery(name = "DailyChallenges.findByInd", query = "SELECT d FROM DailyChallenges d WHERE d.ind = :ind")})
+public class DailyChallenges implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "Name")
-    private String name;
+    @Column(name = "ChallengeName")
+    private String challengeName;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -58,33 +57,28 @@ public class Challenges implements Serializable {
     @NotNull
     @Column(name = "Ind")
     private int ind;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "GoalType")
-    private int goalType;
 
-    public Challenges() {
+    public DailyChallenges() {
     }
 
-    public Challenges(String name) {
-        this.name = name;
+    public DailyChallenges(String challengeName) {
+        this.challengeName = challengeName;
     }
 
-    public Challenges(String name, String description, String challengeType, int pointsAwarded, int ind, int goalType) {
-        this.name = name;
+    public DailyChallenges(String challengeName, String description, String challengeType, int pointsAwarded, int ind) {
+        this.challengeName = challengeName;
         this.description = description;
         this.challengeType = challengeType;
         this.pointsAwarded = pointsAwarded;
         this.ind = ind;
-        this.goalType = goalType;
     }
 
-    public String getName() {
-        return name;
+    public String getChallengeName() {
+        return challengeName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setChallengeName(String challengeName) {
+        this.challengeName = challengeName;
     }
 
     public String getDescription() {
@@ -119,29 +113,21 @@ public class Challenges implements Serializable {
         this.ind = ind;
     }
 
-    public int getGoalType() {
-        return goalType;
-    }
-
-    public void setGoalType(int goalType) {
-        this.goalType = goalType;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (name != null ? name.hashCode() : 0);
+        hash += (challengeName != null ? challengeName.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Challenges)) {
+        if (!(object instanceof DailyChallenges)) {
             return false;
         }
-        Challenges other = (Challenges) object;
-        if ((this.name == null && other.name != null) || (this.name != null && !this.name.equals(other.name))) {
+        DailyChallenges other = (DailyChallenges) object;
+        if ((this.challengeName == null && other.challengeName != null) || (this.challengeName != null && !this.challengeName.equals(other.challengeName))) {
             return false;
         }
         return true;
@@ -149,7 +135,7 @@ public class Challenges implements Serializable {
 
     @Override
     public String toString() {
-        return "com.betteru.entitypackage.Challenges[ name=" + name + " ]";
+        return "com.betteru.entitypackage.service.DailyChallenges[ challengeName=" + challengeName + " ]";
     }
     
 }

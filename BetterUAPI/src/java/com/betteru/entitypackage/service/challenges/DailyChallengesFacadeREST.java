@@ -1,10 +1,10 @@
 /*
- * Created by Ojas Mhetar on 2016.04.02  * 
- * Copyright © 2016 Ojas Mhetar. All rights reserved. * 
+ * Created by Timothy Street on 2016.04.23  * 
+ * Copyright © 2016 Timothy Street. All rights reserved. * 
  */
-package com.betteru.entitypackage.service;
+package com.betteru.entitypackage.service.challenges;
 
-import com.betteru.entitypackage.Challenges;
+import com.betteru.entitypackage.DailyChallenges;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -21,30 +21,30 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author ojmhetar
+ * @author Tim
  */
 @Stateless
-@Path("com.betteru.entitypackage.challenges")
-public class ChallengesFacadeREST extends AbstractFacade<Challenges> {
+@Path("com.betteru.entitypackage.service.dailychallenges")
+public class DailyChallengesFacadeREST extends AbstractFacade<DailyChallenges> {
 
     @PersistenceContext(unitName = "BetterUAPIPU")
     private EntityManager em;
 
-    public ChallengesFacadeREST() {
-        super(Challenges.class);
+    public DailyChallengesFacadeREST() {
+        super(DailyChallenges.class);
     }
 
     @POST
     @Override
-    @Consumes({MediaType.APPLICATION_JSON})
-    public void create(Challenges entity) {
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void create(DailyChallenges entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") String id, Challenges entity) {
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void edit(@PathParam("id") String id, DailyChallenges entity) {
         super.edit(entity);
     }
 
@@ -56,22 +56,22 @@ public class ChallengesFacadeREST extends AbstractFacade<Challenges> {
 
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Challenges find(@PathParam("id") String id) {
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public DailyChallenges find(@PathParam("id") String id) {
         return super.find(id);
     }
 
     @GET
     @Override
-    @Produces({MediaType.APPLICATION_JSON})
-    public List<Challenges> findAll() {
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<DailyChallenges> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_JSON})
-    public List<Challenges> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<DailyChallenges> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 
@@ -85,6 +85,5 @@ public class ChallengesFacadeREST extends AbstractFacade<Challenges> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
-    }
-    
+    }   
 }

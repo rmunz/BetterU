@@ -97,7 +97,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
      * 
      * @param id
      * @return 
-     */
+     *
     @GET
     @Path("nextChallenge={uid}")
     @Produces({MediaType.APPLICATION_JSON})
@@ -126,13 +126,14 @@ public class UserFacadeREST extends AbstractFacade<User> {
      * 
      * @param currIndex
      * @return 
-     */
+     *
     private Integer getProperIndex(Integer currIndex) {
         
-        /**if(challengesFacadeRest.count() < currIndex)
+        if(challengesFacadeRest.count() < currIndex)
         {
             currIndex = 0;
-        }    */   
+        }       
         return currIndex;
-    }
+    }*/
+    
 }
