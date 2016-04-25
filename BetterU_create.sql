@@ -73,4 +73,3 @@ CREATE TABLE Photo
    user_id INT,
    FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE
 );
-
