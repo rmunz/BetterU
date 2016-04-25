@@ -2,3 +2,6 @@
 /BetterUWeb/src/conf/persistence.xml
 /BetterUWeb/dist/
 /BetterUWeb/build/
+/BetterUAPI/nbproject/private/
+/BetterUAPI/build/
+/BetterUAPI/dist/

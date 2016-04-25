@@ -28,11 +28,13 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(com.betteru.entitypackage.service.ChallengesFacadeREST.class);
         resources.add(com.betteru.entitypackage.service.PhotoFacadeREST.class);
         resources.add(com.betteru.entitypackage.service.ProgressFacadeREST.class);
         resources.add(com.betteru.entitypackage.service.UserFacadeREST.class);
         resources.add(com.betteru.entitypackage.service.UsersProgressFacadeREST.class);
+        resources.add(com.betteru.entitypackage.service.challenges.DailyChallengesFacadeREST.class);
+        resources.add(com.betteru.entitypackage.service.challenges.UserIndexFacadeREST.class);
+        resources.add(com.betteru.entitypackage.service.challenges.WeeklyChallengesFacadeREST.class);
     }
     
 }

@@ -4,12 +4,16 @@
  */
 package com.betteru.entitypackage.service;
 
-
-import com.betteru.entitypackage.*;
+import com.betteru.entitypackage.Progress;
+import com.betteru.entitypackage.User;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Calendar;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.swing.Timer;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -39,6 +43,35 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Override
     @Consumes({MediaType.APPLICATION_JSON})
     public void create(User entity) {
+        ActionListener taskPerformer = new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        //...Perform a task...
+                        Progress progress = new Progress(entity.getId(), (int)Calendar.getInstance().getTimeInMillis()/1000);
+                        progress.setCaloriesIn(0);
+                        progress.setCaloriesOut(0);
+                        progress.setMiles(0);
+                        progress.setWeight(entity.getWeight());
+                        progress.setSteps(0);
+                        ProgressFacadeREST pf = new ProgressFacadeREST();
+                        pf.create(progress);
+                    }
+                };
+            
+            //set up refresh timer
+           // Timer timer = new Timer(86400000, taskPerformer);//set delay to 24 hours
+            
+            //test timer set for every 10 minutes
+            Timer timer = new Timer(600000, taskPerformer);
+
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.DAY_OF_MONTH, 1);
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+            c.set(Calendar.MILLISECOND, 0);
+           // int msToMidnight = (int)(c.getTimeInMillis()-System.currentTimeMillis());
+            //timer.setInitialDelay(msToMidnight);
+            timer.start(); 
         super.create(entity);
     }
 
@@ -73,7 +106,6 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_JSON})
     public List<User> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        
         return super.findRange(new int[]{from, to});
     }
 
@@ -88,52 +120,5 @@ public class UserFacadeREST extends AbstractFacade<User> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
-    /* Added methods */
-     
-    /**
-     * Gets (and TODO: sets) the next daily challenge for a specified User
-     * by incrementing to the next Challenge index in the Challenges table.
-     * 
-     * @param id
-     * @return 
-     *
-    @GET
-    @Path("nextChallenge={uid}")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Challenges getNextDailyChallenge(@PathParam("uid") int id) {
-        
-        if (em.createQuery("SELECT u FROM User u WHERE u.id = :uid")
-                .setParameter("uid", id)
-                .getResultList().isEmpty())
-                {
-            return null;
-        }
-        else {
-            User user = (User) em.createQuery("SELECT u FROM User u WHERE u.id = :uid")
-                .setParameter("uid", id).getSingleResult();
-            // Attempt to increment to next Challenge in Challenges table
-            Integer currentDailyChallengeIndex = this.getProperIndex(user.getDailyChallengeIndex() + 1);
-            return (Challenges) em.createQuery("SELECT c FROM Challenges c WHERE c.ind = :cind")
-                    .setParameter("cind", currentDailyChallengeIndex).getSingleResult();
-        }
-    }
-    
-    /**
-     * Ensures that the index returned by getNextDailyChallenge() does not
-     * exceed the bounds of the Challenges table. Counting for Challenge
-     * indices starts at 1 in the DB.
-     * 
-     * @param currIndex
-     * @return 
-     *
-    private Integer getProperIndex(Integer currIndex) {
-        
-        if(challengesFacadeRest.count() < currIndex)
-        {
-            currIndex = 0;
-        }       
-        return currIndex;
-    }*/
     
 }

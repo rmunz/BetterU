@@ -148,9 +148,28 @@ public class User implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "SecurityAnswer")
     private String securityAnswer;
+    @Size(max = 255)
+    @Column(name = "Breakfast")
+    private String breakfast;
+    @Size(max = 255)
+    @Column(name = "Lunch")
+    private String lunch;
+    @Size(max = 255)
+    @Column(name = "Dinner")
+    private String dinner;
+    @Size(max = 255)
+    @Column(name = "Snack")
+    private String snack;
+    @Size(max = 255)
+    @Column(name = "Photo")
+    private String photo;
+    
     @OneToMany(mappedBy = "userId")
     private Collection<Photo> photoCollection;
 
+    @Column(name = "TargetCalories")
+    private Integer targetCalories;
+    
     public User() {
     }
 
@@ -158,7 +177,11 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public User(Integer id, String firstName, String lastName, String username, String password, int age, Character gender, int height, int weight, Character units, String email, int points, int activityLevel, int bmr, int goalWeight, String activityGoal, int securityQuestion, String securityAnswer) {
+     public User(Integer id, String firstName, String lastName, String username, 
+            String password, int age, Character gender, int height, int weight, 
+            Character units, String email, int points, int activityLevel, int bmr, 
+            int goalWeight, String activityGoal, int securityQuestion, String securityAnswer,
+            String breakfast, String lunch, String dinner, String snack, String photo) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -177,8 +200,37 @@ public class User implements Serializable {
         this.activityGoal = activityGoal;
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
+        this.breakfast = breakfast;
+        this.lunch = lunch;
+        this.dinner = dinner;
+        this.snack = snack;
+        this.photo = photo;
     }
-
+    public Integer calcTargetCals() {
+        int baseline = 0;
+        switch (this.activityLevel) {
+            case 0:
+                baseline = 11;
+                break;
+            case 1:
+                baseline = 12;
+                break;
+            case 2:
+                baseline = 13;
+                break;
+            default:
+                break;
+        }
+        int target = this.weight * baseline + 450; 
+        if (this.goalWeight < this.weight) {
+            target -= 750;
+        }
+        if (this.goalWeight > this.weight) {
+            target += 750;
+        }
+        return target;
+    }
+    
     public Integer getId() {
         return id;
     }
@@ -298,7 +350,7 @@ public class User implements Serializable {
         //Women: BMR = 655 + ( 4.35 x weight in pounds ) + ( 4.7 x height in inches ) - ( 4.7 x age in years )
         //Men: BMR = 66 + ( 6.23 x weight in pounds ) + ( 12.7 x height in inches ) - ( 6.8 x age in year )
         
-        if (this.gender == 'f') {
+        if (this.gender == 'F') {
             this.bmr = (int) (655 + (4.35 * this.weight) + (4.7 * this.height) - (4.7 * this.age));
         }
         else {
@@ -379,6 +431,46 @@ public class User implements Serializable {
         this.securityAnswer = securityAnswer;
     }
 
+     public String getBreakfast() {
+        return breakfast;
+    }
+
+    public void setBreakfast(String breakfast) {
+        this.breakfast = breakfast;
+    }
+    
+        public String getLunch() {
+        return lunch;
+    }
+
+    public void setLunh(String lunch) {
+        this.lunch = lunch;
+    }
+    
+    public String getDinner() {
+        return dinner;
+    }
+
+    public void setDinner(String dinner) {
+        this.dinner = dinner;
+    }
+    
+    public String getSnack() {
+        return snack;
+    }
+
+    public void setSnack(String snack) {
+        this.snack = snack;
+    }
+    
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+    
     @XmlTransient
     public Collection<Photo> getPhotoCollection() {
         return photoCollection;
@@ -388,6 +480,15 @@ public class User implements Serializable {
         this.photoCollection = photoCollection;
     }
 
+    
+    public Integer getTargetCalories() {
+        return targetCalories;
+    }
+    
+    public void setTargetCalories(Integer targetCalories) {
+        this.targetCalories = targetCalories;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
