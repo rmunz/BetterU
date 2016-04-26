@@ -24,11 +24,11 @@
                 <div>
                     <h2>Weight</h2>
 
-                    <div>Your current weight: #{profileViewManager.loggedInUser.weight}</div>
+                    <!--<div>Your current weight: #{profileViewManager.loggedInUser.weight}</div>-->
 
-                    <ui:repeat value="#{profileViewManager.loggedInUsersProgress}" var="p">
+                    <!--<ui:repeat value="#{profileViewManager.loggedInUsersProgress}" var="p">
                         <p>#{p.dayString} - #{p.weight}</p>
-                    </ui:repeat>
+                    </ui:repeat>-->
                     
                     <p:chart type="line" model="#{profileViewManager.weightModel}" style="height:300px;width:600px;"/>
 
@@ -36,30 +36,33 @@
 
                 <div>
                     <h2>Calories</h2>
-
-                    <h3>Calories In</h3>
+                    <p:chart type="line" model="#{profileViewManager.calorieModel}" style="height:300px;width:600px;"/>
+                    <!--<h3>Calories In</h3>
                     <ui:repeat value="#{profileViewManager.loggedInUsersProgress}" var="p">
                         <p>#{p.dayString} - #{p.caloriesIn}</p>
-                    </ui:repeat>   
+                    </ui:repeat>
 
                     <h3>Calories Out</h3>
                     <ui:repeat value="#{profileViewManager.loggedInUsersProgress}" var="p">
                         <p>#{p.dayString} - #{p.caloriesOut}</p>
-                    </ui:repeat>   
+                    </ui:repeat>-->
                 </div>
 
                 <div>
                     <h2>Steps</h2>
-                    <ui:repeat value="#{profileViewManager.loggedInUsersProgress}" var="p">
+                    <!--<ui:repeat value="#{profileViewManager.loggedInUsersProgress}" var="p">
                         <p>#{p.dayString} - #{p.steps}</p>
-                    </ui:repeat>   
+                    </ui:repeat>-->
+                    <p:chart type="line" model="#{profileViewManager.stepModel}" style="height:300px;width:600px;"/>
+                    
                 </div>
 
                 <div>
                     <h2>Miles</h2>
-                    <ui:repeat value="#{profileViewManager.loggedInUsersProgress}" var="p">
+                    <!--<ui:repeat value="#{profileViewManager.loggedInUsersProgress}" var="p">
                         <p>#{p.dayString} - #{p.miles}</p>
-                    </ui:repeat>   
+                    </ui:repeat>-->
+                    <p:chart type="line" model="#{profileViewManager.mileModel}" style="height:300px;width:600px;"/>
                 </div>
             </ui:define>
         </ui:composition>

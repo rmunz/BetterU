@@ -29,6 +29,17 @@ public class ProfileViewManager implements Serializable {
     // Instance Variable (Property)
     private User user;
     private LineChartModel weightModel;
+    private LineChartModel calorieModel;
+    private LineChartModel stepModel;
+    private LineChartModel mileModel;
+    private int minWeight = Integer.MAX_VALUE;
+    private int maxWeight = 0;
+    private int minSteps = Integer.MAX_VALUE;
+    private int maxSteps = 0;
+    private int minMiles = Integer.MAX_VALUE;
+    private int maxMiles = 0;
+    private int minCalories = Integer.MAX_VALUE;
+    private int maxCalories = 0;
     
     
     /**
@@ -74,11 +85,41 @@ public class ProfileViewManager implements Serializable {
     }
     
     public List<Progress> getLoggedInUsersProgress() {
-        // TODO return whole list
-        return progressFacade.findAllProgressEntriesByUid(getLoggedInUser().getId());
+        List<Progress> progressList = progressFacade.findAllProgressEntriesByUid(getLoggedInUser().getId());
+        for (Progress p : progressList) {
+            if (p.getWeight() < minWeight) {
+                minWeight = p.getWeight();
+            }
+            if (p.getWeight() > maxWeight) {
+                maxWeight = p.getWeight();
+            }
+            
+            if (p.getSteps()< minSteps) {
+                minSteps = p.getSteps();
+            }
+            if (p.getSteps() > maxSteps) {
+                maxSteps = p.getSteps();
+            }
+            
+            if (p.getMiles()< minMiles) {
+                minMiles = p.getMiles();
+            }
+            if (p.getMiles() > maxMiles) {
+                maxMiles = p.getMiles();
+            }
+            
+            if (p.getCaloriesIn() < minCalories || p.getCaloriesOut() < minCalories) {
+                minCalories = Math.min(p.getCaloriesIn(), p.getCaloriesOut());
+            }
+            if (p.getCaloriesIn() > maxCalories || p.getCaloriesOut() > maxCalories) {
+                maxCalories = Math.max(p.getCaloriesIn(), p.getCaloriesOut());
+            }
+        }
+        return progressList;
     }
     
     private void buildWeightModel() {
+        int padding = 10;
         weightModel = new LineChartModel();
         List<Progress> progressList = getLoggedInUsersProgress();
         
@@ -94,21 +135,131 @@ public class ProfileViewManager implements Serializable {
         //weightModel.setLegendPosition("e");
         
         Axis yAxis = weightModel.getAxis(AxisType.Y);
-        yAxis.setMin(0);
-        yAxis.setMax(210);
+        yAxis.setMin(minWeight - padding);
+        yAxis.setMax(maxWeight + padding);
         
         DateAxis axis = new DateAxis("Dates");
-        axis.setTickAngle(-50);
-        axis.setMax("2016-04-25");
+        axis.setTickAngle(-45);
+        axis.setMax("2016-04-17");
+        axis.setMax("2016-04-23");
         axis.setTickFormat("%b %#d, %y");
-        axis.setTickCount(2);
+        axis.setTickCount(7);
          
         weightModel.getAxes().put(AxisType.X, axis);
+    }
+    
+    private void buildStepModel() {
+        int padding = 1000;
+        stepModel = new LineChartModel();
+        List<Progress> progressList = getLoggedInUsersProgress();
+        
+        LineChartSeries stepSeries = new LineChartSeries();
+        stepSeries.setLabel("Steps");
+        for (Progress p : progressList) {
+            stepSeries.set(p.getDayString(), p.getSteps());
+        }
+        
+        stepModel.addSeries(stepSeries);
+        
+        stepModel.setTitle("Steps");
+        //weightModel.setLegendPosition("e");
+        
+        Axis yAxis = stepModel.getAxis(AxisType.Y);
+        yAxis.setMin(minSteps - padding);
+        yAxis.setMax(maxSteps + padding);
+        
+        DateAxis axis = new DateAxis("Dates");
+        axis.setTickAngle(-45);
+        axis.setMax("2016-04-17");
+        axis.setMax("2016-04-23");
+        axis.setTickFormat("%b %#d, %y");
+        axis.setTickCount(7);
+         
+        stepModel.getAxes().put(AxisType.X, axis);
+    }
+    
+    private void buildMileModel() {
+        int padding = 1;
+        mileModel = new LineChartModel();
+        List<Progress> progressList = getLoggedInUsersProgress();
+        
+        LineChartSeries mileSeries = new LineChartSeries();
+        mileSeries.setLabel("Miles");
+        for (Progress p : progressList) {
+            mileSeries.set(p.getDayString(), p.getMiles());
+        }
+        
+        mileModel.addSeries(mileSeries);
+        
+        mileModel.setTitle("Miles");
+        //weightModel.setLegendPosition("e");
+        
+        Axis yAxis = mileModel.getAxis(AxisType.Y);
+        yAxis.setMin(minMiles - padding);
+        yAxis.setMax(maxMiles + padding);
+        
+        DateAxis axis = new DateAxis("Dates");
+        axis.setTickAngle(-45);
+        axis.setMax("2016-04-17");
+        axis.setMax("2016-04-23");
+        axis.setTickFormat("%b %#d, %y");
+        axis.setTickCount(7);
+         
+        mileModel.getAxes().put(AxisType.X, axis);
+    }
+    
+    private void buildCalorieModel() {
+        int padding = 500;
+        calorieModel = new LineChartModel();
+        List<Progress> progressList = getLoggedInUsersProgress();
+        
+        LineChartSeries calInSeries = new LineChartSeries();
+        LineChartSeries calOutSeries = new LineChartSeries();
+        calInSeries.setLabel("Calories In");
+        calOutSeries.setLabel("Calories Out");
+        for (Progress p : progressList) {
+            calInSeries.set(p.getDayString(), p.getCaloriesIn());
+            calOutSeries.set(p.getDayString(), p.getCaloriesOut());
+        }
+        
+        calorieModel.addSeries(calInSeries);
+        calorieModel.addSeries(calOutSeries);
+        
+        calorieModel.setTitle("Calories");
+        calorieModel.setLegendPosition("ne");
+        
+        
+        Axis yAxis = calorieModel.getAxis(AxisType.Y);
+        yAxis.setMin(minCalories - padding);
+        yAxis.setMax(maxCalories + padding);
+        
+        DateAxis axis = new DateAxis("Dates");
+        axis.setTickAngle(-45);
+        axis.setMax("2016-04-17");
+        axis.setMax("2016-04-23");
+        axis.setTickFormat("%b %#d, %y");
+        axis.setTickCount(7);
+         
+        calorieModel.getAxes().put(AxisType.X, axis);
     }
     
     public LineChartModel getWeightModel() {
         buildWeightModel();
         return weightModel;
     }
-
+    
+    public LineChartModel getStepModel() {
+        buildStepModel();
+        return stepModel;
+    }
+    
+    public LineChartModel getMileModel() {
+        buildMileModel();
+        return mileModel;
+    }
+    
+    public LineChartModel getCalorieModel() {
+        buildCalorieModel();
+        return calorieModel;
+    }
 }
