@@ -29,17 +29,17 @@ public class ProgressFacade extends AbstractFacade<Progress> {
         super(Progress.class);
     }
     
-    public List<Progress> findAllProgressEntriesByUid(int uid) {
-        String query = "SELECT p FROM Progress p WHERE p.uid = :uid";
+    public List<Progress> findAllProgressEntriesByUid(int userId) {
+        String query = "SELECT p FROM Progress p WHERE p.userId = :userId";
         
         if (em.createQuery(query)
-                .setParameter("uid", uid)
+                .setParameter("userId", userId)
                 .getResultList().isEmpty()) {
             return null;
         }
         else {
             return (List<Progress>) (em.createQuery(query)
-                .setParameter("uid", uid)
+                .setParameter("userId", userId)
                 .getResultList());        
         }
     }

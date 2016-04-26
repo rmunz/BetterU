@@ -5,6 +5,9 @@
 package com.betteru.sourcepackage;
 
 import java.io.Serializable;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -170,6 +173,12 @@ public class Progress implements Serializable {
 
     public Integer getId() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public String getDayString() {
+        Date date = new Date((long) this.getLogDate()* 1000);
+        Format format = new SimpleDateFormat("MM/dd/yyyy");
+        return format.format(date);
     }
     
 }
