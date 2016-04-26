@@ -12,6 +12,11 @@ import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import org.primefaces.model.chart.Axis;
+import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.DateAxis;
+import org.primefaces.model.chart.LineChartModel;
+import org.primefaces.model.chart.LineChartSeries;
 
 @Named(value = "profileViewManager")
 @SessionScoped
@@ -23,6 +28,8 @@ public class ProfileViewManager implements Serializable {
 
     // Instance Variable (Property)
     private User user;
+    private LineChartModel weightModel;
+    
     
     /**
      * The instance variable 'userFacade' is annotated with the @EJB annotation.
@@ -69,6 +76,39 @@ public class ProfileViewManager implements Serializable {
     public List<Progress> getLoggedInUsersProgress() {
         // TODO return whole list
         return progressFacade.findAllProgressEntriesByUid(getLoggedInUser().getId());
+    }
+    
+    private void buildWeightModel() {
+        weightModel = new LineChartModel();
+        List<Progress> progressList = getLoggedInUsersProgress();
+        
+        LineChartSeries weightSeries = new LineChartSeries();
+        weightSeries.setLabel("Weight");
+        for (Progress p : progressList) {
+            weightSeries.set(p.getDayString(), p.getWeight());
+        }
+        
+        weightModel.addSeries(weightSeries);
+        
+        weightModel.setTitle("Weight");
+        //weightModel.setLegendPosition("e");
+        
+        Axis yAxis = weightModel.getAxis(AxisType.Y);
+        yAxis.setMin(0);
+        yAxis.setMax(210);
+        
+        DateAxis axis = new DateAxis("Dates");
+        axis.setTickAngle(-50);
+        axis.setMax("2016-04-25");
+        axis.setTickFormat("%b %#d, %y");
+        axis.setTickCount(2);
+         
+        weightModel.getAxes().put(AxisType.X, axis);
+    }
+    
+    public LineChartModel getWeightModel() {
+        buildWeightModel();
+        return weightModel;
     }
 
 }

@@ -177,7 +177,7 @@ public class Progress implements Serializable {
     
     public String getDayString() {
         Date date = new Date((long) this.getLogDate()* 1000);
-        Format format = new SimpleDateFormat("MM/dd/yyyy");
+        Format format = new SimpleDateFormat("yyy-MM-dd");
         return format.format(date);
     }
     
