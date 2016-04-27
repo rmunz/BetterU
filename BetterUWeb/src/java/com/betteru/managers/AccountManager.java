@@ -491,6 +491,8 @@ public String getBreakfast() {
         username = firstName = lastName = password = email = statusMessage = "";
         security_answer = "";
         height = weight = security_question = 0;
+        breakfast = lunch = dinner = snack = photo = activityGoal = "";
+        targetCalories = goalWeight = activityLevel =  0; 
         
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "/index.xhtml?faces-redirect=true";
