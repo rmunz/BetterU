@@ -1,110 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Created by Ojas Mhetar on 2016.02.14 
-Copyright © 2016 Ojas Mhetar. All rights reserved.
+Created by Jared Schwalbe on 2016.04.05 
+Copyright © 2016 Osman Balci. All rights reserved.
 -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Create Account</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <h:outputStylesheet name="css/jsfcrud.css"/>
-        <h:outputStylesheet library="css" name="globalStyles.css"/>
     </h:head>
     <h:body>
-        <div align="center" style="width:50%; margin:0 auto;">
-            <h:form class="form-signin">
-                <h2 class="form-signin-heading">New Account</h2>
-                <br/>
-                <f:event listener="#{accountManager.validateInformation}" type="postValidate"/>
-                <p:panel id="panel" 
-                         style="width: 400px; border: 0px solid black">
-                <p:messages id="msgs" />
+        <ui:composition template="template/siteTemplate.xhtml">
+            <!-- Page title -->
+            <title><ui:define name="title">BetterU</ui:define></title>
+            <!-- Additional CSS styles needed -->
+            <ui:define name="css">
+                <link rel="stylesheet" type="text/css" href="resources/css/myAccount.css"/>
+            </ui:define>
+            <!-- Additional JS files needed -->
+            
+            <!-- Page content -->
+            <ui:define name="editableContent">
+            <div>
+                <h:form>
+                    <h2>New Account</h2>
+                    <br/>
+                    <f:event listener="#{accountManager.validateInformation}" type="postValidate"/>
 
-                <h:panelGrid columns="3" cellpadding="5">
-                    <p:outputLabel for="firstName" value="First Name" />
-                    <h:inputText id="firstName" value="#{accountManager.firstName}" 
-                                 required="true" label="First Name">
+                    <p>First Name:</p>
+                    <h:inputText id="firstName" value="#{accountManager.firstName}"/>
+
+                    <p>Last Name:</p>
+                    <h:inputText id="lastName" value="#{accountManager.lastName}"/>
+
+                    <p>Username:</p>
+                    <h:inputText id="username" value="#{accountManager.username}"/>
+
+                    <p>Password: </p>
+                        <h:inputSecret id="password" value="#{accountManager.password}" 
+                                    required="true" label="Password">
+                            <f:validator validatorId="passwordValidator" /> 
+                        </h:inputSecret>
+                        <p:message for="password" display="icon" />
+
+                    <p>Confirm Password: </p>
+                        <h:inputSecret id="confirmPassword" 
+                                    required="true" label="Confirm Password">
+                        </h:inputSecret>
+                        <p:message for="confirmPassword" display="icon"/>
+
+                    <p>Age:</p>
+                    <h:inputText id="age" value="#{accountManager.age}"/>
+
+                    <p>Gender:</p>
+                    <h:inputText id="gender" value="#{accountManager.gender}"/>
+
+                    <p>Height:</p>
+                    <h:inputText id="height" value="#{accountManager.height}"/>
+
+                    <p>Weight:</p>
+                    <h:inputText id="weight" value="#{accountManager.weight}"/>
+
+                    <p>Email:</p>
+                    <h:inputText id="email" value="#{accountManager.email}">
                         <f:validateLength minimum="2" />
+                        <f:validator validatorId="emailValidator" />
                     </h:inputText>
-                    <p:message for="firstName" display="icon" />
-                                  
 
-                    <p:outputLabel for="lastName" value="Last Name" />
-                    <h:inputText id="lastName" value="#{accountManager.lastName}" 
-                                 required="true" label="Last Name">
-                        <f:validateLength minimum="2" />
-                    </h:inputText>
-                    <p:message for="lastName" display="icon" />
+                    <p>Activity Level:</p>
+                    <h:inputText id="activityLevel" value="#{accountManager.activityLevel}"/>
 
-                    <p:outputLabel for="height" value="Height in Inches: " />
-                    <h:inputText id="height" value="#{accountManager.height}" 
-                                 required="true" label="height">
-                        <f:validateLongRange minimum="36" maximum="96" />
-                    </h:inputText>
-                    <p:message for="height" display="icon" />
+                    <p>Goal Weight:</p>
+                    <h:inputText id="goalWeight" value="#{accountManager.goalWeight}"/>
 
-                    <p:outputLabel for="weight" value="Weight in Pounds: " />
-                    <h:inputText id="weight" value="#{accountManager.weight}" 
-                                 required="true" label="weight">
-                        <f:validateLongRange minimum="50" maximum="400" />
-                    </h:inputText>
-                    <p:message for="weight" display="icon" />
-                    
-   
-                    <p:outputLabel for="email" value="Email:" />
-                    <h:inputText id="email" value="#{accountManager.email}" 
-                                 label="Email" required="true">
-                        <f:validateLength minimum="2" />
-                        <f:validator validatorId="emailValidator" /> 
-                    </h:inputText>
-                    <p:message for="email" display="icon" />
+                    <p>Activity Goal:</p>
+                    <h:inputText id="activityGoal" value="#{accountManager.activityGoal}"/>
 
-                    <p:outputLabel for="username" value="Username:" />
-                    <h:inputText id="username" value="#{accountManager.username}" 
-                                 required="true" label="Username">
-                        <f:validateLength minimum="4" />
-                    </h:inputText>
-                    <p:message for="username" display="icon" />
+                    <p>Security Question:</p>
+                    <h:inputText id="securityQuestion" value="#{accountManager.security_question}"/>
 
-                    <p:outputLabel for="password" value="Password:" />
-                    <h:inputSecret id="password" value="#{accountManager.password}" 
-                                required="true" label="Password">
-                        <f:validator validatorId="passwordValidator" /> 
-                    </h:inputSecret>
-                    <p:message for="password" display="icon" />
+                    <p>Security Answer:</p>
+                    <h:inputText id="securityAnswer" value="#{accountManager.security_answer}"/>
 
-                    <p:outputLabel for="confirmPassword" value="Confirm Password:" />
-                    <h:inputSecret id="confirmPassword" 
-                                required="true" label="Confirm Password">
-                    </h:inputSecret>
-                    <p:message for="confirmPassword" display="icon"/>
-                    
-                    <p:outputLabel for="security_ques" value="Security Question" />
-                    <h:selectOneMenu id="security_ques" value="#{accountManager.security_question}" required="true">
-                        <f:selectItems value="#{accountManager.security_questions}"/>
-                    </h:selectOneMenu>
-                    <p:message for="security_ques" display="icon" />                    
-                  
-                    <p:outputLabel for="security_ans" value="Answer" />
-                    <h:inputText id="security_ans" value="#{accountManager.security_answer}" 
-                                 required="true" label="city">
-                        <f:validateLength minimum="4" />
-                    </h:inputText>
-                    <p:message for="security_ans" display="icon" />
-                    
-                </h:panelGrid>
-            </p:panel>
-            <h:outputLabel id="error" value="#{accountManager.statusMessage}"  />
-            <br/>
-            <h:commandButton class="btn btn-lg btn-success btn-block" id="submit" 
-                             action="#{accountManager.createAccount()}" value="Submit" />   
-            <h:button class="btn btn-lg btn-danger" id="cancel" outcome="index" value="Cancel" />
-            </h:form>
-        </div>
+                    <p>Target Calories:</p>
+                    <h:inputText id="targetCalories" value="#{accountManager.targetCalories}"/>
+
+                    <br/><br/>
+
+                    <h:commandButton class="btn btn-lg btn-success btn-block" id="submit" 
+                               action="#{accountManager.createAccount()}" value="Submit" />   
+
+                </h:form>
+
+            </div>
+                    </ui:define>
+        </ui:composition>
     </h:body>
-
 </html>

@@ -4,11 +4,16 @@
  */
 package com.betteru.managers;
 
+import com.betteru.sessionbeanpackage.ProgressFacade;
 import com.betteru.sourcepackage.User;
 import com.betteru.sessionbeanpackage.UserFacade;
+import com.betteru.sourcepackage.Progress;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.LinkedHashMap;
-import java.util.List;
+import javax.swing.Timer;
 import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -29,33 +34,28 @@ public class AccountManager implements Serializable {
  
     // Instance Variables (Properties)
     private String firstName;
-    private String middleName;
     private String lastName;
     private String username;
     private String password;
     private String email;
-    private String statusMessage;
+    private int age;
     private int height;
     private int weight;
-    private int age; 
-    private char gender; 
-    private char units; 
-    private int points; 
     private int activityLevel;
-    private int bmr; 
-    private int goalType; 
-    private int goalWeight; 
     private String activityGoal;
-    private String dCSkipped; 
-    private int dailyChallengeIndex; 
-    private String wCSkipped; 
-    private int weeklyChallengeIndex; 
+    private int goalWeight;
+    private int targetCalories;
+    private char gender;
     private int security_question;
     private String security_answer;
+    private String breakfast;
+    private String lunch;
+    private String dinner;
+    private String snack;
+    private String photo;
         
-    private final String[] listOfStates = Constants.STATES;
     private Map<String, Object> security_questions;
-    
+    private String statusMessage;
     private User selected;
     
     /**
@@ -65,7 +65,16 @@ public class AccountManager implements Serializable {
      */
     @EJB
     private UserFacade userFacade;
-
+    
+    
+ /**
+     * The instance variable 'progressFacade' is annotated with the @EJB annotation.
+     * This means that the GlassFish application server, at runtime, will inject in
+     * this instance variable a reference to the @Stateless session bean UserFacade.
+     */
+    @EJB
+    private ProgressFacade progressFacade;
+    
     /**
      * The instance variable 'photoFacade' is annotated with the @EJB annotation.
      * This means that the GlassFish application server, at runtime, will inject in
@@ -74,10 +83,15 @@ public class AccountManager implements Serializable {
 //    @EJB
 //    private PhotoFacade photoFacade;
 
-    public String[] getListOfStates() {
-        return listOfStates;
-    }
 
+    public int getAge() {
+        return age;
+    }
+    
+    public void setAge(int age) {
+       this.age = age; 
+    }
+    
     public int getHeight() {
         return height;
     }
@@ -94,6 +108,46 @@ public class AccountManager implements Serializable {
         this.weight = weight;
     }
 
+    public int getActivityLevel(){
+        return activityLevel;
+    }
+    
+    public void setActivityLevel(int level) {
+        this.activityLevel = level;
+    }
+    
+    public String getActivityGoal() {
+        return this.activityGoal;
+    }
+    
+    public void setActivityGoal(String goal) {
+        this.activityGoal = goal;
+    }
+    
+    
+    public int getGoalWeight() {
+        return goalWeight;
+    }
+
+    public void setGoalWeight(int goalWeight) {
+        this.goalWeight = goalWeight;
+    }
+
+    public int getTargetCalories() {
+        return targetCalories;
+    }
+
+    public void setTargetCalories(int targetCalories) {
+        this.targetCalories = targetCalories;
+    }
+    
+    public char getGender() {
+        return gender;
+    }
+    
+    public void setGender(char gender) {
+        this.gender = gender;
+    }
     /**
      * Creates a new instance of AccountManager
      */
@@ -112,14 +166,6 @@ public class AccountManager implements Serializable {
      */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
     }
 
     /**
@@ -177,109 +223,45 @@ public class AccountManager implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public int getAge() {
-        return age;
+    
+public String getBreakfast() {
+        return breakfast;
     }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public Character getGender() {
-        return gender;
-    }
-
-    public void setGender(Character gender) {
-        this.gender = gender;
+    public void setBreakfast(String breakfast) {
+        this.breakfast = breakfast;
     }
     
-    public int getActivityLevel() {
-        return activityLevel;
+        public String getLunch() {
+        return lunch;
     }
 
-    public void setActivityLevel(int activityLevel) {
-        this.activityLevel = activityLevel;
-    }
-
-    public int getBmr() {
-        return bmr;
-    }
-     
-    public void setBmr(int bmr) {
-        this.bmr = bmr;
+    public void setLunh(String lunch) {
+        this.lunch = lunch;
     }
     
-    public int getPoints() {
-        return points;
+    public String getDinner() {
+        return dinner;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public Integer getGoalType() {
-        return goalType;
-    }
-
-    public void setGoalType(Integer goalType) {
-        this.goalType = goalType;
-    }
-
-    public int getGoalWeight() {
-        return goalWeight;
-    }
-
-    public void setGoalWeight(int goalWeight) {
-        this.goalWeight = goalWeight;
-    }
-
-    public String getActivityGoal() {
-        return activityGoal;
-    }
-
-    public void setActivityGoal(String activityGoal) {
-        this.activityGoal = activityGoal;
-    }
-
-    public Integer getDailyChallengeIndex() {
-        return dailyChallengeIndex;
-    }
-
-    public void setDailyChallengeIndex(Integer dailyChallengeIndex) {
-        this.dailyChallengeIndex = dailyChallengeIndex;
-    }
-
-    public String getDCSkipped() {
-        return dCSkipped;
-    }
-
-    public void setDCSkipped(String dCSkipped) {
-        this.dCSkipped = dCSkipped;
-    }
-
-    public Integer getWeeklyChallengeIndex() {
-        return weeklyChallengeIndex;
-    }
-
-    public void setWeeklyChallengeIndex(Integer weeklyChallengeIndex) {
-        this.weeklyChallengeIndex = weeklyChallengeIndex;
-    }
-
-    public String getWCSkipped() {
-        return wCSkipped;
-    }
-
-    public void setWCSkipped(String wCSkipped) {
-        this.wCSkipped = wCSkipped;
+    public void setDinenr(String dinner) {
+        this.dinner = dinner;
     }
     
-    public char getUnits() {
-        return units; 
+    public String getSnack() {
+        return snack;
+    }
+
+    public void setSnack(String snack) {
+        this.snack = snack;
     }
     
-    public void setUnits(char units) { 
-        this.units = units; 
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
     
     public int getSecurity_question() {
@@ -333,7 +315,6 @@ public class AccountManager implements Serializable {
     public void setSelected(User selected) {
         this.selected = selected;
     }
-   
 
     public String createAccount() {
         
@@ -353,32 +334,67 @@ public class AccountManager implements Serializable {
                 user.setLastName(lastName);                
                 user.setHeight(height);
                 user.setWeight(weight);
-                user.setAge(20);
+                user.setAge(age);
                 user.setSecurityQuestion(security_question);
                 user.setSecurityAnswer(security_answer);
                 user.setEmail(email);
                 user.setUsername(username);                
                 user.setPassword(password);
-                user.setBmr(height);
-                user.setActivityLevel(1);
-                user.setActivityGoal("Lose weight");
-                user.setGender('F');
+                user.setGender(gender);
+                user.calculateBMR();
+                user.setActivityLevel(activityLevel);
+                user.setActivityGoal(activityGoal);
+                user.setGoalWeight(goalWeight);
+                user.setTargetCalories(targetCalories);
                 user.setPoints(0);
                 user.setUnits('I');
               
-             
-                userFacade.create(user);                
+                userFacade.create(user);    
+                
+                ActionListener taskPerformer = new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        //...Perform a task...
+                        Progress progress = new Progress(user.getId(), (int)Calendar.getInstance().getTimeInMillis()/1000);
+                        progress.setCaloriesIn(0);
+                        progress.setCaloriesOut(0);
+                        progress.setMiles(0);
+                        progress.setWeight(user.getWeight());
+                        progress.setSteps(0);
+                        progressFacade.create(progress);
+                    }
+                };
+            
+            //set up refresh timer
+           // Timer timer = new Timer(86400000, taskPerformer);//set delay to 24 hours
+            
+            //test timer set for every 10 minutes
+            Timer timer = new Timer(600000, taskPerformer);
+
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.DAY_OF_MONTH, 1);
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+            c.set(Calendar.MILLISECOND, 0);
+            int msToMidnight = (int)(c.getTimeInMillis()-System.currentTimeMillis());
+            //timer.setInitialDelay(msToMidnight);
+            timer.start(); 
+            
             } catch (EJBException e) {
                 username = "";
                 statusMessage = "Something went wrong while creating your account!";
                 return "";
             }
             initializeSessionMap();
+            
+            
             return "Profile";
         }
         return "";
     }
 
+      
+      
     public String updateAccount() {
         if (statusMessage.isEmpty()) {
             int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
@@ -472,14 +488,13 @@ public class AccountManager implements Serializable {
 
     public String logout() {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().clear();
-        username = firstName = middleName = lastName = password = email = statusMessage = "";
-        security_answer = wCSkipped = dCSkipped = activityGoal = "";
-        height = weight = security_question = points = bmr = age = activityLevel = goalType = goalWeight = dailyChallengeIndex = weeklyChallengeIndex = security_question = 0;
+        username = firstName = lastName = password = email = statusMessage = "";
+        security_answer = "";
+        height = weight = security_question = 0;
         
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "/index.xhtml?faces-redirect=true";
     }
    
-
-
+   
 }

@@ -1,6 +1,6 @@
 /*
- * Created by Ojas Mhetar on 2016.04.03  * 
- * Copyright © 2016 Ojas Mhetar. All rights reserved. * 
+ * Created by Jared Schwalbe on 2016.04.08  * 
+ * Copyright © 2016 Osman Balci. All rights reserved. * 
  */
 package com.betteru.sessionbeanpackage;
 
@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 
 /**
  *
- * @author ojmhetar
+ * @author Jared
  */
 public abstract class AbstractFacade<T> {
 
