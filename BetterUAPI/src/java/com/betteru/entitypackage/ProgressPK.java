@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.betteru.sourcepackage;
+package com.betteru.entitypackage;
 import java.io.Serializable;
 
 /**
@@ -60,3 +60,4 @@ public class ProgressPK implements Serializable {
         this.logDate = logDate;
     }
 }
+
