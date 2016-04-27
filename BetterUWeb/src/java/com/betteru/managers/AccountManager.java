@@ -305,10 +305,10 @@ public String getBreakfast() {
     }
 
     public User getSelected() {
-        if (selected == null) {
-            selected = userFacade.find(FacesContext.getCurrentInstance().
+        
+        selected = userFacade.find(FacesContext.getCurrentInstance().
                 getExternalContext().getSessionMap().get("user_id"));
-        }
+        
         return selected;
     }
 
