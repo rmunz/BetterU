@@ -7,6 +7,8 @@ package com.betteru.managers;
 import com.betteru.sourcepackage.Progress;
 import com.betteru.sourcepackage.User;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -88,9 +90,39 @@ public class ProfileViewManager implements Serializable {
     }
     
     public List<Progress> getLoggedInUsersProgress() {
-        List<Progress> progressList = progressFacade.findAllProgressEntriesByUid(getLoggedInUser().getId());
+        List<Progress> progressList;// = progressFacade.findAllProgressEntriesByUid(getLoggedInUser().getId());
+        
+        //Get current week
+        progressList = progressFacade.findWeekByUid(getLoggedInUser().getId(), 1461988800);
+        
+        //Get current month
         
         return progressList;
+    }
+    
+    private int getEndOfWeek(long currentTime) {
+        Calendar c = Calendar.getInstance();
+        
+        Date now = new Date(currentTime);
+        c.setTime(now);
+        
+        // set to end of week
+        c.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+        c.set(Calendar.AM_PM, 0);
+        c.set(Calendar.HOUR, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        
+        return (int)c.getTimeInMillis();
+    }
+    
+    public void setDateMin(String dateMin) {
+        this.dateMin = dateMin;
+    }
+
+    public void setDateMax(String dateMax) {
+        this.dateMax = dateMax;
     }
     
     private LineChartModel buildWeightModel() {

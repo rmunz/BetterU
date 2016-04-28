@@ -45,17 +45,17 @@ public class ProgressFacade extends AbstractFacade<Progress> {
         }
     }
     
-    public List<Progress> findWeekByUid(int userId, int logDate) {
-        int aWeekAgo = logDate - 604800;
+    public List<Progress> findWeekByUid(int userId, long logDate) {
+        long aWeekAgo = logDate - 604800;
         TypedQuery<Progress> query = em.createNamedQuery("Progress.findWeek", Progress.class)
-                                        .setParameter("LogDate", logDate).setParameter("userId", userId).setParameter("aWeekAgo", aWeekAgo);               
+                                        .setParameter("logDate", logDate).setParameter("userId", userId).setParameter("aWeekAgo", aWeekAgo);               
         return query.getResultList();        
     }
     
-    public List<Progress> findMonthByUid(int userId, int logDate) {
-        int aMonthAgo = logDate - 2628000;
+    public List<Progress> findMonthByUid(int userId, long logDate) {
+        long aMonthAgo = logDate - 2628000;
         TypedQuery<Progress> query = em.createNamedQuery("Progress.findMonth", Progress.class)
-                                        .setParameter("LogDate", logDate).setParameter("userId", userId).setParameter("aMonthAgo", aMonthAgo);               
+                                        .setParameter("logDate", logDate).setParameter("userId", userId).setParameter("aMonthAgo", aMonthAgo);               
         return query.getResultList();
     }
     
