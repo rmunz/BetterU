@@ -17,7 +17,13 @@
             
             <!-- Page content -->
             <ui:define name="editableContent">
+                <div align="center" width="50%">
                 <h1>Progress</h1>
+                
+                <div align="right">
+                    Saturday's morning timestamp: #{profileViewManager.endOfWeek} <br/>
+                    Should be: 1461988800
+                </div>
         
                 <h2>#{profileViewManager.loggedInUser.firstName} #{profileViewManager.loggedInUser.lastName} - user #{profileViewManager.loggedInUser.id}</h2>
 
@@ -50,6 +56,7 @@
                     <p:chart type="line" model="#{profileViewManager.mileModel}" rendered="#{not empty profileViewManager.mileModel}" style="height:300px;width:600px;"/>
                     
                     <h:panelGroup layout="block" rendered="#{empty profileViewManager.mileModel}"><div>No data for selected date range.</div></h:panelGroup>
+                </div>
                 </div>
             </ui:define>
         </ui:composition>
