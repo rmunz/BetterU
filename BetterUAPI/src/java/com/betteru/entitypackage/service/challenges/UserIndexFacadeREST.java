@@ -91,7 +91,7 @@ public class UserIndexFacadeREST extends AbstractFacade<UserIndex> {
 
     @GET
     @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     public List<UserIndex> findAll() {
         return super.findAll();
     }
@@ -242,10 +242,28 @@ public class UserIndexFacadeREST extends AbstractFacade<UserIndex> {
     }
 
     @GET
-    @Path("completeChallengeForUserId={uid,ct}")
-    public void completeChallengeForUserId(@PathParam("uid") int uid, @PathParam("ct") String challengeType) {
+    @Path("completeChallengeForUserId/{uid}?d={desc}")
+    public void completeChallengeForUserId(@PathParam("uid") int uid, @PathParam("desc") String description) {
 
-        em.createQuery("UPDATE UserIndex u SET u.ind = u.ind + 1 WHERE u.userIndexPK.challengeType = :ctype AND u.userIndexPK.userID = :uid")
-                .setParameter("uid", uid).setParameter("ctype", challengeType);
+        DailyChallenges completedDailyChallenge = (DailyChallenges) em.createQuery("SELECT c FROM DailyChallenges c WHERE c.Description = :desc")
+                .setParameter("desc", description);
+
+        WeeklyChallenges completedWeeklyChallenge = (WeeklyChallenges) em.createQuery("SELECT c FROM WeeklyChallenges c WHERE c.Description = :desc")
+                .setParameter("desc", description);
+
+        int awardedPoints = 0;
+        if (completedDailyChallenge != null) {
+            awardedPoints = completedDailyChallenge.getPointsAwarded();
+            em.createQuery("UPDATE UserIndex u SET u.ind = u.ind + 1 WHERE u.userIndexPK.challengeType = :ctype AND u.userIndexPK.userID = :uid")
+                .setParameter("uid", uid).setParameter("ctype", completedDailyChallenge.getChallengeType());
+            
+            
+        } else {
+            awardedPoints = completedWeeklyChallenge.getPointsAwarded();
+            em.createQuery("UPDATE UserIndex u SET u.ind = u.ind + 1 WHERE u.userIndexPK.challengeType = :ctype AND u.userIndexPK.userID = :uid")
+                .setParameter("uid", uid).setParameter("ctype", "Weekly");
+        }
+        em.createQuery("UPDATE User u SET u.Points = u.Points + pts WHERE u.id = :uid")
+                    .setParameter("uid", uid).setParameter("pts", awardedPoints);       
     }
 }
