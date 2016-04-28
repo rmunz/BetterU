@@ -41,8 +41,8 @@ public class ProfileViewManager implements Serializable {
     private int minCalories = Integer.MAX_VALUE;
     private int maxCalories = 0;
     
-    private String dateMin = "2016-04-17";
-    private String dateMax = "2016-04-23";
+    private String dateMin = "2016-04-01";
+    private String dateMax = "2016-04-30";
     
     
     /**
@@ -93,22 +93,27 @@ public class ProfileViewManager implements Serializable {
         return progressList;
     }
     
-    private void buildWeightModel() {
+    private LineChartModel buildWeightModel() {
         int padding = 10;
         weightModel = new LineChartModel();
         List<Progress> progressList = getLoggedInUsersProgress();
         
         LineChartSeries weightSeries = new LineChartSeries();
         weightSeries.setLabel("Weight");
-        for (Progress p : progressList) {
-            weightSeries.set(p.getDayString(), p.getWeight());
-            
-            if (p.getWeight() < minWeight) {
-                minWeight = p.getWeight();
+        
+        if (progressList != null) {
+            for (Progress p : progressList) {
+                weightSeries.set(p.getDayString(), p.getWeight());
+
+                if (p.getWeight() < minWeight) {
+                    minWeight = p.getWeight();
+                }
+                if (p.getWeight() > maxWeight) {
+                    maxWeight = p.getWeight();
+                }
             }
-            if (p.getWeight() > maxWeight) {
-                maxWeight = p.getWeight();
-            }
+        } else {
+            return null;
         }
         
         weightModel.addSeries(weightSeries);
@@ -126,24 +131,31 @@ public class ProfileViewManager implements Serializable {
         axis.setTickCount(7);
          
         weightModel.getAxes().put(AxisType.X, axis);
+        
+        return weightModel;
     }
     
-    private void buildStepModel() {
+    private LineChartModel buildStepModel() {
         int padding = 1000;
         stepModel = new LineChartModel();
         List<Progress> progressList = getLoggedInUsersProgress();
         
         LineChartSeries stepSeries = new LineChartSeries();
         stepSeries.setLabel("Steps");
-        for (Progress p : progressList) {
-            stepSeries.set(p.getDayString(), p.getSteps());
-            
-            if (p.getSteps()< minSteps) {
-                minSteps = p.getSteps();
+        
+        if (progressList != null) {
+            for (Progress p : progressList) {
+                stepSeries.set(p.getDayString(), p.getSteps());
+
+                if (p.getSteps()< minSteps) {
+                    minSteps = p.getSteps();
+                }
+                if (p.getSteps() > maxSteps) {
+                    maxSteps = p.getSteps();
+                }
             }
-            if (p.getSteps() > maxSteps) {
-                maxSteps = p.getSteps();
-            }
+        } else {
+            return null;
         }
         
         stepModel.addSeries(stepSeries);
@@ -161,24 +173,31 @@ public class ProfileViewManager implements Serializable {
         axis.setTickCount(7);
          
         stepModel.getAxes().put(AxisType.X, axis);
+        
+        return stepModel;
     }
     
-    private void buildMileModel() {
+    private LineChartModel buildMileModel() {
         int padding = 1;
         mileModel = new LineChartModel();
         List<Progress> progressList = getLoggedInUsersProgress();
         
         LineChartSeries mileSeries = new LineChartSeries();
         mileSeries.setLabel("Miles");
-        for (Progress p : progressList) {
-            mileSeries.set(p.getDayString(), p.getMiles());
-            
-            if (p.getMiles() < minMiles) {
-                minMiles = p.getMiles();
+        
+        if (progressList != null) {
+            for (Progress p : progressList) {
+                mileSeries.set(p.getDayString(), p.getMiles());
+
+                if (p.getMiles() < minMiles) {
+                    minMiles = p.getMiles();
+                }
+                if (p.getMiles() > maxMiles) {
+                    maxMiles = p.getMiles();
+                }
             }
-            if (p.getMiles() > maxMiles) {
-                maxMiles = p.getMiles();
-            }
+        } else {
+            return null;
         }
         
         mileModel.addSeries(mileSeries);
@@ -196,9 +215,11 @@ public class ProfileViewManager implements Serializable {
         axis.setTickCount(7);
          
         mileModel.getAxes().put(AxisType.X, axis);
+        
+        return mileModel;
     }
     
-    private void buildCalorieModel() {
+    private LineChartModel buildCalorieModel() {
         int padding = 500;
         calorieModel = new LineChartModel();
         List<Progress> progressList = getLoggedInUsersProgress();
@@ -207,16 +228,21 @@ public class ProfileViewManager implements Serializable {
         LineChartSeries calorieOutSeries = new LineChartSeries();
         calorieInSeries.setLabel("Calories In");
         calorieOutSeries.setLabel("Calories Out");
-        for (Progress p : progressList) {
-            calorieInSeries.set(p.getDayString(), p.getCaloriesIn());
-            calorieOutSeries.set(p.getDayString(), p.getCaloriesOut());
-            
-            if (p.getCaloriesIn() < minCalories || p.getCaloriesOut() < minCalories) {
-                minCalories = Math.min(p.getCaloriesIn(), p.getCaloriesOut());
+        
+        if (progressList != null) {
+            for (Progress p : progressList) {
+                calorieInSeries.set(p.getDayString(), p.getCaloriesIn());
+                calorieOutSeries.set(p.getDayString(), p.getCaloriesOut());
+
+                if (p.getCaloriesIn() < minCalories || p.getCaloriesOut() < minCalories) {
+                    minCalories = Math.min(p.getCaloriesIn(), p.getCaloriesOut());
+                }
+                if (p.getCaloriesIn() > maxCalories || p.getCaloriesOut() > maxCalories) {
+                    maxCalories = Math.max(p.getCaloriesIn(), p.getCaloriesOut());
+                }
             }
-            if (p.getCaloriesIn() > maxCalories || p.getCaloriesOut() > maxCalories) {
-                maxCalories = Math.max(p.getCaloriesIn(), p.getCaloriesOut());
-            }
+        } else {
+            return null;
         }
         
         calorieModel.addSeries(calorieInSeries);
@@ -237,25 +263,31 @@ public class ProfileViewManager implements Serializable {
         axis.setTickCount(7);
                  
         calorieModel.getAxes().put(AxisType.X, axis);
+        
+        return calorieModel;
     }
     
     public LineChartModel getWeightModel() {
-        buildWeightModel();
-        return weightModel;
+        LineChartModel m = buildWeightModel();
+
+        return m;
     }
     
     public LineChartModel getStepModel() {
-        buildStepModel();
-        return stepModel;
+        LineChartModel m = buildStepModel();
+        
+        return m;
     }
     
     public LineChartModel getMileModel() {
-        buildMileModel();
-        return mileModel;
+        LineChartModel m = buildMileModel();
+
+        return m;
     }
     
     public LineChartModel getCalorieModel() {
-        buildCalorieModel();
-        return calorieModel;
+        LineChartModel m = buildCalorieModel();
+
+        return m;
     }
 }

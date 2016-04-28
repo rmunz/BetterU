@@ -101,7 +101,7 @@ public class LoginManager implements Serializable {
       if (user.getUsername().equals(getUsername()) && user.getPassword().equals(getPassword())) {
         errorMessage = "";
         initializeSessionMap(user);
-        return "MyAccount?faces-redirect=true";
+        return "MyProgress?faces-redirect=true";
       }
       errorMessage = "Invalid username or password!";
       return "";

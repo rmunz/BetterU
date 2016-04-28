@@ -388,7 +388,7 @@ public String getBreakfast() {
             initializeSessionMap();
             
             
-            return "Profile";
+            return "MyAccount";
         }
         return "";
     }
