@@ -157,10 +157,10 @@ public class ProfileViewManager implements Serializable {
         
         DateAxis axis = new DateAxis("Dates");
         axis.setTickAngle(-45);
-        axis.setMin(dateMin);
-        axis.setMax(dateMax);
+        axis.setMin(progressList.get(0).getDayString());
+        axis.setMax(progressList.get(progressList.size()-1).getDayString());
         axis.setTickFormat("%b %#d, %y");
-        axis.setTickCount(7);
+        axis.setTickCount(progressList.size());
          
         weightModel.getAxes().put(AxisType.X, axis);
         
