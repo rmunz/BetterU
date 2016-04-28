@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -42,6 +43,20 @@ public class ProgressFacade extends AbstractFacade<Progress> {
                 .setParameter("userId", userId)
                 .getResultList());        
         }
+    }
+    
+    public List<Progress> findWeekByUid(int userId, int logDate) {
+        int aWeekAgo = logDate - 604800;
+        TypedQuery<Progress> query = em.createNamedQuery("Progress.findWeek", Progress.class)
+                                        .setParameter("LogDate", logDate).setParameter("userId", userId).setParameter("aWeekAgo", aWeekAgo);               
+        return query.getResultList();        
+    }
+    
+    public List<Progress> findMonthByUid(int userId, int logDate) {
+        int aMonthAgo = logDate - 2628000;
+        TypedQuery<Progress> query = em.createNamedQuery("Progress.findMonth", Progress.class)
+                                        .setParameter("LogDate", logDate).setParameter("userId", userId).setParameter("aMonthAgo", aMonthAgo);               
+        return query.getResultList();
     }
     
 }

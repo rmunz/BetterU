@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -31,7 +32,9 @@ import javax.ws.rs.core.MediaType;
 @Stateless
 @Path("com.betteru.entitypackage.user")
 public class UserFacadeREST extends AbstractFacade<User> {
-
+    @EJB
+    private ProgressFacadeREST pf;
+    
     @PersistenceContext(unitName = "BetterUAPIPU")
     private EntityManager em;
 
@@ -43,25 +46,26 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Override
     @Consumes({MediaType.APPLICATION_JSON})
     public void create(User entity) {
+        
         ActionListener taskPerformer = new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         //...Perform a task...
-                        Progress progress = new Progress(entity.getId(), (int)Calendar.getInstance().getTimeInMillis()/1000);
+                        Progress progress = new Progress(entity.getId(), ((int)(System.currentTimeMillis()/100000)) * 100);
                         progress.setCaloriesIn(0);
                         progress.setCaloriesOut(0);
                         progress.setMiles(0);
                         progress.setWeight(entity.getWeight());
                         progress.setSteps(0);
-                        ProgressFacadeREST pf = new ProgressFacadeREST();
+                       // ProgressFacadeREST pf = new ProgressFacadeREST();
                         pf.create(progress);
                     }
                 };
             
             //set up refresh timer
-           // Timer timer = new Timer(86400000, taskPerformer);//set delay to 24 hours
+            Timer timer = new Timer(86400000, taskPerformer);//set delay to 24 hours
             
             //test timer set for every 10 minutes
-            Timer timer = new Timer(600000, taskPerformer);
+            //Timer timer = new Timer(600000, taskPerformer);
 
             Calendar c = Calendar.getInstance();
             c.add(Calendar.DAY_OF_MONTH, 1);
@@ -69,8 +73,8 @@ public class UserFacadeREST extends AbstractFacade<User> {
             c.set(Calendar.MINUTE, 0);
             c.set(Calendar.SECOND, 0);
             c.set(Calendar.MILLISECOND, 0);
-           // int msToMidnight = (int)(c.getTimeInMillis()-System.currentTimeMillis());
-            //timer.setInitialDelay(msToMidnight);
+            int msToMidnight = (int)(c.getTimeInMillis()-System.currentTimeMillis());
+            timer.setInitialDelay(msToMidnight);
             timer.start(); 
         super.create(entity);
     }
