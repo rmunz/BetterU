@@ -100,19 +100,19 @@ public class ProfileViewManager implements Serializable {
         return progressList;
     }
     
-    private int getEndOfWeek(long currentTime) {
+    public int getEndOfWeek() {
         Calendar c = Calendar.getInstance();
         
-        Date now = new Date(currentTime);
+        Date now = new Date(System.currentTimeMillis()/1000);
         c.setTime(now);
         
         // set to end of week
         c.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-        c.set(Calendar.AM_PM, 0);
+        /*c.set(Calendar.AM_PM, 0);
         c.set(Calendar.HOUR, 0);
         c.set(Calendar.MINUTE, 0);
         c.set(Calendar.SECOND, 0);
-        c.set(Calendar.MILLISECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);*/
         
         return (int)c.getTimeInMillis();
     }
