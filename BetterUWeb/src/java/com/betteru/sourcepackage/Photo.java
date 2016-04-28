@@ -1,6 +1,6 @@
 /*
- * Created by Ojas Mhetar on 2016.04.03  * 
- * Copyright © 2016 Ojas Mhetar. All rights reserved. * 
+ * Created by Jared Schwalbe on 2016.04.05  * 
+ * Copyright © 2016 Osman Balci. All rights reserved. * 
  */
 package com.betteru.sourcepackage;
 
@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author ojmhetar
+ * @author Jared
  */
 @Entity
 @Table(name = "Photo")
@@ -106,7 +106,7 @@ public class Photo implements Serializable {
 
     @Override
     public String toString() {
-        return "com.betteru.sourcepackage.Photo[ id=" + id + " ]";
+        return "com.mycompany.entitypackage.Photo[ id=" + id + " ]";
     }
     
 }

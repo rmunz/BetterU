@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="template/siteTemplate.xhtml">
+            <!-- Page title -->
+            <title><ui:define name="title">BetterU</ui:define></title>
+            <!-- Additional CSS styles needed -->
+            <ui:define name="css">
+                <link rel="stylesheet" type="text/css" href="resources/css/myProgress.css"/>
+            </ui:define>
+            <!-- Additional JS files needed -->
+            
+            <!-- Page content -->
+            <ui:define name="editableContent">
+                <h1>Progress</h1>
+        
+                <h2>#{profileViewManager.loggedInUser.firstName} #{profileViewManager.loggedInUser.lastName} - user #{profileViewManager.loggedInUser.id}</h2>
+
+                <div>
+                    <h2>Weight</h2>
+
+                    <p:chart type="line" model="#{profileViewManager.weightModel}" rendered="#{not empty profileViewManager.weightModel}" style="height:300px;width:600px;"/>
+                    
+                    <h:panelGroup layout="block" rendered="#{empty profileViewManager.weightModel}"><div>No data for selected date range.</div></h:panelGroup>
+                </div>
+
+                <div>
+                    <h2>Calories</h2>
+                    <p:chart type="line" model="#{profileViewManager.calorieModel}" rendered="#{not empty profileViewManager.calorieModel}" style="height:300px;width:600px;"/>
+                    
+                    <h:panelGroup layout="block" rendered="#{empty profileViewManager.calorieModel}"><div>No data for selected date range.</div></h:panelGroup>
+                </div>
+
+                <div>
+                    <h2>Steps</h2>
+                    
+                    <p:chart type="line" model="#{profileViewManager.stepModel}" rendered="#{not empty profileViewManager.stepModel}" style="height:300px;width:600px;"/>
+                    
+                    <h:panelGroup layout="block" rendered="#{empty profileViewManager.stepModel}"><div>No data for selected date range.</div></h:panelGroup>
+                </div>
+
+                <div>
+                    <h2>Miles</h2>
+                    
+                    <p:chart type="line" model="#{profileViewManager.mileModel}" rendered="#{not empty profileViewManager.mileModel}" style="height:300px;width:600px;"/>
+                    
+                    <h:panelGroup layout="block" rendered="#{empty profileViewManager.mileModel}"><div>No data for selected date range.</div></h:panelGroup>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

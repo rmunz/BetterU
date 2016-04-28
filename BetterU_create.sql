@@ -47,7 +47,7 @@ CREATE TABLE User (
     DailyChallengeIndex int,
     DCSkipped varchar(255),
     WeeklyChallengeIndex int,
-    WCSkipped int,
+    WCSkipped varchar(255),
     SecurityQuestion int NOT NULL,
     SecurityAnswer varchar(255) NOT NULL,   
     Breakfast varchar(255),

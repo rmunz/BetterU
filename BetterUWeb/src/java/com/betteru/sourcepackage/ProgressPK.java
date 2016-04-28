@@ -60,4 +60,3 @@ public class ProgressPK implements Serializable {
         this.logDate = logDate;
     }
 }
-

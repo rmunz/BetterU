@@ -50,7 +50,16 @@ public class ProgressFacadeREST extends AbstractFacade<Progress> {
         ProgressPK pk = new ProgressPK();
         pk.setDay(logDate);
         pk.setId(userId);
-        super.edit(entity);
+        //super.edit(entity);
+        
+        //manually add all of the fields
+        Progress prog = (Progress) super.find(pk);
+        prog.setMiles(prog.getMiles() + entity.getMiles());
+        prog.setCaloriesIn(prog.getCaloriesIn() + entity.getCaloriesIn());
+        prog.setCaloriesOut(prog.getCaloriesOut() + entity.getCaloriesOut());
+        prog.setSteps(prog.getSteps() + entity.getSteps());
+        prog.setWeight(prog.getWeight() + entity.getWeight());
+         
     }
 
     @DELETE

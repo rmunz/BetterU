@@ -43,6 +43,8 @@ public class AccountManager implements Serializable {
     private int weight;
     private int activityLevel;
     private String activityGoal;
+    private int goalWeight;
+    private int targetCalories;
     private char gender;
     private int security_question;
     private String security_answer;
@@ -120,6 +122,23 @@ public class AccountManager implements Serializable {
     
     public void setActivityGoal(String goal) {
         this.activityGoal = goal;
+    }
+    
+    
+    public int getGoalWeight() {
+        return goalWeight;
+    }
+
+    public void setGoalWeight(int goalWeight) {
+        this.goalWeight = goalWeight;
+    }
+
+    public int getTargetCalories() {
+        return targetCalories;
+    }
+
+    public void setTargetCalories(int targetCalories) {
+        this.targetCalories = targetCalories;
     }
     
     public char getGender() {
@@ -286,10 +305,10 @@ public String getBreakfast() {
     }
 
     public User getSelected() {
-        if (selected == null) {
-            selected = userFacade.find(FacesContext.getCurrentInstance().
+        
+        selected = userFacade.find(FacesContext.getCurrentInstance().
                 getExternalContext().getSessionMap().get("user_id"));
-        }
+        
         return selected;
     }
 
@@ -321,10 +340,12 @@ public String getBreakfast() {
                 user.setEmail(email);
                 user.setUsername(username);                
                 user.setPassword(password);
+                user.setGender(gender);
                 user.calculateBMR();
                 user.setActivityLevel(activityLevel);
                 user.setActivityGoal(activityGoal);
-                user.setGender(gender);
+                user.setGoalWeight(goalWeight);
+                user.setTargetCalories(user.calcTargetCals());
                 user.setPoints(0);
                 user.setUnits('I');
               
@@ -333,7 +354,7 @@ public String getBreakfast() {
                 ActionListener taskPerformer = new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         //...Perform a task...
-                        Progress progress = new Progress(user.getId(), (int)Calendar.getInstance().getTimeInMillis()/1000);
+                        Progress progress = new Progress(user.getId(), ((int)(System.currentTimeMillis()/100000)) * 100);
                         progress.setCaloriesIn(0);
                         progress.setCaloriesOut(0);
                         progress.setMiles(0);
@@ -344,10 +365,10 @@ public String getBreakfast() {
                 };
             
             //set up refresh timer
-           // Timer timer = new Timer(86400000, taskPerformer);//set delay to 24 hours
+            Timer timer = new Timer(86400000, taskPerformer);//set delay to 24 hours
             
             //test timer set for every 10 minutes
-            Timer timer = new Timer(600000, taskPerformer);
+            //Timer timer = new Timer(600000, taskPerformer);
 
             Calendar c = Calendar.getInstance();
             c.add(Calendar.DAY_OF_MONTH, 1);
@@ -356,7 +377,7 @@ public String getBreakfast() {
             c.set(Calendar.SECOND, 0);
             c.set(Calendar.MILLISECOND, 0);
             int msToMidnight = (int)(c.getTimeInMillis()-System.currentTimeMillis());
-            //timer.setInitialDelay(msToMidnight);
+            timer.setInitialDelay(msToMidnight);
             timer.start(); 
             
             } catch (EJBException e) {
@@ -367,7 +388,7 @@ public String getBreakfast() {
             initializeSessionMap();
             
             
-            return "Profile";
+            return "MyAccount";
         }
         return "";
     }
@@ -470,6 +491,8 @@ public String getBreakfast() {
         username = firstName = lastName = password = email = statusMessage = "";
         security_answer = "";
         height = weight = security_question = 0;
+        breakfast = lunch = dinner = snack = photo = activityGoal = "";
+        targetCalories = goalWeight = activityLevel =  0; 
         
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "/index.xhtml?faces-redirect=true";
