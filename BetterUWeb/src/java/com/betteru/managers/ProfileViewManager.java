@@ -93,28 +93,46 @@ public class ProfileViewManager implements Serializable {
         List<Progress> progressList;// = progressFacade.findAllProgressEntriesByUid(getLoggedInUser().getId());
         
         //Get current week
-        progressList = progressFacade.findWeekByUid(getLoggedInUser().getId(), 1461988800);
+        //progressList = progressFacade.findWeekByUid(getLoggedInUser().getId(), getEndOfWeek(System.currentTimeMillis()));
         
         //Get current month
+        progressList = progressFacade.findMonthByUid(getLoggedInUser().getId(), getEndOfMonth(System.currentTimeMillis()));
         
         return progressList;
     }
     
-    public int getEndOfWeek() {
+    private long getEndOfWeek(long time) {
         Calendar c = Calendar.getInstance();
         
-        Date now = new Date(System.currentTimeMillis()/1000);
+        Date now = new Date(time);
         c.setTime(now);
         
         // set to end of week
         c.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-        /*c.set(Calendar.AM_PM, 0);
+        c.set(Calendar.AM_PM, 0);
         c.set(Calendar.HOUR, 0);
         c.set(Calendar.MINUTE, 0);
         c.set(Calendar.SECOND, 0);
-        c.set(Calendar.MILLISECOND, 0);*/
+        c.set(Calendar.MILLISECOND, 0);
         
-        return (int)c.getTimeInMillis();
+        return c.getTimeInMillis()/1000;
+    }
+    
+    private long getEndOfMonth(long time) {
+        Calendar c = Calendar.getInstance();
+        
+        Date now = new Date(time);
+        c.setTime(now);
+        
+        // set to end of month
+        c.getActualMaximum(Calendar.DAY_OF_MONTH);
+        c.set(Calendar.AM_PM, 0);
+        c.set(Calendar.HOUR, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        
+        return c.getTimeInMillis()/1000;
     }
     
     public void setDateMin(String dateMin) {
