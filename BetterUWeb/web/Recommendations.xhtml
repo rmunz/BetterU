@@ -14,14 +14,25 @@
             <!-- Page title -->
             <title><ui:define name="title">BetterU</ui:define></title>
             
-            <link rel="stylesheet" type="text/css" href="resources/css/signIn.css"/>
-        
+            <ui:define name="css">
+                <link rel="stylesheet" type="text/css" href="resources/css/recommendations.css"/>
+            </ui:define>
+            
             <!-- Additional JS files needed -->
             
             <!-- Page content -->
             <ui:define name="editableContent">
-                <br/><br/><br/><br/>
-                <div align="center">
+                <div id="banner-wrapper">
+                    <div id="banner-inner-wrapper">
+                        <div id="banner-message" align="center">
+                            Let's Eat.<br/>
+                        </div>
+                    </div>
+                </div>
+                
+                <br /><br /><br /><br /><br /><br /><br />
+                <div align="center">     
+                    <h:outputLabel value ="#{recommmendationManager.statusMessage}" />
                     <h:form class="form-recommendation">
                         
                         <h:outputLabel styleClass="outputLabel" for="mincal" value="Minimum Calories " />
@@ -33,8 +44,8 @@
                         
                         <h:commandButton id="refresh"  action="#{recommendationManager.refresh()}" value="Submit" styleClass="buttonText"/>
                     </h:form>
-                    
-                    <p:dataTable var="rec" value="#{recommendationManager.yummlyRecommendations}">
+                    <br /><br /><br /><br /><br /><br /><br />
+                    <p:dataTable class="rec-table" var="rec" value="#{recommendationManager.yummlyRecommendations}">
                         <p:column headerText="Recipe Id">
                             <h:outputText value="#{rec.recipeId}" />
                         </p:column>
@@ -48,6 +59,16 @@
                         </p:column>
 
                     </p:dataTable>
+                    <br /><br /><br /><br /><br /><br /><br />
+                    <h:form class="form-daily-entry">
+                        
+                        <h:outputLabel styleClass="outputLabel" for="caloriesin" value="Calories Eaten: " />
+                        <h:inputText class="form-control" id="caloriesin" value="#{recommendationManager.calorieIntake}"/>
+                        <br/>
+                        
+                        <h:commandButton id="daily-submit"  action="#{recommendationManager.enterDailyIntake()}" value="Submit" styleClass="buttonText"/>
+                    </h:form>
+                    <br /><br /><br /><br /><br /><br /><br />
                 </div>
             </ui:define>
         </ui:composition>

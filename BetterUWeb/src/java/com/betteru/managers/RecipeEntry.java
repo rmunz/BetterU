@@ -21,7 +21,7 @@ public class RecipeEntry {
     
     public RecipeEntry(String recipeId, String name) {
         this.name = name;
-        this.recipeId = recipeId; 
+        this.recipeId = recipeId;   
         this.calories = 0; 
     }
     

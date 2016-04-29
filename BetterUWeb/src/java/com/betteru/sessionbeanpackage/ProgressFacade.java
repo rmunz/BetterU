@@ -5,6 +5,7 @@
 package com.betteru.sessionbeanpackage;
 
 import com.betteru.sourcepackage.Progress;
+import com.betteru.sourcepackage.ProgressPK;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -57,6 +58,10 @@ public class ProgressFacade extends AbstractFacade<Progress> {
         TypedQuery<Progress> query = em.createNamedQuery("Progress.findMonth", Progress.class)
                                         .setParameter("logDate", logDate).setParameter("userId", userId).setParameter("aMonthAgo", aMonthAgo);               
         return query.getResultList().isEmpty() ? null : query.getResultList();        
+    }
+    
+    public Progress getProgressEntry(ProgressPK id) {
+        return em.find(Progress.class, id);
     }
     
 }

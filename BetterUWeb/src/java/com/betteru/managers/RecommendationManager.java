@@ -4,14 +4,24 @@
  */
 package com.betteru.managers;
 
+import com.betteru.sessionbeanpackage.ProgressFacade;
+import com.betteru.sourcepackage.Progress;
+import com.betteru.sourcepackage.ProgressPK;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -28,6 +38,9 @@ public class RecommendationManager implements Serializable{
     
     private int caloriesMin; 
     private int caloriesMax;
+    private int calorieIntake; 
+    
+    private String statusMessage; 
     
     private static final String YUMMLY_ID = "f6004e71";
     private static final String YUMMLY_KEY = "57e811ae63c25bd48802742327682e7d";
@@ -35,9 +48,14 @@ public class RecommendationManager implements Serializable{
     
     List<RecipeEntry> yummlyRecommendations; 
     
+    
+    @EJB
+    private ProgressFacade progressFacade;
+    
     public RecommendationManager(){  
         caloriesMin = 50; 
         caloriesMax = 250; 
+        statusMessage = "Status message for testing";
         
     }
     
@@ -56,6 +74,27 @@ public class RecommendationManager implements Serializable{
     public void setCaloriesMax(int caloriesMax) { 
         this.caloriesMax = caloriesMax; 
     }
+    
+    public int getCalorieIntake(){
+        return calorieIntake;
+    }
+    
+    public void setCalorieIntake(int calorieIntake){
+        this.calorieIntake = calorieIntake; 
+    }
+    
+    
+    
+    public String getStatusMessage(){
+        return statusMessage; 
+    }
+    
+    public void setStatusMessage(String statusMessage) {
+        this.statusMessage = statusMessage;
+    }
+    
+    
+    
     
     public String refresh(){
         return "";
@@ -99,7 +138,6 @@ public class RecommendationManager implements Serializable{
                     if(tmpName.equals("ENERC_KJ")) {
                         int calorie = result.getJsonNumber("value").intValue();
                         System.out.println(calorie + "\n");
-                        //int calorie = Integer.parseInt(result.getString("value"));
                         entry.setCalories(calorie);
                         
                     }
@@ -109,6 +147,51 @@ public class RecommendationManager implements Serializable{
          
          return recipeResults;
          
+    }
+    
+    
+    public String enterDailyIntake(){
+          
+        //Testing: userId = 29, time = 1461744000  
+        int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+        if(user_id == 0) {
+            statusMessage = "Oops. You're not logged in!";
+            return "";
+        }
+        
+        //Get today @ Midnight in epoch 
+        int LOGTIME_HARDCODE = 1461744000;
+        LocalTime midnight = LocalTime.MIDNIGHT;
+        LocalDate today = LocalDate.now(ZoneId.of("Europe/Berlin"));
+        LocalDateTime todayMidnight = LocalDateTime.of(today, midnight);
+        
+        //Create primary comp key with userId + time 
+        ProgressPK proPK = new ProgressPK();
+        proPK.setDay(todayMidnight.getSecond());
+        proPK.setId(user_id);
+        
+        //connect to find progress entry
+        Progress entry = progressFacade.getProgressEntry(proPK);
+        
+        if(entry != null) {
+            //update progress entry
+            try {
+                entry.setCaloriesIn(calorieIntake);
+
+                progressFacade.edit(entry);
+            } catch (EJBException e) {
+
+                statusMessage = "Something went wrong while editing your profile!";
+                return "";
+            }
+        }
+        else {
+            statusMessage = "Progress entry not found.";
+            return "";
+        }
+        
+        //return appropriate page 
+        return "MyAccount";
     }
     
     
