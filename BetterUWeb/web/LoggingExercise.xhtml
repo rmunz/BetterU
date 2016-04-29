@@ -43,6 +43,8 @@ Copyright © 2016 Corey McQuay. All rights reserved.
                             <p:watermark for="description" value="Description" />
                         </p:inputText>
 
+                        <br />
+
                         <p:inputText id="sets" value="" 
                                      required="true" label="Sets" class="create-content">
 
@@ -54,11 +56,17 @@ Copyright © 2016 Corey McQuay. All rights reserved.
                             <p:watermark for="reps" value="Reps* (Optional)" />
                         </p:inputText>
 
+                        <br />
+
                         <h3><b>Intensity:</b> </h3>
                         <h:panelGrid columns="1" style="margin-bottom: 10px">
                             <p:inputText id="txt3" value="#{sliderView.number3}" />
                             <p:slider for="txt3" step="1" minValue="1" maxValue="9" />
                         </h:panelGrid>
+
+                        <img id="intensity" src="resources/images/intensityChart.jpg" alt="intensity" />
+
+                        <br />
 
                         <h3><b>Duration</b> </h3>
                         <!--                <h:panelGrid columns="1" style="margin-bottom: 10px">
@@ -76,6 +84,9 @@ Copyright © 2016 Corey McQuay. All rights reserved.
                                 <p:outputLabel for="time" value="Time:" />
                                 <p:calendar id="time" value="#{timeView.date11}" pattern="HH:mm" timeOnly="true"  />
                             </h:panelGrid>
+                            
+                            <br />
+                            <br />
 
                             <p:commandButton value="Submit" update="msgs" actionListener="#{calendarView.click}" icon="ui-icon-check" />
 
@@ -90,11 +101,11 @@ Copyright © 2016 Corey McQuay. All rights reserved.
                                 </p:panelGrid>
                             </p:dialog>
                         </h:form>
-                        <b>Calories:</b> <p:outputLabel></p:outputLabel>
+                        <img id="intensity" src="resources/images/CaloriesBurnedIcon.png" alt="intensity" /><b>Calories Burned:    </b> <p:outputLabel></p:outputLabel>
                     </h:form>
                 </div> 
-                </ui:define>
+            </ui:define>
         </ui:composition>
-                </h:body>
-            
+    </h:body>
+
 </html>
