@@ -8,14 +8,15 @@ Copyright © 2016 Osman Balci. All rights reserved.
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
     <h:body>
         <ui:composition template="template/siteTemplate.xhtml">
             <!-- Page title -->
             <title><ui:define name="title">BetterU - Create Account</ui:define></title>
             <!-- Additional CSS styles needed -->
             <ui:define name="css">
-                <link href="resources/css/createAccount.css" rel="stylesheet" type="text/css"/>
+                <link rel="stylesheet" type="text/css" href="resources/css/createAccount.css" />
             </ui:define>
             <!-- Additional JS files needed -->
             
@@ -25,30 +26,114 @@ Copyright © 2016 Osman Balci. All rights reserved.
                 <div id="create-account-wrapper">
                     <h:form id="form">
                         <f:event listener="#{accountManager.validateInformation}" type="postValidate"/>
-                        <div id="part-1">
-                            <h:inputText id="first-name" label="First Name" 
-                                         styleClass="input-control #{component.valid?'':'validation-failed'}"
-                                         value="#{accountManager.firstName}" a:placeholder="First Name*"
-                                         required="true" requiredMessage="First Name is required." />
-                            <h:inputText id="last-name" label="Last Name" 
-                                         styleClass="input-control #{component.valid?'':'validation-failed'}"
-                                         value="#{accountManager.firstName}" a:placeholder="Last Name*"
-                                         required="true" requiredMessage="Last Name is required." />
-                            <h:inputText id="age" label="Age" 
-                                         styleClass="input-control #{component.valid?'':'validation-failed'}"
-                                         value="#{accountManager.firstName}" a:placeholder="Age*"
-                                         required="true" requiredMessage="Age is required." />
-                            <h:selectOneMenu id="gender" label="Gender" styleClass="input-control"
-                                             value="#{accountManager.gender}" required="true">
-                                <f:selectItem itemValue="Male" itemLabel="Male" />
-                                <f:selectItem itemValue="Female" itemLabel="Female" />
-                            </h:selectOneMenu>
+                        <div id="wrapper-1-2">
+                            <div id="part-1">
+                                <span class="section-header">1. Basic Information</span><br/><br/>
+                                <h:inputText id="first-name" label="First Name" 
+                                             styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                             value="#{accountManager.firstName}" a:placeholder="First Name*"
+                                             required="true" requiredMessage="First Name is required." />
+                                <h:inputText id="last-name" label="Last Name" 
+                                             styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                             value="#{accountManager.firstName}" a:placeholder="Last Name*"
+                                             required="true" requiredMessage="Last Name is required." />
+                                <h:inputText id="age" label="Age" 
+                                             styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                             value="#{accountManager.firstName}" a:placeholder="Age*"
+                                             required="true" requiredMessage="Age is required." />
+                                <h:selectOneMenu id="gender" label="Gender"
+                                                 value="#{accountManager.gender}" required="true"
+                                                 requiredMessage="Gender is required."
+                                                 styleClass="input-control #{component.valid?'':'validation-failed'}">
+                                    <f:selectItem itemValue="#{null}" itemLabel="--Gender--" />
+                                    <f:selectItem itemValue="Male" itemLabel="Male" />
+                                    <f:selectItem itemValue="Female" itemLabel="Female" />
+                                </h:selectOneMenu>
+                            </div>
+                            <div id="part-2">
+                                <span class="section-header">2. Height and Weight</span><br/><br/>
+                                <h:inputText id="height-ft" label="Height (ft)" 
+                                             styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                             value="#{accountManager.height}" a:placeholder="Height (ft)*"
+                                             required="true" requiredMessage="Height (ft) is required." />
+                                <h:inputText id="height-in" label="Height (in)" 
+                                             styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                             value="#{accountManager.height}" a:placeholder="Height (in)*"
+                                             required="true" requiredMessage="Height (in) is required." />
+                                <h:inputText id="current-weight" label="Current Weight (lbs)" 
+                                             styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                             value="#{accountManager.weight}" a:placeholder="Current Weight (lbs)*"
+                                             required="true" requiredMessage="Height (ft) is required." />
+                                <h:inputText id="goal-weight" label="Goal Weight (lbs)" 
+                                             styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                             value="#{accountManager.goalWeight}" a:placeholder="Goal Weight (lbs)*"
+                                             required="true" requiredMessage="Goal Weight (lbs) is required." />
+                            </div>
                         </div>
-                        <div id="part-2">
+                        <div id="wrapper-3-4">
+                            <div id="part-3">
+                                <span class="section-header">3. Activity Level</span><br/><br/>
+                                <h:selectOneMenu id="activity-level" label="Activity Level"
+                                                 value="#{accountManager.activityLevel}" required="true"
+                                                 requiredMessage="Activity Level is required."
+                                                 styleClass="input-control #{component.valid?'':'validation-failed'}">
+                                    <f:selectItem itemValue="#{null}" itemLabel="--How active are you?--" />
+                                    <f:selectItem itemValue="0" itemLabel="I am exercising less than 1 hour per week" />
+                                    <f:selectItem itemValue="1" itemLabel="I am exercising about 2-5 hours per week" />
+                                    <f:selectItem itemValue="2" itemLabel="I am exercising about 5-7 hours per week" />
+                                    <f:selectItem itemValue="3" itemLabel="I am exercising for 8+ hours per week" />
+                                </h:selectOneMenu>
+                                <h:selectOneMenu id="activity-goal" label="Activity Goal"
+                                                 value="#{accountManager.activityGoal}" required="true"
+                                                 requiredMessage="Activity Goal is required."
+                                                 styleClass="input-control #{component.valid?'':'validation-failed'}">
+                                    <f:selectItem itemValue="#{null}" itemLabel="--How active do you want to be?--" />
+                                    <f:selectItem itemValue="1" itemLabel="I want to spend some of my day being physical" />
+                                    <f:selectItem itemValue="2" itemLabel="I want to spend more of my day being physical" />
+                                    <f:selectItem itemValue="3" itemLabel="I want to spend most of my day being physical" />
+                                </h:selectOneMenu>
+                            </div>
+                            <div id="part-4">
+                                <span class="section-header">4. Account Details</span><br/><br/>
+                                <h:inputText id="username" label="Username" 
+                                             styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                             value="#{accountManager.goalWeight}" a:placeholder="Username*"
+                                             required="true" requiredMessage="Email is required." />
+                                <h:inputText id="email" label="Email" 
+                                             styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                             value="#{accountManager.goalWeight}" a:placeholder="Email*"
+                                             required="true" requiredMessage="Email is required." />
+                                <h:selectOneMenu id="security-question" label="Security Questions" styleClass="input-control"
+                                         value="#{accountManager.security_question}" required="true">
+                                    <f:selectItems value="#{accountManager.security_questions}" />
+                                </h:selectOneMenu>
+                                <h:inputText id="security-answer" label="Security Answer" 
+                                             styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                             value="#{accountManager.security_answer}" a:placeholder="Security Answer*"
+                                             required="true" requiredMessage="Security Answer is required." />
+                                <h:inputSecret id="password" label="Password" 
+                                             styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                             value="#{accountManager.password}" a:placeholder="Password*"
+                                             required="true" requiredMessage="Password is required.">
+                                    <f:validator validatorId="passwordValidator" />
+                                </h:inputSecret>
+                                <h:inputSecret id="confirm-password" label="Confirm Password" 
+                                             styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                             value="#{accountManager.password}" a:placeholder="Confirm Password*"
+                                             required="true" requiredMessage="Confirm Password is required." />
+                            </div>
                         </div>
-                        <div id="part-3">
-                        </div>
-                        <div id="part-4">
+                        <div id="submit-wrapper">
+                            <!-- Error messages output -->
+                            <div id="messages-wrapper">
+                                <p:messages id="msgs" showIcon="false" />
+                                <h:outputLabel id="form-error-message" class="error-message"
+                                               value="#{accountManager.statusMessage}" />
+                            </div>
+                            <!-- Create account / cancel buttons -->
+                            <h:button id="cancel-btn" class="btn" value="Cancel" outcome="index" />
+                            <h:commandButton id="create-account-btn" class="btn" value="Create Account"
+                                             action="#{accountManager.createAccount()}" />
                         </div>
                     </h:form>
                 </div>
