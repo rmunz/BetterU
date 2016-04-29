@@ -47,6 +47,9 @@ public class ProfileViewManager implements Serializable {
     private int numDaysInMonth = 30;
     private boolean weekly = true;
     private String interval = "Weekly";
+    
+    private long referenceTime;
+    private final long secondsPerWeek = 60*60*24*7;
 
     public String getInterval() {
         return interval;
@@ -69,7 +72,7 @@ public class ProfileViewManager implements Serializable {
     private com.betteru.sessionbeanpackage.ProgressFacade progressFacade;
 
     public ProfileViewManager() {
-        
+        referenceTime = System.currentTimeMillis();
     }
 
     public String viewProfile() {
@@ -95,8 +98,6 @@ public class ProfileViewManager implements Serializable {
     }
     
     public void refreshCharts() {
-        weekly = !weekly;
-        
         interval = weekly ? "Weekly" : "Monthly";
         
         buildWeightModel();
@@ -105,14 +106,35 @@ public class ProfileViewManager implements Serializable {
         buildMileModel();
     }
     
+    public void changeInterval() {
+        weekly = !weekly;
+        
+        refreshCharts();
+    }
+    
+    public void prev(){
+        //decrement time
+        if (weekly) {
+            
+        }
+        
+        refreshCharts();
+    }
+    
+    public void next(){
+        //increment time
+        
+        refreshCharts();
+    }
+    
     public List<Progress> getLoggedInUsersProgress() {
         List<Progress> progressList;// = progressFacade.findAllProgressEntriesByUid(getLoggedInUser().getId());
         
         if (weekly) {
-            progressList = progressFacade.findWeekByUid(getLoggedInUser().getId(), getEndOfWeek(System.currentTimeMillis()));
+            progressList = progressFacade.findWeekByUid(getLoggedInUser().getId(), getEndOfWeek(referenceTime));
             numTicks = 7;
         } else {
-            progressList = progressFacade.findMonthByUid(getLoggedInUser().getId(), getEndOfMonth(System.currentTimeMillis()), numDaysInMonth);
+            progressList = progressFacade.findMonthByUid(getLoggedInUser().getId(), getEndOfMonth(referenceTime), numDaysInMonth);
             numTicks = numDaysInMonth;
         }
         

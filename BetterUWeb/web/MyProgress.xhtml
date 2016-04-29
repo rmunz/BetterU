@@ -24,7 +24,11 @@
                 
                 <h2>#{profileViewManager.loggedInUser.firstName} #{profileViewManager.loggedInUser.lastName} - user #{profileViewManager.loggedInUser.id}</h2>
 
-                <p:commandButton id="btn_interval" value="#{profileViewManager.interval}" actionListener="#{profileViewManager.refreshCharts()}" update="@form"/>
+                <div>
+                    <p:commandButton id="btn_prev" value="prev" actionListener="#{profileViewManager.prev()}" update="@form"/>
+                    <p:commandButton id="btn_interval" value="#{profileViewManager.interval}" actionListener="#{profileViewManager.changeInterval()}" update="@form"/>
+                    <p:commandButton id="btn_next" value="next" actionListener="#{profileViewManager.next()}" update="@form"/>
+                </div>
                 
                 <table>
                     <tr>
