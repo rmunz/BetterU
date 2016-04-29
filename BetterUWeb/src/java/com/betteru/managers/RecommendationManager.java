@@ -7,6 +7,7 @@ package com.betteru.managers;
 import com.betteru.sessionbeanpackage.ProgressFacade;
 import com.betteru.sourcepackage.Progress;
 import com.betteru.sourcepackage.ProgressPK;
+import com.betteru.sourcepackage.User;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -111,12 +112,15 @@ public class RecommendationManager implements Serializable{
     
     public String enterDailyIntake(){
           
-        //Testing: userId = 29, time = 1461744000  
-        int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
-        if(user_id == 0) {
+        //Get user Id  
+        User user = (User)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+
+        if(user == null) {
             statusMessage = "Oops. You're not logged in!";
             return "";
         }
+        
+        int user_id = user.getId();
         
         //Get today @ Midnight in epoch 
         int LOGTIME_HARDCODE = 1461744000;

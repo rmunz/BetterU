@@ -39,14 +39,13 @@ Copyright © 2016 Corey McQuay. All rights reserved.
                         <h:panelGrid columns="1" style="margin-bottom: 10px">
                             <p:inputText id="intensitySlider" value="#{exerciseManager.intensity}" />
                             <p:slider for="intensitySlider" step="1" minValue="1" maxValue="9" />
-                        </h:panelGrid>
-
-                        <h3><b>Duration:</b> </h3>
-                        <h:panelGrid columns="1" style="margin-bottom: 10px">
+                            <br />
                             <p:inputText id="durationSlider" value="#{exerciseManager.duration}" />
                             <p:slider for="durationSlider" step="1" minValue="0" maxValue="60" />
+                            <br />
+                            <p:inputText id="weight" value="#{exerciseManager.weight}" />
                         </h:panelGrid>
-
+                        
                         <h:inputHidden id="caloriesBurned" value="#{exerciseManager.caloriesOut}" />
                         
                         <h:commandButton id="calcCalories-btn"  action="#{exerciseManager.enterDailyExercise}" value="Calculate" styleClass="buttonText"/>
@@ -103,39 +102,7 @@ Copyright © 2016 Corey McQuay. All rights reserved.
                         <img id="intensity" src="resources/images/intensityChart.jpg" alt="intensity" />
 
                         <br /><br /><br />
-<!--                        <br />
 
-                        <h3><b>Duration</b> </h3>-->
-                        
-
-<!--                        <h:form id="form">
-                            <p:growl id="msgs" showDetail="true" />
-
-                            <h:panelGrid columns="2" cellpadding="5">
-
-
-                                <p:outputLabel for="time" value="Time:" />
-                                <p:calendar id="time" value="#{timeView.date11}" pattern="HH:mm" timeOnly="true"  />
-                            </h:panelGrid>
-                            
-                            <br />
-                            <br />
-
-                            <p:commandButton value="Submit" update="msgs" actionListener="#{calendarView.click}" icon="ui-icon-check" />
-
-                            <p:dialog modal="true" resizable="false" header="Values" widgetVar="time" showEffect="fold">
-                                <p:panelGrid id="display" columns="2" columnClasses="label,value">
-
-
-                                    <h:outputText value="Time:" />
-                                    <h:outputText id="duration2" value="#{timeView.date11}">
-                                        <f:convertDateTime pattern="mm" />
-                                    </h:outputText>
-                                </p:panelGrid>
-                            </p:dialog>
-                            
-                            
-                        </h:form>-->
 
                         <img id="intensity" src="resources/images/CaloriesBurnedIcon.png" alt="intensity" /><b>Calories Burned:    </b> <p:outputLabel></p:outputLabel>
                     </h:form>
