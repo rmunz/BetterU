@@ -105,6 +105,7 @@ public class ProfileViewManager implements Serializable {
         
         Date now = new Date(System.currentTimeMillis()/1000);
         c.setTime(now);
+        c.getFirstDayOfWeek();
         
         // set to end of week
         c.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
