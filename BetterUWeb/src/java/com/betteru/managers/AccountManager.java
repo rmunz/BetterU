@@ -315,6 +315,12 @@ public String getBreakfast() {
     public void setSelected(User selected) {
         this.selected = selected;
     }
+    
+    /* Check session map for username to see if anyone is logged in */
+    public boolean isLoggedIn() {
+        return FacesContext.getCurrentInstance().getExternalContext().
+               getSessionMap().get("username") != null;
+    } 
 
     public String createAccount() {
         
