@@ -52,8 +52,8 @@ public class ProgressFacade extends AbstractFacade<Progress> {
         return query.getResultList().isEmpty() ? null : query.getResultList();        
     }
     
-    public List<Progress> findMonthByUid(int userId, long logDate) {
-        long aMonthAgo = logDate - 2628000 + 1;
+    public List<Progress> findMonthByUid(int userId, long logDate, int numDaysInMonth) {
+        long aMonthAgo = logDate - (24*60*60*numDaysInMonth) + 1;
         TypedQuery<Progress> query = em.createNamedQuery("Progress.findMonth", Progress.class)
                                         .setParameter("logDate", logDate).setParameter("userId", userId).setParameter("aMonthAgo", aMonthAgo);               
         return query.getResultList().isEmpty() ? null : query.getResultList();        
