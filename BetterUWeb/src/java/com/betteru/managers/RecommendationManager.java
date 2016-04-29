@@ -59,47 +59,6 @@ public class RecommendationManager implements Serializable{
         
     }
     
-    public int getCaloriesMin() {
-        return caloriesMin; 
-    }
-    
-    public void setCaloriesMin(int caloriesMin){
-        this.caloriesMin = caloriesMin; 
-    }
-    
-    public int getCaloriesMax() { 
-        return caloriesMax;  
-    }
-    
-    public void setCaloriesMax(int caloriesMax) { 
-        this.caloriesMax = caloriesMax; 
-    }
-    
-    public int getCalorieIntake(){
-        return calorieIntake;
-    }
-    
-    public void setCalorieIntake(int calorieIntake){
-        this.calorieIntake = calorieIntake; 
-    }
-    
-    
-    
-    public String getStatusMessage(){
-        return statusMessage; 
-    }
-    
-    public void setStatusMessage(String statusMessage) {
-        this.statusMessage = statusMessage;
-    }
-    
-    
-    
-    
-    public String refresh(){
-        return "";
-    }
-    
     public List<RecipeEntry> getYummlyRecommendations() throws IOException{
          String min = "&nutrition.ENERC_KCAL.min=" + caloriesMin; 
          String max = "&nutrition.ENERC_KCAL.max=" + caloriesMax; 
@@ -194,6 +153,46 @@ public class RecommendationManager implements Serializable{
         return "MyAccount";
     }
     
+    public int getCaloriesMin() {
+        return caloriesMin; 
+    }
+    
+    public void setCaloriesMin(int caloriesMin){
+        this.caloriesMin = caloriesMin; 
+    }
+    
+    public int getCaloriesMax() { 
+        return caloriesMax;  
+    }
+    
+    public void setCaloriesMax(int caloriesMax) { 
+        this.caloriesMax = caloriesMax; 
+    }
+    
+    public int getCalorieIntake(){
+        return calorieIntake;
+    }
+    
+    public void setCalorieIntake(int calorieIntake){
+        this.calorieIntake = calorieIntake; 
+    }
+    
+    
+    
+    public String getStatusMessage(){
+        return statusMessage; 
+    }
+    
+    public void setStatusMessage(String statusMessage) {
+        this.statusMessage = statusMessage;
+    }
+    
+    
+    
+    
+    public String refresh(){
+        return "";
+    }
     
 }
 
