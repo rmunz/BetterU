@@ -45,7 +45,12 @@ public class ProfileViewManager implements Serializable {
     
     private int numTicks = 7;
     private int numDaysInMonth = 30;
-    private boolean weekly;
+    private boolean weekly = true;
+    private String interval = "Weekly";
+
+    public String getInterval() {
+        return interval;
+    }
 
     /**
      * The instance variable 'userFacade' is annotated with the @EJB annotation.
@@ -91,6 +96,8 @@ public class ProfileViewManager implements Serializable {
     
     public void refreshCharts() {
         weekly = !weekly;
+        
+        interval = weekly ? "Weekly" : "Monthly";
         
         buildWeightModel();
         buildCalorieModel();
