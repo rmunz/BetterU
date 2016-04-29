@@ -27,6 +27,7 @@
                 <div>
                     <p:commandButton id="btn_prev" value="prev" actionListener="#{profileViewManager.prev()}" update="@form"/>
                     <p:commandButton id="btn_interval" value="#{profileViewManager.interval}" actionListener="#{profileViewManager.changeInterval()}" update="@form"/>
+                    <p:commandButton id="btn_today" value="Today" actionListener="#{profileViewManager.today()}" update="@form"/>
                     <p:commandButton id="btn_next" value="next" actionListener="#{profileViewManager.next()}" update="@form"/>
                 </div>
                 

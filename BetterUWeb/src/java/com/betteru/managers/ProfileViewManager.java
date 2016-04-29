@@ -49,7 +49,7 @@ public class ProfileViewManager implements Serializable {
     private String interval = "Weekly";
     
     private long referenceTime;
-    private final long secondsPerWeek = 60*60*24*7;
+    private final long secondsPerDay = 60*60*24;
 
     public String getInterval() {
         return interval;
@@ -112,10 +112,18 @@ public class ProfileViewManager implements Serializable {
         refreshCharts();
     }
     
+    public void today() {
+        referenceTime = System.currentTimeMillis();
+        
+        refreshCharts();
+    }
+    
     public void prev(){
         //decrement time
         if (weekly) {
-            
+            referenceTime -= (7*secondsPerDay*1000);
+        } else {
+            referenceTime -= (30*secondsPerDay*1000);
         }
         
         refreshCharts();
@@ -123,12 +131,17 @@ public class ProfileViewManager implements Serializable {
     
     public void next(){
         //increment time
+        if (weekly) {
+            referenceTime += (7*secondsPerDay*1000);
+        } else {
+            referenceTime += (30*secondsPerDay*1000);
+        }
         
         refreshCharts();
     }
     
     public List<Progress> getLoggedInUsersProgress() {
-        List<Progress> progressList;// = progressFacade.findAllProgressEntriesByUid(getLoggedInUser().getId());
+        List<Progress> progressList;
         
         if (weekly) {
             progressList = progressFacade.findWeekByUid(getLoggedInUser().getId(), getEndOfWeek(referenceTime));
