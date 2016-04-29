@@ -12,7 +12,7 @@
     <body>
         <ui:composition template="template/siteTemplate.xhtml">
             <!-- Page title -->
-            <title><ui:define name="title">BetterU</ui:define></title>
+            <title><ui:define name="title">BetterU - Sign In</ui:define></title>
             <!-- Additional CSS styles needed -->
             <ui:define name="css">
                 <link rel="stylesheet" type="text/css" href="resources/css/signIn.css"/>
@@ -21,9 +21,7 @@
             
             <!-- Page content -->
             <ui:define name="editableContent">
-                <div id="page-title">
-                    Sign In
-                </div>
+                <div id="page-title">Sign In</div>
                 <div id="signin-wrapper">
                     <h:form id="form">
                         <!-- Input fields -->
@@ -47,9 +45,6 @@
                                 Forgot password?
                             </h:commandLink>
                         </div>
-                        
-                        <!-- Page bottom fix -->
-                        <div id="page-bottom-padding">&nbsp;</div>
                     </h:form>
                 </div>
             </ui:define>
