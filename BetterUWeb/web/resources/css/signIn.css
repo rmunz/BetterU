@@ -1,0 +1,40 @@
+#signin-wrapper {
+    width: 240px;
+    margin: 0 auto;
+    padding-top: 80px;
+}
+
+#form\:username {
+    width: 220px;
+    font-size: 16px;
+}
+
+#form\:password {
+    width: 220px;
+    font-size: 16px;
+}
+
+#form\:signin-btn {
+    width: 240px;
+    margin-bottom: 10px;
+}
+
+#form\:form-error-message {
+    width: 220px;
+    margin-bottom: 10px;
+}
+
+#signin-links {
+    font-size: 15px;
+    line-height: 23px;
+}
+
+#signin-links a {
+    color: #3f88bd;
+    text-decoration: none;
+    border-bottom: 1px #3f88bd dotted;
+}
+
+#signin-links a:hover {
+    text-decoration: none;
+}
