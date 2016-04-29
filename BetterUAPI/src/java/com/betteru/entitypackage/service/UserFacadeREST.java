@@ -46,7 +46,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Override
     @Consumes({MediaType.APPLICATION_JSON})
     public void create(User entity) {
-        
+        /*
         ActionListener taskPerformer = new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         //...Perform a task...
@@ -75,7 +75,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
             c.set(Calendar.MILLISECOND, 0);
             int msToMidnight = (int)(c.getTimeInMillis()-System.currentTimeMillis());
             timer.setInitialDelay(msToMidnight);
-            timer.start(); 
+            timer.start(); */
         super.create(entity);
     }
 
