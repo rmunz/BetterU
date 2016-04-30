@@ -8,6 +8,8 @@ import com.betteru.sessionbeanpackage.ProgressFacade;
 import com.betteru.sourcepackage.User;
 import com.betteru.sessionbeanpackage.UserFacade;
 import com.betteru.sourcepackage.Progress;
+import com.sendgrid.SendGrid;
+import com.sendgrid.SendGridException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
@@ -23,6 +25,7 @@ import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Named;
+import static javax.ws.rs.client.Entity.entity;
  
 @Named(value = "accountManager")
 @SessionScoped
@@ -39,7 +42,9 @@ public class AccountManager implements Serializable {
     private String password;
     private String email;
     private Integer age;
-    private Integer height;
+    private Integer height; 
+    private Integer heightFeet;
+    private Integer heightInches;
     private Integer weight;
     private Integer activityLevel;
     private String activityGoal;
@@ -75,20 +80,12 @@ public class AccountManager implements Serializable {
     @EJB
     private ProgressFacade progressFacade;
     
-    /**
-     * The instance variable 'photoFacade' is annotated with the @EJB annotation.
-     * This means that the GlassFish application server, at runtime, will inject in
-     * this instance variable a reference to the @Stateless session bean PhotoFacade.
-     */
-//    @EJB
-//    private PhotoFacade photoFacade;
-
 
     public Integer getAge() {
         return age;
     }
     
-    public void setAge(int age) {
+    public void setAge(Integer age) {
        this.age = age; 
     }
     
@@ -96,15 +93,32 @@ public class AccountManager implements Serializable {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(Integer height) {
         this.height = height;
     }
+    
+    public Integer getHeightFeet(){
+        return heightFeet; 
+    }
+    
+    public void setHeightFeet(Integer heightFeet){
+        this.heightFeet = heightFeet;
+    }
+    
+    public Integer getHeightInches(){
+        return heightInches; 
+    }
+    
+    public void setHeightInches(Integer heightInches){
+        this.heightInches = heightInches;
+    }
+    
 
     public Integer getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(Integer weight) {
         this.weight = weight;
     }
 
@@ -112,7 +126,7 @@ public class AccountManager implements Serializable {
         return activityLevel;
     }
     
-    public void setActivityLevel(int level) {
+    public void setActivityLevel(Integer level) {
         this.activityLevel = level;
     }
     
@@ -129,7 +143,7 @@ public class AccountManager implements Serializable {
         return goalWeight;
     }
 
-    public void setGoalWeight(int goalWeight) {
+    public void setGoalWeight(Integer goalWeight) {
         this.goalWeight = goalWeight;
     }
 
@@ -137,7 +151,7 @@ public class AccountManager implements Serializable {
         return targetCalories;
     }
 
-    public void setTargetCalories(int targetCalories) {
+    public void setTargetCalories(Integer targetCalories) {
         this.targetCalories = targetCalories;
     }
     
@@ -224,7 +238,7 @@ public class AccountManager implements Serializable {
         this.email = email;
     }
     
-public String getBreakfast() {
+    public String getBreakfast() {
         return breakfast;
     }
 
@@ -232,11 +246,11 @@ public String getBreakfast() {
         this.breakfast = breakfast;
     }
     
-        public String getLunch() {
+    public String getLunch() {
         return lunch;
     }
 
-    public void setLunh(String lunch) {
+    public void setLunch(String lunch) {
         this.lunch = lunch;
     }
     
@@ -337,7 +351,8 @@ public String getBreakfast() {
             try {
                 User user = new User();
                 user.setFirstName(firstName);
-                user.setLastName(lastName);                
+                user.setLastName(lastName); 
+                this.height = (heightFeet * 12) + heightInches; 
                 user.setHeight(height);
                 user.setWeight(weight);
                 user.setAge(age);
@@ -355,6 +370,7 @@ public String getBreakfast() {
                 user.setPoints(0);
                 user.setUnits('I');
               
+                sendEmail(email);
                 userFacade.create(user);    
                 /*
                 ActionListener taskPerformer = new ActionListener() {
@@ -398,8 +414,29 @@ public String getBreakfast() {
         }
         return "";
     }
+    
+    public void sendEmail(String userEmail) {
 
-      
+        SendGrid sendgrid = new SendGrid("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");
+        
+        SendGrid.Email email = new SendGrid.Email();
+        //Sets up the email format to be sent.
+        email.addTo(userEmail);
+        email.setFrom("BetterU");
+        email.setSubject("TEMPORARY EMAIL: Welcome to BetterU.");
+        email.setHtml("Thanks for signing up!");
+
+        //Send the email to the user using SendGrid, 
+        //if it fails print the error statement
+        try {
+            SendGrid.Response response = sendgrid.send(email);
+            System.out.println(response.getMessage());
+        }
+        catch (SendGridException e) {
+            System.err.println(e);
+        }
+     
+    }
       
     public String updateAccount() {
         if (statusMessage.isEmpty()) {

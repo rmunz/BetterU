@@ -6,6 +6,8 @@ package com.betteru.entitypackage.service;
 
 import com.betteru.entitypackage.Progress;
 import com.betteru.entitypackage.User;
+import com.sendgrid.SendGrid;
+import com.sendgrid.SendGridException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
@@ -41,12 +43,34 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public UserFacadeREST() {
         super(User.class);
     }
-
+    
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_JSON})
     public void create(User entity) {
+<<<<<<< HEAD
         /*
+=======
+        SendGrid sendgrid = new SendGrid("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");
+        
+        SendGrid.Email email = new SendGrid.Email();
+        //Sets up the email format to be sent.
+        email.addTo(entity.getEmail());
+        email.setFrom("BetterU");
+        email.setSubject("TEMPORARY EMAIL: Welcome to BetterU.");
+        email.setHtml("Thanks for signing up!");
+
+        //Send the email to the user using SendGrid, 
+        //if it fails print the error statement
+        try {
+            SendGrid.Response response = sendgrid.send(email);
+            System.out.println(response.getMessage());
+        }
+        catch (SendGridException e) {
+            System.err.println(e);
+        }
+        
+>>>>>>> 3f49b9071bf3f4221d5bcc345d8a0f9b2f39696c
         ActionListener taskPerformer = new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         //...Perform a task...
@@ -54,7 +78,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
                         progress.setCaloriesIn(0);
                         progress.setCaloriesOut(0);
                         progress.setMiles(0);
-                        progress.setWeight(entity.getWeight());
+                        progress.setWeight((double)entity.getWeight());
                         progress.setSteps(0);
                        // ProgressFacadeREST pf = new ProgressFacadeREST();
                         pf.create(progress);

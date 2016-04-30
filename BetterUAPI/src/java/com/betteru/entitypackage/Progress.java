@@ -55,12 +55,12 @@ public class Progress implements Serializable {
     private Integer caloriesIn;
     @Column(name = "CaloriesOut")
     private Integer caloriesOut;
-    @Column(name = "Weight")
-    private Integer weight;
     @Column(name = "Miles")
     private Integer miles;
     @Column(name = "Steps")
     private Integer steps;
+    @Column(name = "Weight")
+    private Double weight;
     //@JoinColumn(name = "user_id", referencedColumnName = "UserId")
     //@ManyToOne
     //private User user;
@@ -119,14 +119,6 @@ public class Progress implements Serializable {
         this.caloriesOut = caloriesOut;
     }
 
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
-
     public Integer getMiles() {
         return miles;
     }
@@ -141,6 +133,14 @@ public class Progress implements Serializable {
 
     public void setSteps(Integer steps) {
         this.steps = steps;
+    }
+    
+    public Double getWeight() {
+        return weight;
+    }
+    
+    public void setWeight(Double weight) {
+        this.weight = weight;
     }
 
     @Override
