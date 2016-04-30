@@ -7,6 +7,8 @@ package com.betteru.managers;
 import com.betteru.sourcepackage.Progress;
 import com.betteru.sourcepackage.User;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -41,10 +43,18 @@ public class ProfileViewManager implements Serializable {
     private int minCalories = Integer.MAX_VALUE;
     private int maxCalories = 0;
     
-    private String dateMin = "2016-04-01";
-    private String dateMax = "2016-04-30";
+    private int numTicks = 7;
+    private int numDaysInMonth = 30;
+    private boolean weekly = true;
+    private String interval = "Weekly";
     
-    
+    private long referenceTime;
+    private final long secondsPerDay = 60*60*24;
+
+    public String getInterval() {
+        return interval;
+    }
+
     /**
      * The instance variable 'userFacade' is annotated with the @EJB annotation.
      * This means that the GlassFish application server, at runtime, will inject in
@@ -62,7 +72,7 @@ public class ProfileViewManager implements Serializable {
     private com.betteru.sessionbeanpackage.ProgressFacade progressFacade;
 
     public ProfileViewManager() {
-        
+        referenceTime = System.currentTimeMillis();
     }
 
     public String viewProfile() {
@@ -87,10 +97,97 @@ public class ProfileViewManager implements Serializable {
         this.user = user;
     }
     
+    public void refreshCharts() {
+        interval = weekly ? "Weekly" : "Monthly";
+        
+        buildWeightModel();
+        buildCalorieModel();
+        buildStepModel();
+        buildMileModel();
+    }
+    
+    public void changeInterval() {
+        weekly = !weekly;
+        
+        refreshCharts();
+    }
+    
+    public void today() {
+        referenceTime = System.currentTimeMillis();
+        
+        refreshCharts();
+    }
+    
+    public void prev(){
+        //decrement time
+        if (weekly) {
+            referenceTime -= (7*secondsPerDay*1000);
+        } else {
+            referenceTime -= (30*secondsPerDay*1000);
+        }
+        
+        refreshCharts();
+    }
+    
+    public void next(){
+        //increment time
+        if (weekly) {
+            referenceTime += (7*secondsPerDay*1000);
+        } else {
+            referenceTime += (30*secondsPerDay*1000);
+        }
+        
+        refreshCharts();
+    }
+    
     public List<Progress> getLoggedInUsersProgress() {
-        List<Progress> progressList = progressFacade.findAllProgressEntriesByUid(getLoggedInUser().getId());
+        List<Progress> progressList;
+        
+        if (weekly) {
+            progressList = progressFacade.findWeekByUid(getLoggedInUser().getId(), getEndOfWeek(referenceTime));
+            numTicks = 7;
+        } else {
+            progressList = progressFacade.findMonthByUid(getLoggedInUser().getId(), getEndOfMonth(referenceTime), numDaysInMonth);
+            numTicks = numDaysInMonth;
+        }
         
         return progressList;
+    }
+    
+    private long getEndOfWeek(long time) {
+        Calendar c = Calendar.getInstance();
+        
+        Date now = new Date(time);
+        c.setTime(now);
+        c.getFirstDayOfWeek();
+        
+        // set to end of week
+        c.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+        c.set(Calendar.AM_PM, 0);
+        c.set(Calendar.HOUR, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        
+        return c.getTimeInMillis()/1000;
+    }
+    
+    private long getEndOfMonth(long time) {
+        Calendar c = Calendar.getInstance();
+        
+        Date now = new Date(time);
+        c.setTime(now);
+        
+        // set to end of month
+        numDaysInMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+        c.set(Calendar.DAY_OF_MONTH, numDaysInMonth);
+        c.set(Calendar.AM_PM, 0);
+        c.set(Calendar.HOUR, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        
+        return c.getTimeInMillis()/1000;
     }
     
     private LineChartModel buildWeightModel() {
@@ -125,10 +222,10 @@ public class ProfileViewManager implements Serializable {
         
         DateAxis axis = new DateAxis("Dates");
         axis.setTickAngle(-45);
-        axis.setMin(dateMin);
-        axis.setMax(dateMax);
+        axis.setMin(progressList.get(0).getDayString());
+        axis.setMax(progressList.get(progressList.size()-1).getDayString());
         axis.setTickFormat("%b %#d, %y");
-        axis.setTickCount(7);
+        axis.setTickCount(numTicks);
          
         weightModel.getAxes().put(AxisType.X, axis);
         
@@ -167,10 +264,10 @@ public class ProfileViewManager implements Serializable {
         
         DateAxis axis = new DateAxis("Dates");
         axis.setTickAngle(-45);
-        axis.setMin(dateMin);
-        axis.setMax(dateMax);
+        axis.setMin(progressList.get(0).getDayString());
+        axis.setMax(progressList.get(progressList.size()-1).getDayString());
         axis.setTickFormat("%b %#d, %y");
-        axis.setTickCount(7);
+        axis.setTickCount(numTicks);
          
         stepModel.getAxes().put(AxisType.X, axis);
         
@@ -209,10 +306,10 @@ public class ProfileViewManager implements Serializable {
         
         DateAxis axis = new DateAxis("Dates");
         axis.setTickAngle(-45);
-        axis.setMin(dateMin);
-        axis.setMax(dateMax);
+        axis.setMin(progressList.get(0).getDayString());
+        axis.setMax(progressList.get(progressList.size()-1).getDayString());
         axis.setTickFormat("%b %#d, %y");
-        axis.setTickCount(7);
+        axis.setTickCount(numTicks);
          
         mileModel.getAxes().put(AxisType.X, axis);
         
@@ -257,10 +354,10 @@ public class ProfileViewManager implements Serializable {
         
         DateAxis axis = new DateAxis("Dates");
         axis.setTickAngle(-45);
-        axis.setMin(dateMin);
-        axis.setMax(dateMax);
+        axis.setMin(progressList.get(0).getDayString());
+        axis.setMax(progressList.get(progressList.size()-1).getDayString());
         axis.setTickFormat("%b %#d, %y");
-        axis.setTickCount(7);
+        axis.setTickCount(numTicks);
                  
         calorieModel.getAxes().put(AxisType.X, axis);
         

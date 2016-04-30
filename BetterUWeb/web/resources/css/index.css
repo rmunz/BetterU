@@ -1,7 +1,7 @@
 #banner-wrapper {
     width: 100%;
     height: 350px;
-    background-color: #41c0f7;
+    background-color: #4aa3e5;
 }
 
 #banner-message {
@@ -31,8 +31,8 @@
 }
 
 #banner-btn:hover {
-    background-color: #0ba9ee;
-    border-color: #0ba9ee;
+    background-color: #2980ba;
+    border-color: #2980ba;
     transition: 0.3s background-color ease;
     transition: 0.3s border-color ease;
 }

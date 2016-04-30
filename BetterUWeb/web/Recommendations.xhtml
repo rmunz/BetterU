@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <head>
+        <title>Sign In</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+        <ui:composition template="template/siteTemplate.xhtml">
+            <!-- Page title -->
+            <title><ui:define name="title">BetterU</ui:define></title>
+            
+            <ui:define name="css">
+                <link rel="stylesheet" type="text/css" href="resources/css/recommendations.css"/>
+            </ui:define>
+            
+            <!-- Additional JS files needed -->
+            
+            <!-- Page content -->
+            <ui:define name="editableContent">
+                <div id="banner-wrapper">
+                    <div id="banner-inner-wrapper">
+                        <div id="banner-message" align="center">
+                            Let's Eat.<br/>
+                        </div>
+                    </div>
+                </div>
+                
+                <br /><br /><br /><br /><br /><br /><br />
+                <div align="center">     
+                    <h:outputLabel value ="#{recommmendationManager.statusMessage}" />
+                    <h:form class="form-recommendation">
+                        
+                        <h:outputLabel styleClass="outputLabel" for="mincal" value="Minimum Calories " />
+                        <h:inputText class="form-control" id="mincal" value="#{recommendationManager.caloriesMin}"/>
+                        <br/>
+                        <h:outputLabel styleClass="outputLabel" for="maxcal" value="Maximum Calories: " />
+                        <h:inputText class="form-control"  id="maxcal" value="#{recommendationManager.caloriesMax}"/>
+                        <br/>
+                        
+                        <h:commandButton id="refresh"  action="#{recommendationManager.refresh()}" value="Submit" styleClass="buttonText"/>
+                    </h:form>
+                    <br /><br /><br /><br /><br /><br /><br />
+                    <p:dataTable class="rec-table" var="rec" value="#{recommendationManager.yummlyRecommendations}">
+                        <p:column headerText="Recipe Id">
+                            <h:outputText value="#{rec.recipeId}" />
+                        </p:column>
+
+                        <p:column headerText="Recipie Name">
+                            <h:outputText value="#{rec.name}" />
+                        </p:column>
+
+                        <p:column headerText="Calories">
+                            <h:outputText value="#{rec.calories}" />
+                        </p:column>
+
+                    </p:dataTable>
+                    <br /><br /><br /><br /><br /><br /><br />
+                    <h:form class="form-daily-entry">
+                        
+                        <h:outputLabel styleClass="outputLabel" for="caloriesin" value="Calories Eaten: " />
+                        <h:inputText class="form-control" id="caloriesin" value="#{recommendationManager.calorieIntake}"/>
+                        <br/>
+                        
+                        <h:commandButton id="daily-submit"  action="#{recommendationManager.enterDailyIntake()}" value="Submit" styleClass="buttonText"/>
+                    </h:form>
+                    <br /><br /><br /><br /><br /><br /><br />
+                </div>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
