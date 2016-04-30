@@ -42,7 +42,9 @@ public class AccountManager implements Serializable {
     private String password;
     private String email;
     private Integer age;
-    private Integer height;
+    private Integer height; 
+    private Integer heightFeet;
+    private Integer heightInches;
     private Integer weight;
     private Integer activityLevel;
     private String activityGoal;
@@ -78,20 +80,12 @@ public class AccountManager implements Serializable {
     @EJB
     private ProgressFacade progressFacade;
     
-    /**
-     * The instance variable 'photoFacade' is annotated with the @EJB annotation.
-     * This means that the GlassFish application server, at runtime, will inject in
-     * this instance variable a reference to the @Stateless session bean PhotoFacade.
-     */
-//    @EJB
-//    private PhotoFacade photoFacade;
-
 
     public Integer getAge() {
         return age;
     }
     
-    public void setAge(int age) {
+    public void setAge(Integer age) {
        this.age = age; 
     }
     
@@ -99,15 +93,32 @@ public class AccountManager implements Serializable {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(Integer height) {
         this.height = height;
     }
+    
+    public Integer getHeightFeet(){
+        return heightFeet; 
+    }
+    
+    public void setHeightFeet(Integer heightFeet){
+        this.heightFeet = heightFeet;
+    }
+    
+    public Integer getHeightInches(){
+        return heightInches; 
+    }
+    
+    public void setHeightInches(Integer heightInches){
+        this.heightInches = heightInches;
+    }
+    
 
     public Integer getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(Integer weight) {
         this.weight = weight;
     }
 
@@ -115,7 +126,7 @@ public class AccountManager implements Serializable {
         return activityLevel;
     }
     
-    public void setActivityLevel(int level) {
+    public void setActivityLevel(Integer level) {
         this.activityLevel = level;
     }
     
@@ -132,7 +143,7 @@ public class AccountManager implements Serializable {
         return goalWeight;
     }
 
-    public void setGoalWeight(int goalWeight) {
+    public void setGoalWeight(Integer goalWeight) {
         this.goalWeight = goalWeight;
     }
 
@@ -140,7 +151,7 @@ public class AccountManager implements Serializable {
         return targetCalories;
     }
 
-    public void setTargetCalories(int targetCalories) {
+    public void setTargetCalories(Integer targetCalories) {
         this.targetCalories = targetCalories;
     }
     
@@ -340,7 +351,8 @@ public class AccountManager implements Serializable {
             try {
                 User user = new User();
                 user.setFirstName(firstName);
-                user.setLastName(lastName);                
+                user.setLastName(lastName); 
+                this.height = (heightFeet * 12) + heightInches; 
                 user.setHeight(height);
                 user.setWeight(weight);
                 user.setAge(age);

@@ -54,11 +54,11 @@ Copyright © 2016 Osman Balci. All rights reserved.
                                 <span class="section-header">2. Height and Weight</span><br/><br/>
                                 <h:inputText id="height-ft" label="Height (ft)" 
                                              styleClass="input-control #{component.valid?'':'validation-failed'}"
-                                             value="#{accountManager.height}" a:placeholder="Height (ft)*"
+                                             value="#{accountManager.heightFeet}" a:placeholder="Height (ft)*"
                                              required="true" requiredMessage="Height (ft) is required." />
                                 <h:inputText id="height-in" label="Height (in)" 
                                              styleClass="input-control #{component.valid?'':'validation-failed'}"
-                                             value="#{accountManager.height}" a:placeholder="Height (in)*"
+                                             value="#{accountManager.heightInches}" a:placeholder="Height (in)*"
                                              required="true" requiredMessage="Height (in) is required." />
                                 <h:inputText id="current-weight" label="Current Weight (lbs)" 
                                              styleClass="input-control #{component.valid?'':'validation-failed'}"
