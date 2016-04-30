@@ -10,13 +10,13 @@ Copyright © 2016 Osman Balci. All rights reserved.
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui">
     <head>
-        <title>Schedule</title>
+        <title>Daily Progress</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
     <body>
         <ui:composition template="template/siteTemplate.xhtml">
             <!-- Page title -->
-            <title><ui:define name="title">BetterU - Schedule</ui:define></title>
+            <title><ui:define name="title">BetterU - Daily Progress</ui:define></title>
             
             <ui:define name="css">
                 <link rel="stylesheet" type="text/css" href="resources/css/recommendations.css"/>
@@ -37,8 +37,39 @@ Copyright © 2016 Osman Balci. All rights reserved.
                 <br /><br /><br /><br /><br /><br /><br />
                 <div align="center">     
                     
+                    <div>
+                        <h1>Your Daily Totals</h1>
+                        
+                        <table>
+                            <tr>
+                                <td>Calories Eaten:</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Calories Burned:</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Net Calories</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Weight:</td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <br/><br/><br/>
                     
                     <div>
+                        <a href="Recommendations.xhtml">Log Food</a>     <a href="LoggingExercise.xhtml">Log Exercise</a>
+                    </div>
+                    
+                    <br/><br/><br/>
+                    
+                    <div>
+                        <h1>Schedule</h1>
                         <div>
                             <h2>Breakfast</h2>
                             <h:outputText id="breakfastName" value="#{profileViewManager.breakfast}" />
