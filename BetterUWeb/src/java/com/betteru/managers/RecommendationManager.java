@@ -95,7 +95,7 @@ public class RecommendationManager implements Serializable{
                 for (JsonObject result : results.getValuesAs(JsonObject.class)) {
                     
                     String tmpName = result.getString("attribute");    
-                    if(tmpName.equals("ENERC_KJ")) {
+                    if(tmpName.equals("ENERC_KCAL")) {
                         int calorie = result.getJsonNumber("value").intValue();
                         System.out.println(calorie + "\n");
                         entry.setCalories(calorie);
