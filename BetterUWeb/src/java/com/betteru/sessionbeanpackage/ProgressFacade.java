@@ -5,6 +5,7 @@
 package com.betteru.sessionbeanpackage;
 
 import com.betteru.sourcepackage.Progress;
+import com.betteru.sourcepackage.ProgressPK;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -45,18 +46,22 @@ public class ProgressFacade extends AbstractFacade<Progress> {
         }
     }
     
-    public List<Progress> findWeekByUid(int userId, int logDate) {
-        int aWeekAgo = logDate - 604800;
+    public List<Progress> findWeekByUid(int userId, long logDate) {
+        long aWeekAgo = logDate - 604800 + 1;
         TypedQuery<Progress> query = em.createNamedQuery("Progress.findWeek", Progress.class)
-                                        .setParameter("LogDate", logDate).setParameter("userId", userId).setParameter("aWeekAgo", aWeekAgo);               
-        return query.getResultList();        
+                                        .setParameter("logDate", logDate).setParameter("userId", userId).setParameter("aWeekAgo", aWeekAgo);               
+        return query.getResultList().isEmpty() ? null : query.getResultList();        
     }
     
-    public List<Progress> findMonthByUid(int userId, int logDate) {
-        int aMonthAgo = logDate - 2628000;
+    public List<Progress> findMonthByUid(int userId, long logDate, int numDaysInMonth) {
+        long aMonthAgo = logDate - (24*60*60*numDaysInMonth) + 1;
         TypedQuery<Progress> query = em.createNamedQuery("Progress.findMonth", Progress.class)
-                                        .setParameter("LogDate", logDate).setParameter("userId", userId).setParameter("aMonthAgo", aMonthAgo);               
-        return query.getResultList();
+                                        .setParameter("logDate", logDate).setParameter("userId", userId).setParameter("aMonthAgo", aMonthAgo);               
+        return query.getResultList().isEmpty() ? null : query.getResultList();        
+    }
+    
+    public Progress getProgressEntry(ProgressPK id) {
+        return em.find(Progress.class, id);
     }
     
 }
