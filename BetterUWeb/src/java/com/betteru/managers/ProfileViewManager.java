@@ -387,4 +387,20 @@ public class ProfileViewManager implements Serializable {
 
         return m;
     }
+    
+    public String getBreakfast() {
+        return getLoggedInUser().getBreakfast();
+    }
+    
+    public String getLunch() {
+        return getLoggedInUser().getLunch();
+    }
+    
+    public String getDinner() {
+        return getLoggedInUser().getDinner();
+    }
+    
+    public String getSnack() {
+        return getLoggedInUser().getSnack();
+    }
 }
