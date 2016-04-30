@@ -59,6 +59,8 @@ public class Progress implements Serializable {
     private Integer miles;
     @Column(name = "Steps")
     private Integer steps;
+    @Column(name = "Weight")
+    private Double weight;
     //@JoinColumn(name = "user_id", referencedColumnName = "UserId")
     //@ManyToOne
     //private User user;
@@ -131,6 +133,14 @@ public class Progress implements Serializable {
 
     public void setSteps(Integer steps) {
         this.steps = steps;
+    }
+    
+    public Double getWeight() {
+        return weight;
+    }
+    
+    public void setWeight(Double weight) {
+        this.weight = weight;
     }
 
     @Override

@@ -58,6 +58,7 @@ public class ProgressFacadeREST extends AbstractFacade<Progress> {
         prog.setCaloriesIn(prog.getCaloriesIn() + entity.getCaloriesIn());
         prog.setCaloriesOut(prog.getCaloriesOut() + entity.getCaloriesOut());
         prog.setSteps(prog.getSteps() + entity.getSteps());
+        prog.setWeight(prog.getWeight() + entity.getWeight());
          
     }
 
