@@ -37,8 +37,8 @@ import javax.json.JsonReader;
 public class RecommendationManager implements Serializable{
     
     
-    private int caloriesMin; 
-    private int caloriesMax;
+    private int caloriesMin = 50; 
+    private int caloriesMax = 1000;
     private int calorieIntake; 
     
     private String statusMessage; 
@@ -55,7 +55,7 @@ public class RecommendationManager implements Serializable{
     
     public RecommendationManager(){  
         caloriesMin = 50; 
-        caloriesMax = 250; 
+        caloriesMax = 1000; 
         statusMessage = "Status message for testing";
         
     }
