@@ -48,9 +48,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Override
     @Consumes({MediaType.APPLICATION_JSON})
     public void create(User entity) {
-<<<<<<< HEAD
         /*
-=======
         SendGrid sendgrid = new SendGrid("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");
         
         SendGrid.Email email = new SendGrid.Email();
@@ -70,7 +68,6 @@ public class UserFacadeREST extends AbstractFacade<User> {
             System.err.println(e);
         }
         
->>>>>>> 3f49b9071bf3f4221d5bcc345d8a0f9b2f39696c
         ActionListener taskPerformer = new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         //...Perform a task...
