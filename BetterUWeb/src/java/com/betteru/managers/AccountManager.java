@@ -38,13 +38,13 @@ public class AccountManager implements Serializable {
     private String username;
     private String password;
     private String email;
-    private int age;
-    private int height;
-    private int weight;
-    private int activityLevel;
+    private Integer age;
+    private Integer height;
+    private Integer weight;
+    private Integer activityLevel;
     private String activityGoal;
-    private int goalWeight;
-    private int targetCalories;
+    private Integer goalWeight;
+    private Integer targetCalories;
     private char gender;
     private int security_question;
     private String security_answer;
@@ -84,7 +84,7 @@ public class AccountManager implements Serializable {
 //    private PhotoFacade photoFacade;
 
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
     
@@ -92,7 +92,7 @@ public class AccountManager implements Serializable {
        this.age = age; 
     }
     
-    public int getHeight() {
+    public Integer getHeight() {
         return height;
     }
 
@@ -100,7 +100,7 @@ public class AccountManager implements Serializable {
         this.height = height;
     }
 
-    public int getWeight() {
+    public Integer getWeight() {
         return weight;
     }
 
@@ -108,7 +108,7 @@ public class AccountManager implements Serializable {
         this.weight = weight;
     }
 
-    public int getActivityLevel(){
+    public Integer getActivityLevel(){
         return activityLevel;
     }
     
@@ -125,7 +125,7 @@ public class AccountManager implements Serializable {
     }
     
     
-    public int getGoalWeight() {
+    public Integer getGoalWeight() {
         return goalWeight;
     }
 
@@ -133,7 +133,7 @@ public class AccountManager implements Serializable {
         this.goalWeight = goalWeight;
     }
 
-    public int getTargetCalories() {
+    public Integer getTargetCalories() {
         return targetCalories;
     }
 
@@ -315,6 +315,12 @@ public String getBreakfast() {
     public void setSelected(User selected) {
         this.selected = selected;
     }
+    
+    /* Check session map for username to see if anyone is logged in */
+    public boolean isLoggedIn() {
+        return FacesContext.getCurrentInstance().getExternalContext().
+               getSessionMap().get("username") != null;
+    } 
 
     public String createAccount() {
         
@@ -444,7 +450,7 @@ public String getBreakfast() {
                 : uiInputPassword.getLocalValue().toString();
 
         // Get confirm password
-        UIInput uiInputConfirmPassword = (UIInput) components.findComponent("confirmPassword");
+        UIInput uiInputConfirmPassword = (UIInput) components.findComponent("confirm-password");
         String confirmPassword = uiInputConfirmPassword.getLocalValue() == null ? ""
                 : uiInputConfirmPassword.getLocalValue().toString();
 
@@ -470,7 +476,7 @@ public String getBreakfast() {
     }
 
     private boolean correctPasswordEntered(UIComponent components) {
-        UIInput uiInputVerifyPassword = (UIInput) components.findComponent("verifyPassword");
+        UIInput uiInputVerifyPassword = (UIInput) components.findComponent("confirm-password");
         String verifyPassword = uiInputVerifyPassword.getLocalValue() == null ? ""
                 : uiInputVerifyPassword.getLocalValue().toString();
         if (verifyPassword.isEmpty()) {

@@ -26,19 +26,58 @@ Copyright © 2016 Corey McQuay. All rights reserved.
             <!-- Page content -->
             <ui:define name="editableContent">
                 <div align="center">
+                    
 
-
-                    Today is: <p:outputLabel></p:outputLabel>
+                    Today is: <p:outputLabel><script> document.write(Date()); </script> </p:outputLabel>
+                    <br />
+                    <h:outputLabel id="statMessage" value="#{exerciseManager.statusMessage}" />
 
                     <br />
+                    
+                    <h:form id="calcCal">
+                        <h3><b>Intensity:</b> </h3>
+                        <h:panelGrid columns="1" style="margin-bottom: 10px">
+                            <p:inputText id="intensitySlider" value="#{exerciseManager.intensity}" />
+                            <p:slider for="intensitySlider" step="1" minValue="1" maxValue="9" />
+                            <br />
+                            <p:inputText id="durationSlider" value="#{exerciseManager.duration}" />
+                            <p:slider for="durationSlider" step="1" minValue="0" maxValue="60" />
+                            <br />
+                            <p:inputText id="weight" value="#{exerciseManager.weight}" />
+                        </h:panelGrid>
+                        
+                        <h:inputHidden id="caloriesBurned" value="#{exerciseManager.caloriesOut}" />
+                        
+                        <h:commandButton id="calcCalories-btn"  action="#{exerciseManager.enterDailyExercise}" value="Calculate" styleClass="buttonText"/>
+
+                        
+
+                    </h:form>
+
+                    <script>     
+                        function getCaloriesBurned() { 
+                            var intensity = document.getElementById("calcCal:intensitySlider").value;
+                            var duration = document.getElementById("calcCal:durationSlider").value;
+
+
+
+                            var cBurn = ((intensity * 3.5 * 120)/200) * duration;
+                            var elem = document.getElementById("calcCal:caloriesBurned");
+
+                            elem.value = cBurn;
+                        }
+                    </script> 
+
+                    <h:outputLabel id="caloriesBurned" value="#{exerciseManager.caloriesOut}" />
+
 
 
                     <br />
-                    <h:form>
-                        <p:growl id="growl" showDetail="true" />
+                    <h:form id="whole">
+<!--                        <p:growl id="growl" showDetail="true" />
 
                         <p:inputText id="description" value="" 
-                                     required="true" label="Description" class="create-content">
+                                     required="false" label="Description" class="create-content">
 
                             <p:watermark for="description" value="Description" />
                         </p:inputText>
@@ -46,7 +85,7 @@ Copyright © 2016 Corey McQuay. All rights reserved.
                         <br />
 
                         <p:inputText id="sets" value="" 
-                                     required="true" label="Sets" class="create-content">
+                                     required="false" label="Sets" class="create-content">
 
                             <p:watermark for="sets" value="Sets* (Optional)" />
                         </p:inputText>
@@ -54,53 +93,17 @@ Copyright © 2016 Corey McQuay. All rights reserved.
                                      required="false" label="Reps" class="create-content">
 
                             <p:watermark for="reps" value="Reps* (Optional)" />
-                        </p:inputText>
+                        </p:inputText>-->
 
                         <br />
 
-                        <h3><b>Intensity:</b> </h3>
-                        <h:panelGrid columns="1" style="margin-bottom: 10px">
-                            <p:inputText id="txt3" value="#{sliderView.number3}" />
-                            <p:slider for="txt3" step="1" minValue="1" maxValue="9" />
-                        </h:panelGrid>
+                                
 
                         <img id="intensity" src="resources/images/intensityChart.jpg" alt="intensity" />
 
-                        <br />
-
-                        <h3><b>Duration</b> </h3>
-                        <!--                <h:panelGrid columns="1" style="margin-bottom: 10px">
-                                            <p:outputLabel for="hour" value="Hour:" />
-                                            <p:calendar id="hour" value="#{calendarView.date11}" pattern="HH:mm" timeOnly="true"  />
-                                        </h:panelGrid>
-                                        <br/>-->
-
-                        <h:form id="form">
-                            <p:growl id="msgs" showDetail="true" />
-
-                            <h:panelGrid columns="2" cellpadding="5">
+                        <br /><br /><br />
 
 
-                                <p:outputLabel for="time" value="Time:" />
-                                <p:calendar id="time" value="#{timeView.date11}" pattern="HH:mm" timeOnly="true"  />
-                            </h:panelGrid>
-                            
-                            <br />
-                            <br />
-
-                            <p:commandButton value="Submit" update="msgs" actionListener="#{calendarView.click}" icon="ui-icon-check" />
-
-                            <p:dialog modal="true" resizable="false" header="Values" widgetVar="time" showEffect="fold">
-                                <p:panelGrid id="display" columns="2" columnClasses="label,value">
-
-
-                                    <h:outputText value="Time:" />
-                                    <h:outputText value="#{timeView.date11}">
-                                        <f:convertDateTime pattern="HH:mm" />
-                                    </h:outputText>
-                                </p:panelGrid>
-                            </p:dialog>
-                        </h:form>
                         <img id="intensity" src="resources/images/CaloriesBurnedIcon.png" alt="intensity" /><b>Calories Burned:    </b> <p:outputLabel></p:outputLabel>
                     </h:form>
                 </div> 
