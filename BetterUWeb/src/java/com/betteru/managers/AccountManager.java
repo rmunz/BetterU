@@ -8,6 +8,8 @@ import com.betteru.sessionbeanpackage.ProgressFacade;
 import com.betteru.sourcepackage.User;
 import com.betteru.sessionbeanpackage.UserFacade;
 import com.betteru.sourcepackage.Progress;
+import com.sendgrid.SendGrid;
+import com.sendgrid.SendGridException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
@@ -23,6 +25,7 @@ import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Named;
+import static javax.ws.rs.client.Entity.entity;
  
 @Named(value = "accountManager")
 @SessionScoped
@@ -224,7 +227,7 @@ public class AccountManager implements Serializable {
         this.email = email;
     }
     
-public String getBreakfast() {
+    public String getBreakfast() {
         return breakfast;
     }
 
@@ -232,11 +235,11 @@ public String getBreakfast() {
         this.breakfast = breakfast;
     }
     
-        public String getLunch() {
+    public String getLunch() {
         return lunch;
     }
 
-    public void setLunh(String lunch) {
+    public void setLunch(String lunch) {
         this.lunch = lunch;
     }
     
@@ -355,6 +358,7 @@ public String getBreakfast() {
                 user.setPoints(0);
                 user.setUnits('I');
               
+                sendEmail(email);
                 userFacade.create(user);    
                 
                 ActionListener taskPerformer = new ActionListener() {
@@ -398,8 +402,29 @@ public String getBreakfast() {
         }
         return "";
     }
+    
+    public void sendEmail(String userEmail) {
 
-      
+        SendGrid sendgrid = new SendGrid("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");
+        
+        SendGrid.Email email = new SendGrid.Email();
+        //Sets up the email format to be sent.
+        email.addTo(userEmail);
+        email.setFrom("BetterU");
+        email.setSubject("TEMPORARY EMAIL: Welcome to BetterU.");
+        email.setHtml("Thanks for signing up!");
+
+        //Send the email to the user using SendGrid, 
+        //if it fails print the error statement
+        try {
+            SendGrid.Response response = sendgrid.send(email);
+            System.out.println(response.getMessage());
+        }
+        catch (SendGridException e) {
+            System.err.println(e);
+        }
+     
+    }
       
     public String updateAccount() {
         if (statusMessage.isEmpty()) {

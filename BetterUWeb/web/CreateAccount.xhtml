@@ -35,11 +35,11 @@ Copyright © 2016 Osman Balci. All rights reserved.
                                              required="true" requiredMessage="First Name is required." />
                                 <h:inputText id="last-name" label="Last Name" 
                                              styleClass="input-control #{component.valid?'':'validation-failed'}"
-                                             value="#{accountManager.firstName}" a:placeholder="Last Name*"
+                                             value="#{accountManager.lastName}" a:placeholder="Last Name*"
                                              required="true" requiredMessage="Last Name is required." />
                                 <h:inputText id="age" label="Age" 
                                              styleClass="input-control #{component.valid?'':'validation-failed'}"
-                                             value="#{accountManager.firstName}" a:placeholder="Age*"
+                                             value="#{accountManager.age}" a:placeholder="Age*"
                                              required="true" requiredMessage="Age is required." />
                                 <h:selectOneMenu id="gender" label="Gender"
                                                  value="#{accountManager.gender}" required="true"
@@ -97,11 +97,11 @@ Copyright © 2016 Osman Balci. All rights reserved.
                                 <span class="section-header">4. Account Details</span><br/><br/>
                                 <h:inputText id="username" label="Username" 
                                              styleClass="input-control #{component.valid?'':'validation-failed'}"
-                                             value="#{accountManager.goalWeight}" a:placeholder="Username*"
-                                             required="true" requiredMessage="Email is required." />
+                                             value="#{accountManager.username}" a:placeholder="Username*"
+                                             required="true" requiredMessage="Username is required." />
                                 <h:inputText id="email" label="Email" 
                                              styleClass="input-control #{component.valid?'':'validation-failed'}"
-                                             value="#{accountManager.goalWeight}" a:placeholder="Email*"
+                                             value="#{accountManager.email}" a:placeholder="Email*"
                                              required="true" requiredMessage="Email is required." />
                                 <h:selectOneMenu id="security-question" label="Security Questions" styleClass="input-control"
                                          value="#{accountManager.security_question}" required="true">
