@@ -74,7 +74,6 @@ public class UserFacadeREST extends AbstractFacade<User> {
                         progress.setCaloriesIn(0);
                         progress.setCaloriesOut(0);
                         progress.setMiles(0);
-                        progress.setWeight(entity.getWeight());
                         progress.setSteps(0);
                        // ProgressFacadeREST pf = new ProgressFacadeREST();
                         pf.create(progress);
