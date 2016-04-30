@@ -16,6 +16,8 @@
                         <a href="CreateAccount.xhtml">Create Account</a>
                     </c:if>
                     <c:if test="#{accountManager.isLoggedIn() == true}">
+                        <a href="DailyProgress.xhtml">Daily Overview</a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <a href="MyProgress.xhtml">My Progress</a>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <a href="Recommendations.xhtml">Recommendations</a>

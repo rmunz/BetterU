@@ -5,6 +5,7 @@
 package com.betteru.managers;
 
 import com.betteru.sessionbeanpackage.ProgressFacade;
+import com.betteru.sessionbeanpackage.UserFacade;
 import com.betteru.sourcepackage.Progress;
 import com.betteru.sourcepackage.ProgressPK;
 import com.betteru.sourcepackage.User;
@@ -40,6 +41,7 @@ public class RecommendationManager implements Serializable{
     private int caloriesMin = 50; 
     private int caloriesMax = 1000;
     private int calorieIntake; 
+    private List<String> selectedAlergy;
     
     private String statusMessage; 
     
@@ -48,7 +50,6 @@ public class RecommendationManager implements Serializable{
     private static final String YUMMLY_URL = "http://api.yummly.com/v1/api/recipes?_app_id=" + YUMMLY_ID + "&_app_key=" + YUMMLY_KEY;
     
     List<RecipeEntry> yummlyRecommendations; 
-    
     
     @EJB
     private ProgressFacade progressFacade;
@@ -95,13 +96,22 @@ public class RecommendationManager implements Serializable{
                 for (JsonObject result : results.getValuesAs(JsonObject.class)) {
                     
                     String tmpName = result.getString("attribute");    
-                    if(tmpName.equals("ENERC_KCAL")) {
+                    if (tmpName.equals("ENERC_KCAL")) {
                         int calorie = result.getJsonNumber("value").intValue();
-                        System.out.println(calorie + "\n");
-                        entry.setCalories(calorie);
-                        
+                        entry.setCalories(calorie);  
                     }
-                } 
+                    else if(tmpName.equals("FAT")) {
+                        int fat = result.getJsonNumber("value").intValue();
+                        entry.setFat(fat);  
+                    }
+                    else if(tmpName.equals("PROCNT")) {
+                        int protein = result.getJsonNumber("value").intValue();
+                        entry.setProtein(protein);  
+                    }       
+                    else if(tmpName.equals("CHOCDF")) {
+                        int carbs = result.getJsonNumber("value").intValue();
+                        entry.setCarbs(carbs);  
+                    }} 
             }
          }
          
@@ -154,7 +164,7 @@ public class RecommendationManager implements Serializable{
         }
         
         //return appropriate page 
-        return "MyAccount";
+        return "DailyProgress";
     }
     
     public int getCaloriesMin() {
@@ -181,7 +191,13 @@ public class RecommendationManager implements Serializable{
         this.calorieIntake = calorieIntake; 
     }
     
+    public List<String> getSelectedAlergy(){
+        return selectedAlergy; 
+    }
     
+    public void setSelectedAlergy(List<String> alergy) {
+        this.selectedAlergy = alergy;
+    }
     
     public String getStatusMessage(){
         return statusMessage; 
