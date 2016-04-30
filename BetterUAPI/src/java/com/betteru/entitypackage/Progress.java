@@ -55,8 +55,6 @@ public class Progress implements Serializable {
     private Integer caloriesIn;
     @Column(name = "CaloriesOut")
     private Integer caloriesOut;
-    @Column(name = "Weight")
-    private Integer weight;
     @Column(name = "Miles")
     private Integer miles;
     @Column(name = "Steps")
@@ -117,14 +115,6 @@ public class Progress implements Serializable {
 
     public void setCaloriesOut(Integer caloriesOut) {
         this.caloriesOut = caloriesOut;
-    }
-
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Integer weight) {
-        this.weight = weight;
     }
 
     public Integer getMiles() {
