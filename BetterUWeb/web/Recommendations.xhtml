@@ -13,13 +13,13 @@
         <ui:composition template="template/siteTemplate.xhtml">
             <!-- Page title -->
             <title><ui:define name="title">BetterU</ui:define></title>
-            
+
             <ui:define name="css">
                 <link rel="stylesheet" type="text/css" href="resources/css/recommendations.css"/>
             </ui:define>
-            
+
             <!-- Additional JS files needed -->
-            
+
             <!-- Page content -->
             <ui:define name="editableContent">
                 <div id="banner-wrapper">
@@ -29,19 +29,26 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <br /><br /><br /><br /><br /><br /><br />
                 <div align="center">     
                     <h:outputLabel value ="#{recommmendationManager.statusMessage}" />
                     <h:form class="form-recommendation">
-                        
-                        <h:outputLabel styleClass="outputLabel" for="mincal" value="Minimum Calories " />
+
+<!--                        <h:outputLabel styleClass="outputLabel" for="mincal" value="Minimum Calories " />
                         <h:inputText class="form-control" id="mincal" value="#{recommendationManager.caloriesMin}"/>
                         <br/>
                         <h:outputLabel styleClass="outputLabel" for="maxcal" value="Maximum Calories: " />
                         <h:inputText class="form-control"  id="maxcal" value="#{recommendationManager.caloriesMax}"/>
-                        <br/>
-                        
+                        <br/>-->
+
+                        <h:panelGrid columns="1" style="margin-bottom: 10px">
+                            <h:outputText id="displayRange" value="Between #{recommendationManager.caloriesMin} and #{recommendationManager.caloriesMax} calories" />
+                            <p:slider for="calMin,calMax" display="displayRange" step="50" style="width: 400px" range="true" displayTemplate="Between {min} and {max} calories" minValue="50" maxValue="1000" />
+                        </h:panelGrid>
+                        <h:inputHidden id="calMin" value="#{recommendationManager.caloriesMin}" />
+                        <h:inputHidden id="calMax" value="#{recommendationManager.caloriesMax}" />
+
                         <h:commandButton id="refresh"  action="#{recommendationManager.refresh()}" value="Submit" styleClass="buttonText"/>
                     </h:form>
                     <br /><br /><br /><br /><br /><br /><br />
@@ -61,11 +68,11 @@
                     </p:dataTable>
                     <br /><br /><br /><br /><br /><br /><br />
                     <h:form class="form-daily-entry">
-                        
+
                         <h:outputLabel styleClass="outputLabel" for="caloriesin" value="Calories Eaten: " />
                         <h:inputText class="form-control" id="caloriesin" value="#{recommendationManager.calorieIntake}"/>
                         <br/>
-                        
+
                         <h:commandButton id="daily-submit"  action="#{recommendationManager.enterDailyIntake()}" value="Submit" styleClass="buttonText"/>
                     </h:form>
                     <br /><br /><br /><br /><br /><br /><br />
