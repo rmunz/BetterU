@@ -30,17 +30,19 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <br /><br /><br /><br /><br /><br /><br />
                 <div align="center">     
                     <h:outputLabel value ="#{recommmendationManager.statusMessage}" />
-                    <h:outputLabel value="Your target for today is #{accountManager.selected.targetCalories} calories."/>
+                    <h:outputLabel value="Your target for today is #{accountManager.selected.firstName} calories."/>
                     <br />
                     <h:outputLabel value="Look's like you've got #{accountManager.targetCalories - recommendationManager.calorieIntake} calories to go!"  />
                     <br /><br /><br />
                     <h:form class="form-recommendation">
                         
-                        <p:selectManyCheckbox id="Alergies" value="#{recommendationManager.selectedAlergy}">
+                        What are your allergies?
+                        <br />
+                        <p:selectManyCheckbox id="Alergies" value="#{recommendationManager.selectedAllergy}">
                             <f:selectItem itemLabel="Nuts" itemValue="Nuts" />
                             <f:selectItem itemLabel="Dairy" itemValue="Dairy" />
                             <f:selectItem itemLabel="Gluten" itemValue="Gluten" />

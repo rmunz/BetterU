@@ -41,7 +41,7 @@ public class RecommendationManager implements Serializable{
     private int caloriesMin = 50; 
     private int caloriesMax = 1000;
     private int calorieIntake; 
-    private List<String> selectedAlergy;
+    private String[] selectedAllergy;
     
     private String statusMessage; 
     
@@ -68,7 +68,19 @@ public class RecommendationManager implements Serializable{
          System.out.println("\n\n\n\n\n\n\n\nHERE\n");
          System.out.println(caloriesMin);
          System.out.println(caloriesMax);
-         URL url = new URL(YUMMLY_URL + min + max + "&maxResult=5"); 
+         String strURL = YUMMLY_URL + min + max + "&maxResult=5";
+          
+         
+         //Handle allergy
+         if(selectedAllergy != null) {
+            for (int i = 0; i < selectedAllergy.length; i++) {
+                if(selectedAllergy[i] != null) {
+                    strURL = strURL + "&allowedAllergy[]=" + selectedAllergy[i];
+                }
+            }
+         }
+         
+         URL url = new URL(strURL);
          
          List<RecipeEntry> recipeResults = new ArrayList(); 
          
@@ -191,12 +203,12 @@ public class RecommendationManager implements Serializable{
         this.calorieIntake = calorieIntake; 
     }
     
-    public List<String> getSelectedAlergy(){
-        return selectedAlergy; 
+    public String[] getSelectedAllergy(){
+        return selectedAllergy; 
     }
     
-    public void setSelectedAlergy(List<String> alergy) {
-        this.selectedAlergy = alergy;
+    public void setSelectedAllergy(String[] allergy) {
+        this.selectedAllergy = allergy;
     }
     
     public String getStatusMessage(){
