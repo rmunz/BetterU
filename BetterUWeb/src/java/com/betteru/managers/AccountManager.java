@@ -73,12 +73,12 @@ public class AccountManager implements Serializable {
     
     
  /**
-     * The instance variable 'progressFacade' is annotated with the @EJB annotation.
+     * The instance variable 'pf' is annotated with the @EJB annotation.
      * This means that the GlassFish application server, at runtime, will inject in
      * this instance variable a reference to the @Stateless session bean UserFacade.
      */
     @EJB
-    private ProgressFacade progressFacade;
+    private ProgressFacade pf;
     
 
     public Integer getAge() {
@@ -372,35 +372,19 @@ public class AccountManager implements Serializable {
               
                 sendEmail(email);
                 userFacade.create(user);    
-                /*
-                ActionListener taskPerformer = new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        //...Perform a task...
-                        Progress progress = new Progress(user.getId(), ((int)(System.currentTimeMillis()/100000)) * 100);
-                        progress.setCaloriesIn(0);
-                        progress.setCaloriesOut(0);
-                        progress.setMiles(0);
-                        progress.setWeight(user.getWeight());
-                        progress.setSteps(0);
-                        progressFacade.create(progress);
-                    }
-                };
-            
-            //set up refresh timer
-            Timer timer = new Timer(86400000, taskPerformer);//set delay to 24 hours
-            
-            //test timer set for every 10 minutes
-            //Timer timer = new Timer(600000, taskPerformer);
-
-            Calendar c = Calendar.getInstance();
-            c.add(Calendar.DAY_OF_MONTH, 1);
-            c.set(Calendar.HOUR_OF_DAY, 0);
-            c.set(Calendar.MINUTE, 0);
-            c.set(Calendar.SECOND, 0);
-            c.set(Calendar.MILLISECOND, 0);
-            int msToMidnight = (int)(c.getTimeInMillis()-System.currentTimeMillis());
-            timer.setInitialDelay(msToMidnight);
-            timer.start(); */
+                
+                Calendar c = Calendar.getInstance();
+                c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
+                for(int i = 0; i < 7; i++) {
+                    //...Perform a task...
+                    Progress progress = new Progress(user.getId(), (int)((c.getTimeInMillis()-i*86400000)/1000));
+                    progress.setCaloriesIn(0);
+                    progress.setCaloriesOut(0);
+                    progress.setMiles(0);
+                    progress.setWeight(user.getWeight());
+                    progress.setSteps(0);
+                    pf.create(progress);
+                }
             
             } catch (EJBException e) {
                 username = "";
