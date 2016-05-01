@@ -48,6 +48,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Override
     @Consumes({MediaType.APPLICATION_JSON})
     public void create(User entity) {
+
         SendGrid sendgrid = new SendGrid("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");
         
         SendGrid.Email email = new SendGrid.Email();
@@ -67,35 +68,18 @@ public class UserFacadeREST extends AbstractFacade<User> {
             System.err.println(e);
         }
         
-        ActionListener taskPerformer = new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        //...Perform a task...
-                        Progress progress = new Progress(entity.getId(), ((int)(System.currentTimeMillis()/100000)) * 100);
-                        progress.setCaloriesIn(0);
-                        progress.setCaloriesOut(0);
-                        progress.setMiles(0);
-                        progress.setWeight((double)entity.getWeight());
-                        progress.setSteps(0);
-                       // ProgressFacadeREST pf = new ProgressFacadeREST();
-                        pf.create(progress);
-                    }
-                };
-            
-            //set up refresh timer
-            Timer timer = new Timer(86400000, taskPerformer);//set delay to 24 hours
-            
-            //test timer set for every 10 minutes
-            //Timer timer = new Timer(600000, taskPerformer);
-
-            Calendar c = Calendar.getInstance();
-            c.add(Calendar.DAY_OF_MONTH, 1);
-            c.set(Calendar.HOUR_OF_DAY, 0);
-            c.set(Calendar.MINUTE, 0);
-            c.set(Calendar.SECOND, 0);
-            c.set(Calendar.MILLISECOND, 0);
-            int msToMidnight = (int)(c.getTimeInMillis()-System.currentTimeMillis());
-            timer.setInitialDelay(msToMidnight);
-            timer.start(); 
+        Calendar c = Calendar.getInstance();
+        c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
+        for(int i = 0; i < 7; i++) {
+            //...Perform a task...
+            Progress progress = new Progress(entity.getId(), (int)((c.getTimeInMillis()-i*86400000)/1000));
+            progress.setCaloriesIn(0);
+            progress.setCaloriesOut(0);
+            progress.setMiles(0);
+            progress.setWeight((double)entity.getWeight());
+            progress.setSteps(0);
+            pf.create(progress);
+        }
         super.create(entity);
     }
 

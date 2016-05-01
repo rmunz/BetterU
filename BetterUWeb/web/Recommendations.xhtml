@@ -34,9 +34,9 @@
                 <br /><br /><br /><br /><br /><br /><br />
                 <div align="center">     
                     <h:outputLabel value ="#{recommmendationManager.statusMessage}" />
-                    <h:outputLabel value="Your target for today is #{accountManager.selected.firstName} calories."/>
+                    <h:outputLabel value="Your target for today is #{accountManager.selected.targetCalories} calories."/>
                     <br />
-                    <h:outputLabel value="Look's like you've got #{accountManager.targetCalories - recommendationManager.calorieIntake} calories to go!"  />
+                    <h:outputLabel value="Look's like you've got #{accountManager.selected.targetCalories - recommendationManager.calorieIntake} calories to go!"  />
                     <br /><br /><br />
                     <h:form class="form-recommendation">
                         
@@ -79,10 +79,14 @@
                         <p:column headerText="Fat">
                             <h:outputText value="#{rec.fat}" />
                         </p:column>
+                        
+                        <p:column headerText="Add Meal">
+                            <p:commandButton id="selectRowBtn" value="select" onclick="document.getElementById('dailyEntry:caloriesin').value=#{rec.calories}"/>
+                        </p:column>
 
                     </p:dataTable>
                     <br /><br /><br /><br /><br /><br /><br />
-                    <h:form class="form-daily-entry">
+                    <h:form id="dailyEntry" class="form-daily-entry">
 
                         <h:outputLabel styleClass="outputLabel" for="caloriesin" value="Calories Eaten: " />
                         <h:inputText class="form-control" id="caloriesin" value="#{recommendationManager.calorieIntake}"/>

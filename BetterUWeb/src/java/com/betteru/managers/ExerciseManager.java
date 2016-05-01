@@ -43,14 +43,14 @@ public class ExerciseManager {
     public String enterDailyExercise(){
           
         //Get user Id
-        User user = (User)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+        Integer user = (Integer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
 
         if(user == null) {
             statusMessage = "Oops. You're not logged in!";
             return "";
         }
         
-        int user_id = user.getId();
+        int user_id = user.intValue();
         
         //Get today @ Midnight in epoch 
         int LOGTIME_HARDCODE = 1461744000;
@@ -87,7 +87,7 @@ public class ExerciseManager {
         }
         
         //return appropriate page 
-        return "MyAccount";
+        return "DailyProgress";
     }
     
     public void setCaloriesOut(int caloriesOut){
