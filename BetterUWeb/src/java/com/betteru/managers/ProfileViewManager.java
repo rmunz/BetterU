@@ -403,4 +403,17 @@ public class ProfileViewManager implements Serializable {
     public String getSnack() {
         return getLoggedInUser().getSnack();
     }
+    
+    public Progress getTodaysProgress() {
+        Calendar c = Calendar.getInstance();
+        Date now = new Date();
+        c.setTime(now);
+        c.set(Calendar.AM_PM, Calendar.AM);
+        c.set(Calendar.HOUR, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+    
+        return progressFacade.getProgressByTimestamp(c.getTimeInMillis(), getLoggedInUser().getId());
+    }
 }
