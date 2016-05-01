@@ -21,7 +21,4 @@
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
-    <listener>
-      <listener-class>com.betteru.listeners.BetterUContextListener</listener-class>
-    </listener>
 </web-app>
