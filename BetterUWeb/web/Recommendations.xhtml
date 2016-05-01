@@ -64,7 +64,6 @@
                         <p:column headerText="Calories">
                             <h:outputText value="#{rec.calories}" />
                         </p:column>
-
                     </p:dataTable>
                     <br /><br /><br /><br /><br /><br /><br />
                     <h:form class="form-daily-entry">
@@ -75,6 +74,39 @@
 
                         <h:commandButton id="daily-submit"  action="#{recommendationManager.enterDailyIntake()}" value="Submit" styleClass="buttonText"/>
                     </h:form>
+                    <br /><br /><br /><br /><br /><br /><br />
+                    <!-- adding in section for the USDA search after asking the two...-->
+                    <h:form id="usda_search">
+                            <span class="section-header">Please enter food to search for</span><br/><br/>
+                            <h:inputText id="first-name" label="Food to search for" 
+                                             value="#{recommendationManager.foodToSearchForUSDA}"
+                                             required="true" requiredMessage="Please enter a item to search for." />
+                            
+                            <h:commandButton id="usda_search_button" class="btn" value="Search"
+                                             action="#{recommendationManager.getUSDAEntries()}" />
+                    </h:form>
+                    <br /><br />
+                    
+                    
+                    <!--How to update the data table when button is hit? -->
+                    <p:dataTable class="rec-table" var="rec" value="#{recommendationManager.usdaRecommendations}">
+                        <p:column headerText="Number">
+                            <h:outputText value="#{rec.recipeId}" />
+                        </p:column>
+
+                        <p:column headerText="Food Group">
+                            <h:outputText value="#{rec.name}" />
+                        </p:column>
+                        
+                        <p:column headerText="Food Name">
+                            <h:outputText value="#{rec.name}" />
+                        </p:column>
+                        
+                        <p:column headerText="Food Ndbno">
+                            <h:outputText value="#{rec.name}" />
+                        </p:column>
+
+                    </p:dataTable>
                     <br /><br /><br /><br /><br /><br /><br />
                 </div>
             </ui:define>
