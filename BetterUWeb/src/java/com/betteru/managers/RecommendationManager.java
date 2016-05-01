@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -93,7 +94,6 @@ public class RecommendationManager implements Serializable{
                     
                     RecipeEntry tmpName = new RecipeEntry(result.getString("id"), result.getString("recipeName"));    
                     recipeResults.add(tmpName); 
-                    System.out.println(result.getString("recipeName") + "\n");
                }
             }
          
@@ -146,17 +146,15 @@ public class RecommendationManager implements Serializable{
         
         //Get today @ Midnight in epoch 
         int LOGTIME_HARDCODE = 1461744000;
-        LocalTime midnight = LocalTime.MIDNIGHT;
-        LocalDate today = LocalDate.now(ZoneId.of("Europe/Berlin"));
-        LocalDateTime todayMidnight = LocalDateTime.of(today, midnight);
-        
-        //Create primary comp key with userId + time 
-        ProgressPK proPK = new ProgressPK();
-        proPK.setDay(todayMidnight.getSecond());
-        proPK.setId(user_id);
-        
+        Calendar c = Calendar.getInstance();
+        c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
+        Integer epochMidnight =  (int)(c.getTimeInMillis()/1000);
+ 
         //connect to find progress entry
-        Progress entry = progressFacade.getProgressEntry(proPK);
+        Progress entry = progressFacade.getProgressEntry(user, epochMidnight);
+        System.out.println("\n\n\n\n\n\n\n\nHERE");
+        System.out.println("\n\n USER" + user);
+        System.out.println("\n\n Midnight" + epochMidnight);
         
         if(entry != null) {
             //update progress entry
@@ -172,12 +170,54 @@ public class RecommendationManager implements Serializable{
             }
         }
         else {
-            statusMessage = "Progress entry not found.";
-            return "";
+            
+            //Create new entry 
+            try {   
+                createProgressEntry(user_id, calorieIntake);
+
+            } catch (EJBException e) {
+
+                statusMessage = "Something went wrong while editing your profile!";
+                return "";
+            }
         }
         
         //return appropriate page 
         return "DailyProgress";
+    }
+    
+    public void createProgressEntry(int user_id, int caloriesIn) {
+        
+        Calendar c = Calendar.getInstance();
+        c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
+
+        Progress progress = new Progress(user_id, (int)((c.getTimeInMillis()/1000)));
+        progress.setCaloriesIn(caloriesIn);
+        progress.setCaloriesOut(0);
+        progress.setMiles(777);
+        progress.setWeight(0);
+        progress.setSteps(0);
+        
+        progressFacade.create(progress);
+        
+    }
+    
+    public Progress getToday(){
+        Calendar c = Calendar.getInstance();
+        c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
+        Integer epochMidnight =  (int)(c.getTimeInMillis()/1000);
+        
+        //Get user Id  
+        Integer user = (Integer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+
+        if(user == null) {
+            statusMessage = "Oops. You're not logged in!";
+        }
+        
+        int user_id = user.intValue();
+        
+        Progress entry = progressFacade.getProgressEntry(user_id, epochMidnight);
+        return entry;    
     }
     
     public int getCaloriesMin() {
