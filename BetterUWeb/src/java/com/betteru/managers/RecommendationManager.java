@@ -135,14 +135,14 @@ public class RecommendationManager implements Serializable{
     public String enterDailyIntake(){
           
         //Get user Id  
-        User user = (User)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+        Integer user = (Integer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
 
         if(user == null) {
             statusMessage = "Oops. You're not logged in!";
             return "";
         }
         
-        int user_id = user.getId();
+        int user_id = user.intValue();
         
         //Get today @ Midnight in epoch 
         int LOGTIME_HARDCODE = 1461744000;
@@ -161,7 +161,8 @@ public class RecommendationManager implements Serializable{
         if(entry != null) {
             //update progress entry
             try {
-                entry.setCaloriesIn(calorieIntake);
+                //Update the value instead of reseting
+                entry.setCaloriesIn(entry.getCaloriesIn() + calorieIntake);
 
                 progressFacade.edit(entry);
             } catch (EJBException e) {

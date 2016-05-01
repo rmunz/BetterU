@@ -43,19 +43,19 @@ Copyright © 2016 Osman Balci. All rights reserved.
                         <table>
                             <tr>
                                 <td>Calories Eaten:</td>
-                                <td></td>
+                                <td>#{recommendationManager.calorieIntake}</td>
                             </tr>
                             <tr>
                                 <td>Calories Burned:</td>
-                                <td></td>
+                                <td>#{exerciseManager.caloriesOut}</td>
                             </tr>
                             <tr>
-                                <td>Net Calories</td>
-                                <td></td>
+                                <td>Calories Remaining</td>
+                                <td>#{accountManager.selected.targetCalories - recommendationManager.calorieIntake}</td>
                             </tr>
                             <tr>
                                 <td>Weight:</td>
-                                <td></td>
+                                <td>#{exerciseManager.weight}</td>
                             </tr>
                         </table>
                     </div>
