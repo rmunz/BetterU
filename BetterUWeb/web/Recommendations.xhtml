@@ -91,11 +91,11 @@
                     <!--How to update the data table when button is hit? -->
                     <p:dataTable class="rec-table" var="rec" value="#{recommendationManager.usdaRecommendations}">
                         <p:column headerText="Number">
-                            <h:outputText value="#{rec.recipeId}" />
+                            <h:outputText value="#{rec.offset}" />
                         </p:column>
 
                         <p:column headerText="Food Group">
-                            <h:outputText value="#{rec.name}" />
+                            <h:outputText value="#{rec.foodGroup}" />
                         </p:column>
                         
                         <p:column headerText="Food Name">
@@ -103,7 +103,7 @@
                         </p:column>
                         
                         <p:column headerText="Food Ndbno">
-                            <h:outputText value="#{rec.name}" />
+                            <h:outputText value="#{rec.ndbno}" />
                         </p:column>
 
                     </p:dataTable>
