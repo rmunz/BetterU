@@ -67,7 +67,7 @@
                         <p:column headerText="Calories">
                             <h:outputText value="#{rec.calories}" />
                         </p:column>
-                        
+        
                         <p:column headerText="Protein">
                             <h:outputText value="#{rec.protein}" />
                         </p:column>
@@ -82,6 +82,44 @@
                         
                         <p:column headerText="Add Meal">
                             <p:commandButton id="selectRowBtn" value="select" onclick="document.getElementById('dailyEntry:caloriesin').value=#{rec.calories}"/>
+                        </p:column>
+
+                    </p:dataTable>
+                    <br /><br /><br /><br /><br /><br /><br />
+                  
+                    <!-- adding in section for the USDA search after asking the two...-->
+                    <h:form id="usda_search">
+                            <span class="section-header">Please enter food to search for</span><br/><br/>
+                            <h:inputText id="first-name" label="Food to search for" 
+                                             value="#{recommendationManager.foodToSearchForUSDA}"
+                                             required="true" requiredMessage="Please enter a item to search for." />
+                            
+                            <h:commandButton id="usda_search_button" class="btn" value="Search"
+                                             action="#{recommendationManager.getUSDAEntries()}" />
+                    </h:form>
+                    <br /><br />
+                    
+                    
+                    <!--How to update the data table when button is hit? -->
+                    <p:dataTable class="rec-table" var="rec" value="#{recommendationManager.usdaRecommendations}">
+                        <p:column headerText="Number">
+                            <h:outputText value="#{rec.offset}" />
+                        </p:column>
+
+                        <p:column headerText="Food Group">
+                            <h:outputText value="#{rec.foodGroup}" />
+                        </p:column>
+                        
+                        <p:column headerText="Food Name">
+                            <h:outputText value="#{rec.name}" />
+                        </p:column>
+                        
+                        <p:column headerText="Food Ndbno">
+                            <h:outputText value="#{rec.ndbno}" />
+                        </p:column>
+                        
+                        <p:column headerText="Add Meal">
+                            <p:commandButton id="selectRowUSDABtn" value="select" onclick="document.getElementById('dailyEntry:caloriesin').value=#{rec.kcal}"/>
                         </p:column>
 
                     </p:dataTable>

@@ -42,11 +42,11 @@ Copyright © 2016 Osman Balci. All rights reserved.
                         <table>
                             <tr>
                                 <td>Calories Eaten:</td>
-                                <td>#{recommendationManager.calorieIntake}</td>
+                                <td>#{recommendationManager.getToday().caloriesIn}</td>
                             </tr>
                             <tr>
                                 <td>Calories Burned:</td>
-                                <td>#{exerciseManager.caloriesOut}</td>
+                                <td>#{exerciseManager.getToday().caloriesOut}</td>
                             </tr>
                             <tr>
                                 <td>Calories Remaining</td>
@@ -54,7 +54,7 @@ Copyright © 2016 Osman Balci. All rights reserved.
                             </tr>
                             <tr>
                                 <td>Weight:</td>
-                                <td>#{exerciseManager.weight}</td>
+                                <td>#{exerciseManager.getToday().weight}</td>
                             </tr>
                         </table>
                     </div>
