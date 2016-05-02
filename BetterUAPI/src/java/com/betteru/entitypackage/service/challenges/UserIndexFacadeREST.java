@@ -246,6 +246,6 @@ public class UserIndexFacadeREST extends AbstractFacade<UserIndex> {
     public void completeChallengeForUserId(@PathParam("uid") int uid, @PathParam("ct") String challengeType) {
 
         em.createQuery("UPDATE UserIndex u SET u.ind = u.ind + 1 WHERE u.userIndexPK.challengeType = :ctype AND u.userIndexPK.userID = :uid")
-                .setParameter("uid", uid).setParameter("ctype", challengeType);
+                .setParameter("uid", uid).setParameter("ctype", challengeType).executeUpdate();
     }
 }
