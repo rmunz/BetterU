@@ -33,15 +33,18 @@ import javax.json.JsonReader;
 public class RecommendationManager implements Serializable{
     
 //--------------------------------------------------------------
-    //For Usda Search url is built in descending order q+sort+max...
+    //For Usda food search USDA+ foodtosearchfor + sort+max+offset
+    //For USDA nutritional information USDA_URL + ndbno from previous search + reportType + format+ USDA_KEY
     private String foodToSearchForUSDA; //q term for usda food search
-    private String ndbno; //the number for the food to search for
-    private String sort = "&sort=n";
-    private String max = "&max=5";
-    private String offset = "&offset=0";
+    private final String sort = "&sort=n";
+    private final String max = "&max=5";
+    private final String offset = "&offset=0";
+    private final String reportType = "&type=f";
+    private final String format = "&format=json";
     private static final String USDA_KEY = "&api_key=lmng23Wvez10CHDEqiWE90dL1qWhJrkXlqIIXRmN";
     private static final String USDA_KEY_DEMO = "&api_key=DEMO_KEY";
     private static final String USDA_URL = "http://api.nal.usda.gov/ndb/search/?format=json&q=";
+    private static final String USDA_URL_NUTR = "http://api.nal.usda.gov/ndb/reports/?ndbno=";
    //----------------------------------------------------------------
    //WGER Stuff below 
     private static final String WGER_Key = "fae3c283d251f4797c4338e8782236d6de49512b";
@@ -84,7 +87,6 @@ public class RecommendationManager implements Serializable{
      */
     public List<FoodEntry> getUSDAEntries() throws IOException{
         
-        System.out.println("Yo");//self test
         
         List<FoodEntry> usdaResults = new ArrayList();
         
@@ -99,7 +101,61 @@ public class RecommendationManager implements Serializable{
                 JsonArray results = newObj.getJsonArray("item");
                 
                 for (JsonObject result : results.getValuesAs(JsonObject.class)) {
+                    
+                    //created new food object with the search request as intended.
                     FoodEntry tmpName = new FoodEntry(result.getInt("offset"), result.getString("group"),result.getString("name"),result.getString("ndbno"));    
+                   
+                     
+                  
+                    //now must get information about the kcal for calorie counter.
+                    URL calorieURL = new URL(USDA_URL_NUTR + tmpName.getNdbno() +reportType+format+USDA_KEY);
+                    
+                    try(InputStream is2 = calorieURL.openStream(); JsonReader rdr2 = Json.createReader(is2))
+                    {
+                        JsonObject obj2 = rdr2.readObject();
+                
+                        JsonObject newObj2 = obj2.getJsonObject("report");
+                        JsonObject newObj3 = newObj2.getJsonObject("food");
+                
+                        JsonArray results2 = newObj3.getJsonArray("nutrients");
+                        
+                        for(int i=0;i < results2.size();i++)
+                        {
+                            JsonObject temp = results2.getJsonObject(i);
+                            
+                            switch(temp.getInt("nutrient_id"))
+                            {
+                                case 208: tmpName.setKcal(temp.getInt("value"));break;
+                                case 203: tmpName.setProtien(temp.getInt("value"));break;
+                                case 205: tmpName.setCarbs(temp.getInt("value"));break;
+                                case 204: tmpName.setFat(temp.getInt("value"));break;
+                            }
+                            /*
+                            if(temp.getInt("nutrient_id") == 208)
+                            {
+                                tmpName.setKcal(temp.getInt("value"));
+                            }
+                            if(temp.getInt("nutrient_id") == 203)
+                            {
+                                tmpName.setProtien(temp.getInt("value"));
+                            }
+                            else if(temp.getInt("nutrient_id") == 205)
+                            {
+                                tmpName.setCarbs(temp.getInt("value"));
+                            }
+                            else if(temp.getInt("nutrient_id") == 204)
+                            {
+                                tmpName.setFat(temp.getInt("value"));
+                            }
+                            */
+                        }
+                        
+                        
+                        System.out.println("YO");//personal stopper
+                    }
+                    
+                    
+                    //add to the list to then add it to 
                     usdaResults.add(tmpName); 
                     
                }
@@ -351,19 +407,7 @@ public class RecommendationManager implements Serializable{
         this.foodToSearchForUSDA = foodToSearchForUSDA;
     }
 
-    /**
-     * @return the ndbno
-     */
-    public String getNdbno() {
-        return ndbno;
-    }
-
-    /**
-     * @param ndbno the ndbno to set
-     */
-    public void setNdbno(String ndbno) {
-        this.ndbno = ndbno;
-    }
+   
     
 }
 
