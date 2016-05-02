@@ -115,7 +115,7 @@ public class RecommendationManager implements Serializable{
                         JsonObject obj2 = rdr2.readObject();
                 
                         JsonObject newObj2 = obj2.getJsonObject("report");
-                        JsonObject newObj3 = newObj.getJsonObject("food");
+                        JsonObject newObj3 = newObj2.getJsonObject("food");
                 
                         JsonArray results2 = newObj3.getJsonArray("nutrients");
                         
