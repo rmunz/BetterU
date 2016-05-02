@@ -5,9 +5,11 @@
 package com.betteru.managers;
 
 import com.betteru.sessionbeanpackage.ProgressFacade;
+import com.betteru.sessionbeanpackage.UserFacade;
 import com.betteru.sourcepackage.Progress;
 import com.betteru.sourcepackage.ProgressPK;
 import com.betteru.sourcepackage.User;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -18,6 +20,7 @@ import javax.ejb.EJBException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import org.primefaces.event.SlideEndEvent;
 
 @ManagedBean(name = "exerciseManager")
 @SessionScoped
@@ -25,17 +28,20 @@ import javax.faces.context.FacesContext;
  *
  * @author ojmhetar
  */
-public class ExerciseManager {
+public class ExerciseManager implements Serializable{
     
     private int caloriesOut; 
     private int intensity; 
     private int duration;
-    private int weight; 
+    private double weight; 
     
     private String statusMessage; 
     
     @EJB
     private ProgressFacade progressFacade;
+    
+    @EJB
+    private UserFacade userFacade;
     
     public ExerciseManager(){
         
@@ -57,7 +63,7 @@ public class ExerciseManager {
         int LOGTIME_HARDCODE = 1461744000;
         Calendar c = Calendar.getInstance();
         c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
-        int epochMidnight =  (int)c.getTimeInMillis()/1000;
+        int epochMidnight =  (int)(c.getTimeInMillis()/1000);
                 
         //Create primary comp key with userId + time 
         //ProgressPK proPK = new ProgressPK();
@@ -67,8 +73,8 @@ public class ExerciseManager {
         //connect to find progress entry
         Progress entry = progressFacade.getProgressEntry(user_id, epochMidnight);
         
-        caloriesOut = ((int)(intensity * 3.5 * 120)/200) * duration;
-        
+       
+        caloriesOut = ((int)(intensity * 3.5 * (userFacade.getUser(user_id).getWeight()*2.2))/200) * duration;
         if(entry != null) {
             //update progress entry
             try {   
@@ -83,9 +89,14 @@ public class ExerciseManager {
             }
         }
         else {      
-            createProgressEntry(user_id, caloriesOut, weight);
-            //statusMessage = "Progress entry not found.";
-            //return "";
+            
+            try {
+                createProgressEntry(user_id, caloriesOut, weight);
+            } catch (EJBException e) {
+
+                statusMessage = "Something went wrong while editing your profile!";
+                return "";
+            }
         }
         
         //return appropriate page 
@@ -97,11 +108,12 @@ public class ExerciseManager {
         Calendar c = Calendar.getInstance();
         c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
 
-        Progress progress = new Progress(user_id, (int)((c.getTimeInMillis())));
+        System.out.println("\n\n\n\nCREATION ");
+        Progress progress = new Progress(user_id, (int)(c.getTimeInMillis()/1000));
         progress.setCaloriesIn(0);
-        progress.setCaloriesOut(0);
+        progress.setCaloriesOut(caloriesOut);
         progress.setMiles(0);
-        progress.setWeight(0);
+        progress.setWeight(weight);
         progress.setSteps(0);
         
         progressFacade.create(progress);
@@ -158,11 +170,25 @@ public class ExerciseManager {
         this.duration = duration; 
     }
     
-    public int getWeight() { 
+    public double getWeight() { 
         return weight; 
     }
     
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         this.weight = weight; 
     }
+    
+     public void onSlideEnd(SlideEndEvent event) {
+         
+          //Get user Id
+        Integer user = (Integer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+
+       
+        
+        int user_id = user.intValue();
+        
+        caloriesOut = ((int)(intensity * 3.5 * (userFacade.getUser(user_id).getWeight()*2.2))/200) * duration;
+
+    } 
+    
 }

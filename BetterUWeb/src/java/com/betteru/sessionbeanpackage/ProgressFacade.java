@@ -67,13 +67,20 @@ public class ProgressFacade extends AbstractFacade<Progress> {
 //        return query.getResultList().isEmpty() ? null : query.getSingleResult();        
 //    }
     
-    public Progress getProgressEntry(Integer user_id, Integer epochTime) {
-        
-        return (Progress) (em.createQuery("SELECT p FROM Progress p WHERE p.userId = :userId AND p.logDate = :time")
-            .setParameter("userId", user_id)
-            .setParameter("time", epochTime)
-            .getSingleResult());        
-
-    }
     
+    
+    public Progress getProgressEntry(Integer user_id, Integer epochTime) {
+        if (em.createQuery("SELECT p FROM Progress p WHERE p.userId = :userId AND p.logDate = :time")
+                .setParameter("userId", user_id)
+                .setParameter("time", epochTime)
+                .getResultList().isEmpty()) {
+            return null;
+        }
+        else {
+            return (Progress) (em.createQuery("SELECT p FROM Progress p WHERE p.userId = :userId AND p.logDate = :time")
+                .setParameter("userId", user_id)
+                .setParameter("time", epochTime)
+                .getSingleResult());       
+        }
+    }
 }

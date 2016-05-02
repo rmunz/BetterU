@@ -34,8 +34,8 @@ public class ProfileViewManager implements Serializable {
     private LineChartModel calorieModel;
     private LineChartModel stepModel;
     private LineChartModel mileModel;
-    private int minWeight = Integer.MAX_VALUE;
-    private int maxWeight = 0;
+    private double minWeight = Integer.MAX_VALUE;
+    private double maxWeight = 0;
     private int minSteps = Integer.MAX_VALUE;
     private int maxSteps = 0;
     private int minMiles = Integer.MAX_VALUE;
