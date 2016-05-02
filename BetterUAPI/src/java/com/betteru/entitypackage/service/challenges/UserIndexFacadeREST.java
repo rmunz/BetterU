@@ -250,20 +250,21 @@ public class UserIndexFacadeREST extends AbstractFacade<UserIndex> {
         int uid = Integer.parseInt(temp[0]);
         String challengeType = temp[1];
         
-        /**
-        DailyChallenges completedDailyChallenge = (DailyChallenges) em.createQuery("SELECT c FROM DailyChallenges c WHERE c.Description = :desc")
-                .setParameter("desc", description);
-
-        WeeklyChallenges completedWeeklyChallenge = (WeeklyChallenges) em.createQuery("SELECT c FROM WeeklyChallenges c WHERE c.Description = :desc")
-                .setParameter("desc", description);*/
+        List<DailyChallenges> dailyChallengesList = em.createQuery("SELECT dc FROM DailyChallenges dc").getResultList();
+        List<WeeklyChallenges> weeklyChallengesList = em.createQuery("SELECT dc FROM DailyChallenges dc").getResultList();
+        int numDailyChallenges = dailyChallengesList.size();
+        int numWeeklyChallenges = weeklyChallengesList.size();
 
         
         int awardedPoints = 0;
-   
-        if (challengeType.equals("Weekly")) {
-            UserIndex userIndex = (UserIndex) em.createQuery("SELECT ui FROM UserIndex ui WHERE ui.userIndexPK.userID = :uid AND ui.userIndexPK.challengeType = :ct")
+        UserIndex userIndex = (UserIndex) em.createQuery("SELECT ui FROM UserIndex ui WHERE ui.userIndexPK.userID = :uid AND ui.userIndexPK.challengeType = :ct")
                 .setParameter("uid", uid).setParameter("ct",challengeType).getSingleResult(); 
-            int index = userIndex.getInd() + 1;
+        int index = userIndex.getInd() + 1;
+        if (challengeType.equals("Weekly")) {
+            
+            if((index) > numWeeklyChallenges) {
+                index = 0;
+            }
             WeeklyChallenges weeklyChallenge = (WeeklyChallenges) em.createQuery("SELECT wc FROM WeeklyChallenges wc WHERE wc.ind = :index")
                 .setParameter("index", userIndex.getInd() + 1).getSingleResult();
             awardedPoints = weeklyChallenge.getPointsAwarded();
@@ -272,7 +273,15 @@ public class UserIndexFacadeREST extends AbstractFacade<UserIndex> {
                 .setParameter("uid", uid).setParameter("ctype", "Weekly").setParameter("index", index).executeUpdate();   
             
         } else {
-            
+            if((index) > numDailyChallenges) {
+                index = 0;
+            }
+            DailyChallenges dailyChallenge = (DailyChallenges) em.createQuery("SELECT dc FROM DailyChallenges dc WHERE dc.ind = :index")
+                .setParameter("index", userIndex.getInd() + 1).getSingleResult();
+            awardedPoints = dailyChallenge.getPointsAwarded();
+            // Update user index to point to next daily challenge
+            em.createQuery("UPDATE UserIndex u SET u.ind = :index WHERE u.userIndexPK.challengeType = :ctype AND u.userIndexPK.userID = :uid")
+                .setParameter("uid", uid).setParameter("ctype", challengeType).setParameter("index", index).executeUpdate();  
         }
         
         int currentUserPoints = ((User) em.createQuery("SELECT u FROM User u WHERE u.id = :uid")
