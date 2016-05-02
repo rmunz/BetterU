@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created by Corey McQuay on 2016.04.28 
+Copyright © 2016 Corey McQuay. All rights reserved.
+-->
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:h="http://xmlns.jcp.org/jsf/html"
+       xmlns:f="http://xmlns.jcp.org/jsf/core"
+       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+       xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <ui:composition template="template/siteTemplate.xhtml">
+            <!-- Page title -->
+            <title><ui:define name="title">BetterU</ui:define></title>
+            <!-- Additional CSS styles needed -->
+            <ui:define name="css">
+                <link rel="stylesheet" type="text/css" href="resources/css/myProgress.css"/>
+            </ui:define>
+            <!-- Additional JS files needed -->
+
+            <!-- Page content -->
+            <ui:define name="editableContent">
+
+                <br />
+                <br />
+                <div align="center">
+
+
+                    Today is: <p:outputLabel><script> document.write(Date());</script> </p:outputLabel>
+                    <br />
+                    <h:outputLabel id="statMessage" value="#{exerciseManager.statusMessage}" />
+
+                    <br />
+
+                    <h:form id="calcCal">
+
+                        <h:panelGrid columns="1" style="margin-bottom: 10px">
+
+                            <h3><b>Intensity:</b> </h3>
+                            <p:inputText id="intensitySlider" value="#{exerciseManager.intensity}" />
+                            <p:slider for="intensitySlider" step="1" minValue="1" maxValue="9" >
+                                <p:ajax event="slideEnd" listener="#{exerciseManager.onSlideEnd}"  update="caloriesBurned" process="@form" />
+                            </p:slider>
+
+                            <br />
+                            <h3><b>Time(In Minutes, 3 Hours Maximum)</b> </h3>
+                            <p:inputText id="durationSlider" value="#{exerciseManager.duration}" />
+                            <p:slider for="durationSlider" step="1" minValue="0" maxValue="180">
+                                <p:ajax event="slideEnd" listener="#{exerciseManager.onSlideEnd}"  update="caloriesBurned" process="@form" />
+                            </p:slider>
+
+                            <br />
+                            <h3><b>Weight: Optional</b> </h3>
+                            <p:inputText id="weight" value="#{exerciseManager.weight}" />
+                        </h:panelGrid>
+                        <img id="intensity" src="resources/images/CaloriesBurnedIcon.png" alt="intensity" /><b>Calories Burned:    </b> <h:outputLabel id="caloriesBurned" value="#{exerciseManager.caloriesOut}" />
+                       <!--                        <h:inputHidden id="caloriesBurned" value="#{exerciseManager.caloriesOut}" />-->
+
+                        <br />
+                        
+                        <h:commandButton id="calcCalories-btn"  action="#{exerciseManager.enterDailyExercise}" value="Log" styleClass="buttonText"/>
+
+                        <br />
+
+
+
+                        <img id="intensity" src="resources/images/intensityChart.jpg" alt="intensity" />
+
+                        <br /><br /><br />
+
+
+
+
+                    </h:form>
+
+                    <!--                    <script type="text/javascript">
+                                            function getCaloriesBurned() {
+                                                var intensity = document.getElementById("calcCal:intensitySlider").value;
+                                                var duration = document.getElementById("calcCal:durationSlider").value;
+                    
+                    
+                    
+                                                var cBurn = ((intensity * 3.5 * 120) / 200) * duration;
+                                                var elem = document.getElementById("calcCal:caloriesBurned");
+                    
+                                                elem.innerHTML = cBurn;
+                    
+                                                document.getElementById("displayCals").innerHTML
+                                            }
+                                        </script> -->
+
+
+
+
+
+                    <br />
+
+                </div> 
+            </ui:define>
+        </ui:composition>
+    </h:body>
+
+</html>

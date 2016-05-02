@@ -5,6 +5,7 @@
 package com.betteru.entitypackage.service;
 
 import com.betteru.entitypackage.Progress;
+import com.betteru.entitypackage.ProgressPK;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -18,6 +19,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -40,25 +42,43 @@ public class ProgressFacadeREST extends AbstractFacade<Progress> {
     public void create(Progress entity) {
         super.create(entity);
     }
-
+    
     @PUT
-    @Path("{id}")
+    @Path("{UserId}/{LogDate}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, Progress entity) {
-        super.edit(entity);
+    public void edit(@PathParam("UserId") Integer userId, @PathParam("LogDate") Integer logDate, Progress entity) {
+        ProgressPK pk = new ProgressPK();
+        pk.setDay(logDate);
+        pk.setId(userId);
+        //super.edit(entity);
+        
+        //manually add all of the fields
+        Progress prog = (Progress) super.find(pk);
+        prog.setMiles(prog.getMiles() + entity.getMiles());
+        prog.setCaloriesIn(prog.getCaloriesIn() + entity.getCaloriesIn());
+        prog.setCaloriesOut(prog.getCaloriesOut() + entity.getCaloriesOut());
+        prog.setSteps(prog.getSteps() + entity.getSteps());
+        prog.setWeight(prog.getWeight() + entity.getWeight());
+         
     }
 
     @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") Integer id) {
-        super.remove(super.find(id));
+    @Path("{UserId}/{LogDate}")
+    public void remove(@PathParam("UserId") Integer userId, @PathParam("LogDate") Integer logDate) {
+        ProgressPK pk = new ProgressPK();
+        pk.setDay(logDate);
+        pk.setId(userId);
+        super.remove(super.find(pk));
     }
 
     @GET
-    @Path("{id}")
+    @Path("{UserId}/{LogDate}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Progress find(@PathParam("id") Integer id) {
-        return super.find(id);
+    public Progress find(@PathParam("UserId") Integer userId, @PathParam("LogDate") Integer logDate) {
+        ProgressPK pk = new ProgressPK();
+        pk.setDay(logDate);
+        pk.setId(userId);
+        return super.find(pk);
     }
 
     @GET
@@ -68,12 +88,12 @@ public class ProgressFacadeREST extends AbstractFacade<Progress> {
         return super.findAll();
     }
 
-    @GET
+   /* @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_JSON})
     public List<Progress> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
-    }
+    }*/
 
     @GET
     @Path("count")
@@ -81,7 +101,27 @@ public class ProgressFacadeREST extends AbstractFacade<Progress> {
     public String countREST() {
         return String.valueOf(super.count());
     }
-
+    
+    @GET
+    @Path("{UserId}/week/{LogDate}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Progress> getWeek(@PathParam("UserId") Integer userId, @PathParam("LogDate") Integer logDate) {
+        int aWeekAgo = logDate - 604800;
+        TypedQuery<Progress> query = em.createNamedQuery("Progress.findWeek", Progress.class)
+                                        .setParameter("LogDate", logDate).setParameter("userId", userId).setParameter("aWeekAgo", aWeekAgo);               
+        return query.getResultList();
+    }
+    
+    @GET
+    @Path("{UserId}/month/{LogDate}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Progress> getMonth(@PathParam("UserId") Integer userId, @PathParam("LogDate") Integer logDate) {
+        int aMonthAgo = logDate - 2628000;
+        TypedQuery<Progress> query = em.createNamedQuery("Progress.findMonth", Progress.class)
+                                        .setParameter("LogDate", logDate).setParameter("userId", userId).setParameter("aMonthAgo", aMonthAgo);               
+        return query.getResultList();
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
