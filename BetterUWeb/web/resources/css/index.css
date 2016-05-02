@@ -85,3 +85,7 @@
     width: 260px;
     margin-left: 20px;
 }
+
+#content-container {
+    padding: 0;
+}
