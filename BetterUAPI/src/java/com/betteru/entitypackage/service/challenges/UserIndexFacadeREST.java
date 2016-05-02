@@ -197,10 +197,12 @@ public class UserIndexFacadeREST extends AbstractFacade<UserIndex> {
             index = userInd.getInd();
         }
 
-        index++;
-        // if(index > 12) {
-        //     index = 1;
-        //}
+        
+        if(index < 50) {
+            index = 1;
+        } else {
+            index++;
+        }
 
         if (em.createQuery("SELECT dc FROM DailyChallenges dc WHERE dc.ind = :index AND dc.challengeType = :ctype")
                 .setParameter("index", index).setParameter("ctype", challengeType)
@@ -229,7 +231,11 @@ public class UserIndexFacadeREST extends AbstractFacade<UserIndex> {
             index = userInd.getInd();
         }
         
-        index++;
+        if(index < 7) {
+            index++;
+        } else {
+            index = 1;
+        }
         
         if (em.createQuery("SELECT wc FROM WeeklyChallenges wc WHERE wc.ind = :index")
                 .setParameter("index", index)
@@ -251,7 +257,7 @@ public class UserIndexFacadeREST extends AbstractFacade<UserIndex> {
         String challengeType = temp[1];
         
         List<DailyChallenges> dailyChallengesList = em.createQuery("SELECT dc FROM DailyChallenges dc").getResultList();
-        List<WeeklyChallenges> weeklyChallengesList = em.createQuery("SELECT dc FROM DailyChallenges dc").getResultList();
+        List<WeeklyChallenges> weeklyChallengesList = em.createQuery("SELECT dc FROM WeeklyChallenges dc").getResultList();
         int numDailyChallenges = dailyChallengesList.size();
         int numWeeklyChallenges = weeklyChallengesList.size();
 
@@ -260,24 +266,32 @@ public class UserIndexFacadeREST extends AbstractFacade<UserIndex> {
         UserIndex userIndex = (UserIndex) em.createQuery("SELECT ui FROM UserIndex ui WHERE ui.userIndexPK.userID = :uid AND ui.userIndexPK.challengeType = :ct")
                 .setParameter("uid", uid).setParameter("ct",challengeType).getSingleResult(); 
         int index = userIndex.getInd() + 1;
+        int queryInd = 0;
         if (challengeType.equals("Weekly")) {
             
-            if((index) > numWeeklyChallenges) {
+            if((index) == numWeeklyChallenges ) {
                 index = 0;
+                queryInd = 1;
+            }
+            else {
+                queryInd = index;
             }
             WeeklyChallenges weeklyChallenge = (WeeklyChallenges) em.createQuery("SELECT wc FROM WeeklyChallenges wc WHERE wc.ind = :index")
-                .setParameter("index", index).getSingleResult();
+                .setParameter("index", queryInd).getSingleResult();
             awardedPoints = weeklyChallenge.getPointsAwarded();
             // Update user index to point to next weekly challenge
             em.createQuery("UPDATE UserIndex u SET u.ind = :index WHERE u.userIndexPK.challengeType = :ctype AND u.userIndexPK.userID = :uid")
                 .setParameter("uid", uid).setParameter("ctype", "Weekly").setParameter("index", index).executeUpdate();   
             
         } else {
-            if((index) > numDailyChallenges) {
+            if((index) == numDailyChallenges) {
                 index = 0;
+                queryInd = 1;
+            } else {
+                queryInd = index;
             }
             DailyChallenges dailyChallenge = (DailyChallenges) em.createQuery("SELECT dc FROM DailyChallenges dc WHERE dc.ind = :index")
-                .setParameter("index", index).getSingleResult();
+                .setParameter("index", queryInd).getSingleResult();
             awardedPoints = dailyChallenge.getPointsAwarded();
             // Update user index to point to next daily challenge
             em.createQuery("UPDATE UserIndex u SET u.ind = :index WHERE u.userIndexPK.challengeType = :ctype AND u.userIndexPK.userID = :uid")
