@@ -11,6 +11,9 @@ public class FoodEntry {
     private String name;
     private String ndbno;
     private int kcal;
+    private int protien;
+    private int carbs;
+    private int fat;
 
     
     public FoodEntry(int offset,String foodGroup,String name,String ndbno)
@@ -19,7 +22,11 @@ public class FoodEntry {
         this.foodGroup = foodGroup;
         this.name = name;
         this.ndbno = ndbno;
-        this.kcal = 0;//since not known yet...
+        this.kcal = 0;
+        this.protien =0;
+        this.carbs = 0;
+        this.fat = 0;
+        
     }
 
     /**
@@ -90,6 +97,48 @@ public class FoodEntry {
      */
     public void setKcal(int kcal) {
         this.kcal = kcal;
+    }
+
+    /**
+     * @return the protien
+     */
+    public int getProtien() {
+        return protien;
+    }
+
+    /**
+     * @param protien the protien to set
+     */
+    public void setProtien(int protien) {
+        this.protien = protien;
+    }
+
+    /**
+     * @return the carbs
+     */
+    public int getCarbs() {
+        return carbs;
+    }
+
+    /**
+     * @param carbs the carbs to set
+     */
+    public void setCarbs(int carbs) {
+        this.carbs = carbs;
+    }
+
+    /**
+     * @return the fat
+     */
+    public int getFat() {
+        return fat;
+    }
+
+    /**
+     * @param fat the fat to set
+     */
+    public void setFat(int fat) {
+        this.fat = fat;
     }
     
    

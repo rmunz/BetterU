@@ -118,6 +118,22 @@
                             <h:outputText value="#{rec.ndbno}" />
                         </p:column>
                         
+                        <p:column headerText="KCal">
+                            <h:outputText value="#{rec.kcal}" />
+                        </p:column>
+                        
+                        <p:column headerText="Protien">
+                            <h:outputText value="#{rec.protien}" />
+                        </p:column>
+                        
+                        <p:column headerText="Carbs">
+                            <h:outputText value="#{rec.carbs}" />
+                        </p:column>
+                        
+                        <p:column headerText="Fat">
+                            <h:outputText value="#{rec.fat}" />
+                        </p:column>
+                        
                         <p:column headerText="Add Meal">
                             <p:commandButton id="selectRowUSDABtn" value="select" onclick="document.getElementById('dailyEntry:caloriesin').value=#{rec.kcal}"/>
                         </p:column>

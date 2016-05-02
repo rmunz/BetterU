@@ -36,11 +36,11 @@ public class RecommendationManager implements Serializable{
     //For Usda food search USDA+ foodtosearchfor + sort+max+offset
     //For USDA nutritional information USDA_URL + ndbno from previous search + reportType + format+ USDA_KEY
     private String foodToSearchForUSDA; //q term for usda food search
-    private String sort = "&sort=n";
-    private String max = "&max=5";
-    private String offset = "&offset=0";
-    private String reportType = "&type=f";
-    private String format = "&format=json";
+    private final String sort = "&sort=n";
+    private final String max = "&max=5";
+    private final String offset = "&offset=0";
+    private final String reportType = "&type=f";
+    private final String format = "&format=json";
     private static final String USDA_KEY = "&api_key=lmng23Wvez10CHDEqiWE90dL1qWhJrkXlqIIXRmN";
     private static final String USDA_KEY_DEMO = "&api_key=DEMO_KEY";
     private static final String USDA_URL = "http://api.nal.usda.gov/ndb/search/?format=json&q=";
@@ -119,7 +119,39 @@ public class RecommendationManager implements Serializable{
                 
                         JsonArray results2 = newObj3.getJsonArray("nutrients");
                         
-                        System.out.println("YO");
+                        for(int i=0;i < results2.size();i++)
+                        {
+                            JsonObject temp = results2.getJsonObject(i);
+                            
+                            switch(temp.getInt("nutrient_id"))
+                            {
+                                case 208: tmpName.setKcal(temp.getInt("value"));break;
+                                case 203: tmpName.setProtien(temp.getInt("value"));break;
+                                case 205: tmpName.setCarbs(temp.getInt("value"));break;
+                                case 204: tmpName.setFat(temp.getInt("value"));break;
+                            }
+                            /*
+                            if(temp.getInt("nutrient_id") == 208)
+                            {
+                                tmpName.setKcal(temp.getInt("value"));
+                            }
+                            if(temp.getInt("nutrient_id") == 203)
+                            {
+                                tmpName.setProtien(temp.getInt("value"));
+                            }
+                            else if(temp.getInt("nutrient_id") == 205)
+                            {
+                                tmpName.setCarbs(temp.getInt("value"));
+                            }
+                            else if(temp.getInt("nutrient_id") == 204)
+                            {
+                                tmpName.setFat(temp.getInt("value"));
+                            }
+                            */
+                        }
+                        
+                        
+                        System.out.println("YO");//personal stopper
                     }
                     
                     
