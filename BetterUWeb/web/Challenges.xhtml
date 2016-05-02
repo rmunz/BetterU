@@ -41,51 +41,28 @@ Copyright © 2016 Timothy Street. All rights reserved.
                         
                         <table>
                             <tr>
-                                <td>Calories Eaten:</td>
-                                <td>#{recommendationManager.getToday().caloriesIn}</td>
+                                <td>Core:</td>
+                                <td>a</td>
                             </tr>
                             <tr>
-                                <td>Calories Burned:</td>
-                                <td>#{exerciseManager.getToday().caloriesOut}</td>
+                                <td>Lower:</td>
+                                <td>a</td>
                             </tr>
                             <tr>
-                                <td>Calories Remaining</td>
-                                <td>#{accountManager.selected.targetCalories - recommendationManager.calorieIntake}</td>
+                                <td>Upper:</td>
+                                <td>a</td>
                             </tr>
                             <tr>
-                                <td>Weight:</td>
-                                <td>#{exerciseManager.getToday().weight}</td>
+                                <td>Cardio:</td>
+                                <td>a</td>
+                            </tr>
+                            <tr>
+                                <td>Weekly:</td>
+                                <td>a</td>
                             </tr>
                         </table>
                     </div>
-                    
-                    <br/><br/><br/>
-                    
-                    <div>
-                        <a href="Recommendations.xhtml">Log Food</a>     <a href="LoggingExercise.xhtml">Log Exercise</a>
-                    </div>
-                    
-                    <br/><br/><br/>
-                    
-                    <div>
-                        <h1>Schedule</h1>
-                        <div>
-                            <h2>Breakfast</h2>
-                            <h:outputText id="breakfastName" value="#{profileViewManager.breakfast}" />
-                        </div>
-                        <div>
-                            <h2>Lunch</h2>
-                            <h:outputText id="lunchName" value="#{profileViewManager.lunch}" />
-                        </div>
-                        <div>
-                            <h2>Dinner</h2>
-                            <h:outputText id="DinnerName" value="#{profileViewManager.dinner}" />
-                        </div>
-                        <div>
-                            <h2>Snack</h2>
-                            <h:outputText id="snackName" value="#{profileViewManager.snack}" />
-                        </div>
-                    </div>
+
                     <br /><br /><br /><br /><br /><br /><br />
                 </div>
             </ui:define>
