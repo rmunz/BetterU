@@ -51,7 +51,7 @@ public class LifecycleBean {
 
         Calendar c = Calendar.getInstance();
         c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
-        int msToMidnight = (int)(c.getTimeInMillis()-System.currentTimeMillis());
+        int msToMidnight = (int)(c.getTimeInMillis() + 86400000 - System.currentTimeMillis());
         timer.setInitialDelay(msToMidnight);
         
         timer.start(); 
