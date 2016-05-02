@@ -4,12 +4,19 @@
  */
 package com.betteru.entitypackage.service;
 
-
-import com.betteru.entitypackage.*;
+import com.betteru.entitypackage.Progress;
+import com.betteru.entitypackage.User;
+import com.sendgrid.SendGrid;
+import com.sendgrid.SendGridException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Calendar;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.swing.Timer;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -27,18 +34,52 @@ import javax.ws.rs.core.MediaType;
 @Stateless
 @Path("com.betteru.entitypackage.user")
 public class UserFacadeREST extends AbstractFacade<User> {
-
+    @EJB
+    private ProgressFacadeREST pf;
+    
     @PersistenceContext(unitName = "BetterUAPIPU")
     private EntityManager em;
 
     public UserFacadeREST() {
         super(User.class);
     }
-
+    
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_JSON})
     public void create(User entity) {
+
+        SendGrid sendgrid = new SendGrid("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");
+        
+        SendGrid.Email email = new SendGrid.Email();
+        //Sets up the email format to be sent.
+        email.addTo(entity.getEmail());
+        email.setFrom("BetterU");
+        email.setSubject("TEMPORARY EMAIL: Welcome to BetterU.");
+        email.setHtml("Thanks for signing up!");
+
+        //Send the email to the user using SendGrid, 
+        //if it fails print the error statement
+        try {
+            SendGrid.Response response = sendgrid.send(email);
+            System.out.println(response.getMessage());
+        }
+        catch (SendGridException e) {
+            System.err.println(e);
+        }
+        
+        Calendar c = Calendar.getInstance();
+        c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
+        for(int i = 0; i < 7; i++) {
+            //...Perform a task...
+            Progress progress = new Progress(entity.getId(), (int)((c.getTimeInMillis()-i*86400000)/1000));
+            progress.setCaloriesIn(0);
+            progress.setCaloriesOut(0);
+            progress.setMiles(0);
+            progress.setWeight((double)entity.getWeight());
+            progress.setSteps(0);
+            pf.create(progress);
+        }
         super.create(entity);
     }
 
@@ -73,7 +114,6 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_JSON})
     public List<User> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        
         return super.findRange(new int[]{from, to});
     }
 
@@ -88,52 +128,5 @@ public class UserFacadeREST extends AbstractFacade<User> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
-    /* Added methods */
-     
-    /**
-     * Gets (and TODO: sets) the next daily challenge for a specified User
-     * by incrementing to the next Challenge index in the Challenges table.
-     * 
-     * @param id
-     * @return 
-     *
-    @GET
-    @Path("nextChallenge={uid}")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Challenges getNextDailyChallenge(@PathParam("uid") int id) {
-        
-        if (em.createQuery("SELECT u FROM User u WHERE u.id = :uid")
-                .setParameter("uid", id)
-                .getResultList().isEmpty())
-                {
-            return null;
-        }
-        else {
-            User user = (User) em.createQuery("SELECT u FROM User u WHERE u.id = :uid")
-                .setParameter("uid", id).getSingleResult();
-            // Attempt to increment to next Challenge in Challenges table
-            Integer currentDailyChallengeIndex = this.getProperIndex(user.getDailyChallengeIndex() + 1);
-            return (Challenges) em.createQuery("SELECT c FROM Challenges c WHERE c.ind = :cind")
-                    .setParameter("cind", currentDailyChallengeIndex).getSingleResult();
-        }
-    }
-    
-    /**
-     * Ensures that the index returned by getNextDailyChallenge() does not
-     * exceed the bounds of the Challenges table. Counting for Challenge
-     * indices starts at 1 in the DB.
-     * 
-     * @param currIndex
-     * @return 
-     *
-    private Integer getProperIndex(Integer currIndex) {
-        
-        if(challengesFacadeRest.count() < currIndex)
-        {
-            currIndex = 0;
-        }       
-        return currIndex;
-    }*/
     
 }

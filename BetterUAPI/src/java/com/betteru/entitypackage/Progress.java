@@ -5,16 +5,16 @@
 package com.betteru.entitypackage;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -24,11 +24,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "Progress")
+@IdClass(value=ProgressPK.class)
 @XmlRootElement
 @NamedQueries({
+  @NamedQuery(name = "Progress.findMonth", query = "SELECT p FROM Progress p WHERE p.userId = :userId AND p.logDate BETWEEN :aMonthAgo AND :logDate"),
+    @NamedQuery(name = "Progress.findWeek", query = "SELECT p FROM Progress p WHERE p.userId = :userId AND p.logDate BETWEEN :aWeekAgo AND :logDate"),
+    
     @NamedQuery(name = "Progress.findAll", query = "SELECT p FROM Progress p"),
-    @NamedQuery(name = "Progress.findById", query = "SELECT p FROM Progress p WHERE p.id = :id"),
-    @NamedQuery(name = "Progress.findByDay", query = "SELECT p FROM Progress p WHERE p.day = :day"),
+    @NamedQuery(name = "Progress.findByUserId", query = "SELECT p FROM Progress p WHERE p.userId = :userId"),
+    @NamedQuery(name = "Progress.findByLogDate", query = "SELECT p FROM Progress p WHERE p.logDate = :logDate"),
     @NamedQuery(name = "Progress.findByCaloriesIn", query = "SELECT p FROM Progress p WHERE p.caloriesIn = :caloriesIn"),
     @NamedQuery(name = "Progress.findByCaloriesOut", query = "SELECT p FROM Progress p WHERE p.caloriesOut = :caloriesOut"),
     @NamedQuery(name = "Progress.findByWeight", query = "SELECT p FROM Progress p WHERE p.weight = :weight"),
@@ -40,50 +44,63 @@ public class Progress implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
-    @Column(name = "id")
-    private Integer id;
+    @Column(name = "UserId")
+    private Integer userId;
+    @Id
     @Basic(optional = false)
     @NotNull
-    @Column(name = "Day")
-    @Temporal(TemporalType.DATE)
-    private Date day;
+    @Column(name = "LogDate")
+    private Integer logDate;
     @Column(name = "CaloriesIn")
     private Integer caloriesIn;
     @Column(name = "CaloriesOut")
     private Integer caloriesOut;
-    @Column(name = "Weight")
-    private Integer weight;
     @Column(name = "Miles")
     private Integer miles;
     @Column(name = "Steps")
     private Integer steps;
-
+    @Column(name = "Weight")
+    private Double weight;
+    //@JoinColumn(name = "user_id", referencedColumnName = "UserId")
+    //@ManyToOne
+    //private User user;
+    
     public Progress() {
     }
 
-    public Progress(Integer id) {
-        this.id = id;
+    public Progress(Integer userId) {
+        this.userId = userId;
     }
 
-    public Progress(Integer id, Date day) {
-        this.id = id;
-        this.day = day;
+    public Progress(Integer userId, Integer logDate) {
+        this.userId = userId;
+        this.logDate = logDate;
     }
 
-    public Integer getId() {
-        return id;
+    /*
+    public User getUser() {
+            return user;
+    }
+    
+    public void setUser(User user) {
+            this.user = user;
+    }
+    */
+    
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public Date getDay() {
-        return day;
+    public Integer getLogDate() {
+        return logDate;
     }
 
-    public void setDay(Date day) {
-        this.day = day;
+    public void setLogDate(Integer logDate) {
+        this.logDate = logDate;
     }
 
     public Integer getCaloriesIn() {
@@ -102,14 +119,6 @@ public class Progress implements Serializable {
         this.caloriesOut = caloriesOut;
     }
 
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
-
     public Integer getMiles() {
         return miles;
     }
@@ -125,11 +134,19 @@ public class Progress implements Serializable {
     public void setSteps(Integer steps) {
         this.steps = steps;
     }
+    
+    public Double getWeight() {
+        return weight;
+    }
+    
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (userId != null ? userId.hashCode() : 0);
         return hash;
     }
 
@@ -140,7 +157,7 @@ public class Progress implements Serializable {
             return false;
         }
         Progress other = (Progress) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.userId == null && other.userId != null) || (this.userId != null && !this.userId.equals(other.userId))) {
             return false;
         }
         return true;
@@ -148,7 +165,7 @@ public class Progress implements Serializable {
 
     @Override
     public String toString() {
-        return "com.betteru.entitypackage.Progress[ id=" + id + " ]";
+        return "com.betteru.sourcepackage.Progress[ userId=" + userId + " ]";
     }
     
 }

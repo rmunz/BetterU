@@ -1,8 +1,4 @@
-/*
- * Created by Ojas Mhetar on 2016.02.27  * 
- * Copyright © 2016 Ojas Mhetar. All rights reserved. * 
- */
-package com.mycompany.validators;
+package com.betteru.validators;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -14,7 +10,7 @@ import javax.faces.validator.ValidatorException;
 @FacesValidator("emailValidator")
 /**
  *
- * @author Mhetar
+ * @author Balci
  */
 public class EmailValidator implements Validator {
 

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+    <head>
+        <title>Sign In</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+        <ui:composition template="template/siteTemplate.xhtml">
+            <!-- Page title -->
+            <title><ui:define name="title">BetterU - Sign In</ui:define></title>
+            <!-- Additional CSS styles needed -->
+            <ui:define name="css">
+                <link rel="stylesheet" type="text/css" href="resources/css/signIn.css"/>
+            </ui:define>
+            <!-- Additional JS files needed -->
+            
+            <!-- Page content -->
+            <ui:define name="editableContent">
+                <div id="page-title">Sign In</div>
+                <div id="signin-wrapper">
+                    <h:form id="form">
+                        <!-- Input fields -->
+                        <h:inputText id="username" class="input-control" value="#{loginManager.username}"
+                                     a:placeholder="Username" />
+                        <h:inputSecret id="password" class="input-control" value="#{loginManager.password}"
+                                       a:placeholder="Password" />
+                        <!-- Error message -->
+                        <h:outputLabel id="form-error-message" class="error-message"
+                                       value="#{loginManager.errorMessage}" />
+                        <!-- Sign in message -->
+                        <h:commandButton id="signin-btn" class="btn" value="Sign In" 
+                                         action="#{loginManager.loginUser()}" />
+                        <!-- Create account / forgot password links -->
+                        <div id="signin-links">
+                            <h:commandLink action="#{loginManager.createUser()}">
+                                Create account
+                            </h:commandLink>
+                            <br/>
+                            <h:commandLink action="#{loginManager.resetPassword()}">
+                                Forgot password?
+                            </h:commandLink>
+                        </div>
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
