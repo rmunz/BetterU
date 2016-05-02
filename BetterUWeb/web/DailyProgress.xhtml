@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created by Ben Robohn on 2016.04.30 
+Copyright © 2016 Osman Balci. All rights reserved.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <head>
+        <title>Daily Progress</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+        <ui:composition template="template/siteTemplate.xhtml">
+            <!-- Page title -->
+            <title><ui:define name="title">BetterU - Daily Progress</ui:define></title>
+            
+            <ui:define name="css">
+                <link rel="stylesheet" type="text/css" href="resources/css/recommendations.css"/>
+            </ui:define>
+            
+            <!-- Additional JS files needed -->
+            
+            <!-- Page content -->
+            <ui:define name="editableContent">
+                <div id="banner-wrapper">
+                    <div id="banner-inner-wrapper">
+                        <div id="banner-message" align="center">
+                            Let's Schedule.<br/>
+                        </div>
+                    </div>
+                </div>
+                
+                <br /><br /><br /><br /><br /><br /><br />
+                <div align="center">     
+                    
+                    <div>
+                        <h1>Your Daily Totals</h1>
+                        
+                        <table>
+                            <tr>
+                                <td>Calories Eaten:</td>
+                                <td>#{recommendationManager.getToday().caloriesIn}</td>
+                            </tr>
+                            <tr>
+                                <td>Calories Burned:</td>
+                                <td>#{exerciseManager.getToday().caloriesOut}</td>
+                            </tr>
+                            <tr>
+                                <td>Calories Remaining</td>
+                                <td>#{accountManager.selected.targetCalories - recommendationManager.calorieIntake}</td>
+                            </tr>
+                            <tr>
+                                <td>Weight:</td>
+                                <td>#{exerciseManager.getToday().weight}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <br/><br/><br/>
+                    
+                    <div>
+                        <a href="Recommendations.xhtml">Log Food</a>     <a href="LoggingExercise.xhtml">Log Exercise</a>
+                    </div>
+                    
+                    <br/><br/><br/>
+                    
+                    <div>
+                        <h1>Schedule</h1>
+                        <div>
+                            <h2>Breakfast</h2>
+                            <h:outputText id="breakfastName" value="#{profileViewManager.breakfast}" />
+                        </div>
+                        <div>
+                            <h2>Lunch</h2>
+                            <h:outputText id="lunchName" value="#{profileViewManager.lunch}" />
+                        </div>
+                        <div>
+                            <h2>Dinner</h2>
+                            <h:outputText id="DinnerName" value="#{profileViewManager.dinner}" />
+                        </div>
+                        <div>
+                            <h2>Snack</h2>
+                            <h:outputText id="snackName" value="#{profileViewManager.snack}" />
+                        </div>
+                    </div>
+                    <br /><br /><br /><br /><br /><br /><br />
+                </div>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

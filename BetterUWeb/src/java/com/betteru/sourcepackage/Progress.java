@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
   @NamedQuery(name = "Progress.findMonth", query = "SELECT p FROM Progress p WHERE p.userId = :userId AND p.logDate BETWEEN :aMonthAgo AND :logDate"),
     @NamedQuery(name = "Progress.findWeek", query = "SELECT p FROM Progress p WHERE p.userId = :userId AND p.logDate BETWEEN :aWeekAgo AND :logDate"),
+    @NamedQuery(name = "Progress.findDay", query = "SELECT p FROM Progress p WHERE p.userId = :userId AND p.logDate = :logDate"),
     
     @NamedQuery(name = "Progress.findAll", query = "SELECT p FROM Progress p"),
     @NamedQuery(name = "Progress.findByUserId", query = "SELECT p FROM Progress p WHERE p.userId = :userId"),
@@ -59,7 +60,7 @@ public class Progress implements Serializable {
     @Column(name = "CaloriesOut")
     private Integer caloriesOut;
     @Column(name = "Weight")
-    private Integer weight;
+    private Double weight;
     @Column(name = "Miles")
     private Integer miles;
     @Column(name = "Steps")
@@ -122,11 +123,11 @@ public class Progress implements Serializable {
         this.caloriesOut = caloriesOut;
     }
 
-    public Integer getWeight() {
+    public Double getWeight() {
         return weight;
     }
 
-    public void setWeight(Integer weight) {
+    public void setWeight(Double weight) {
         this.weight = weight;
     }
 
