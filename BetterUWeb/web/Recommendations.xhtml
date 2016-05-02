@@ -36,7 +36,7 @@
                     <h:outputLabel value ="#{recommmendationManager.statusMessage}" />
                     <h:outputLabel value="Your target for today is #{accountManager.selected.targetCalories} calories."/>
                     <br />
-                    <h:outputLabel value="Look's like you've got #{accountManager.selected.targetCalories - recommendationManager.calorieIntake} calories to go!"  />
+                    <h:outputLabel value="Look's like you've got #{accountManager.selected.targetCalories - recommendationManager.getToday().caloriesIn} calories to go!"  />
                     <br /><br /><br />
                     <h:form class="form-recommendation">
                         
