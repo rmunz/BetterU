@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.Calendar;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.faces.bean.ManagedBean;
@@ -43,35 +44,35 @@ public class ExerciseManager {
     public String enterDailyExercise(){
           
         //Get user Id
-        User user = (User)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+        Integer user = (Integer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
 
         if(user == null) {
             statusMessage = "Oops. You're not logged in!";
             return "";
         }
         
-        int user_id = user.getId();
+        int user_id = user.intValue();
         
         //Get today @ Midnight in epoch 
         int LOGTIME_HARDCODE = 1461744000;
-        LocalTime midnight = LocalTime.MIDNIGHT;
-        LocalDate today = LocalDate.now(ZoneId.of("Europe/Berlin"));
-        LocalDateTime todayMidnight = LocalDateTime.of(today, midnight);
-        
+        Calendar c = Calendar.getInstance();
+        c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
+        int epochMidnight =  (int)c.getTimeInMillis()/1000;
+                
         //Create primary comp key with userId + time 
-        ProgressPK proPK = new ProgressPK();
-        //proPK.setDay(todayMidnight.getSecond());
-        proPK.setDay(LOGTIME_HARDCODE); //for testing purposes
-        proPK.setId(user_id);
+        //ProgressPK proPK = new ProgressPK();
+        //proPK.setDay(epochMidnight);
+        //proPK.setId(user_id);
         
         //connect to find progress entry
-        Progress entry = progressFacade.getProgressEntry(proPK);
+        Progress entry = progressFacade.getProgressEntry(user_id, epochMidnight);
+        
+        caloriesOut = ((int)(intensity * 3.5 * 120)/200) * duration;
         
         if(entry != null) {
             //update progress entry
-            try {
-                caloriesOut = ((int)(intensity * 3.5 * 120)/200) * duration;
-                entry.setCaloriesOut(caloriesOut);
+            try {   
+                entry.setCaloriesOut(entry.getCaloriesOut() + caloriesOut);
                 entry.setWeight(weight);
 
                 progressFacade.edit(entry);
@@ -81,13 +82,48 @@ public class ExerciseManager {
                 return "";
             }
         }
-        else {
-            statusMessage = "Progress entry not found.";
-            return "";
+        else {      
+            createProgressEntry(user_id, caloriesOut, weight);
+            //statusMessage = "Progress entry not found.";
+            //return "";
         }
         
         //return appropriate page 
-        return "MyAccount";
+        return "DailyProgress";
+    }
+    
+    public void createProgressEntry(int user_id, int caloriesOut, double weight) {
+        
+        Calendar c = Calendar.getInstance();
+        c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
+
+        Progress progress = new Progress(user_id, (int)((c.getTimeInMillis())));
+        progress.setCaloriesIn(0);
+        progress.setCaloriesOut(0);
+        progress.setMiles(0);
+        progress.setWeight(0);
+        progress.setSteps(0);
+        
+        progressFacade.create(progress);
+        
+    }
+    
+    public Progress getToday(){
+        Calendar c = Calendar.getInstance();
+        c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
+        Integer epochMidnight =  (int)(c.getTimeInMillis()/1000);
+        
+        //Get user Id  
+        Integer user = (Integer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+
+        if(user == null) {
+            statusMessage = "Oops. You're not logged in!";
+        }
+        
+        int user_id = user.intValue();
+        
+        Progress entry = progressFacade.getProgressEntry(user_id, epochMidnight);
+        return entry;    
     }
     
     public void setCaloriesOut(int caloriesOut){

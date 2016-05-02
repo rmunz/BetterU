@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <head>
         <title>Sign In</title>
@@ -29,19 +30,24 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <br /><br /><br /><br /><br /><br /><br />
                 <div align="center">     
                     <h:outputLabel value ="#{recommmendationManager.statusMessage}" />
+                    <h:outputLabel value="Your target for today is #{accountManager.selected.targetCalories} calories."/>
+                    <br />
+                    <h:outputLabel value="Look's like you've got #{accountManager.selected.targetCalories - recommendationManager.calorieIntake} calories to go!"  />
+                    <br /><br /><br />
                     <h:form class="form-recommendation">
-
-<!--                        <h:outputLabel styleClass="outputLabel" for="mincal" value="Minimum Calories " />
-                        <h:inputText class="form-control" id="mincal" value="#{recommendationManager.caloriesMin}"/>
-                        <br/>
-                        <h:outputLabel styleClass="outputLabel" for="maxcal" value="Maximum Calories: " />
-                        <h:inputText class="form-control"  id="maxcal" value="#{recommendationManager.caloriesMax}"/>
-                        <br/>-->
-
+                        
+                        What are your allergies?
+                        <br />
+                        <p:selectManyCheckbox id="Alergies" value="#{recommendationManager.selectedAllergy}">
+                            <f:selectItem itemLabel="Nuts" itemValue="Nuts" />
+                            <f:selectItem itemLabel="Dairy" itemValue="Dairy" />
+                            <f:selectItem itemLabel="Gluten" itemValue="Gluten" />
+                        </p:selectManyCheckbox>
+                        
                         <h:panelGrid columns="1" style="margin-bottom: 10px">
                             <h:outputText id="displayRange" value="Between #{recommendationManager.caloriesMin} and #{recommendationManager.caloriesMax} calories" />
                             <p:slider for="calMin,calMax" display="displayRange" step="50" style="width: 400px" range="true" displayTemplate="Between {min} and {max} calories" minValue="50" maxValue="1000" />
@@ -53,20 +59,34 @@
                     </h:form>
                     <br /><br /><br /><br /><br /><br /><br />
                     <p:dataTable class="rec-table" var="rec" value="#{recommendationManager.yummlyRecommendations}">
-                        <p:column headerText="Recipe Id">
-                            <h:outputText value="#{rec.recipeId}" />
-                        </p:column>
 
-                        <p:column headerText="Recipie Name">
+                        <p:column headerText="Recipie">
                             <h:outputText value="#{rec.name}" />
                         </p:column>
 
                         <p:column headerText="Calories">
                             <h:outputText value="#{rec.calories}" />
                         </p:column>
+        
+                        <p:column headerText="Protein">
+                            <h:outputText value="#{rec.protein}" />
+                        </p:column>
+                        
+                        <p:column headerText="Carbs">
+                            <h:outputText value="#{rec.carbs}" />
+                        </p:column>
+                        
+                        <p:column headerText="Fat">
+                            <h:outputText value="#{rec.fat}" />
+                        </p:column>
+                        
+                        <p:column headerText="Add Meal">
+                            <p:commandButton id="selectRowBtn" value="select" onclick="document.getElementById('dailyEntry:caloriesin').value=#{rec.calories}"/>
+                        </p:column>
+
                     </p:dataTable>
                     <br /><br /><br /><br /><br /><br /><br />
-                    <h:form class="form-daily-entry">
+                    <h:form id="dailyEntry" class="form-daily-entry">
 
                         <h:outputLabel styleClass="outputLabel" for="caloriesin" value="Calories Eaten: " />
                         <h:inputText class="form-control" id="caloriesin" value="#{recommendationManager.calorieIntake}"/>

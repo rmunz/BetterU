@@ -5,20 +5,14 @@
 package com.betteru.managers;
 
 import com.betteru.sessionbeanpackage.ProgressFacade;
+import com.betteru.sessionbeanpackage.UserFacade;
 import com.betteru.sourcepackage.Progress;
-import com.betteru.sourcepackage.ProgressPK;
-import com.betteru.sourcepackage.User;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -56,16 +50,22 @@ public class RecommendationManager implements Serializable{
 //Created by ojas/corey ask about later how they do stuff
     private int caloriesMin = 50; 
     private int caloriesMax = 1000;
-    private int calorieIntake;
-    private String statusMessage;
+
+    private int calorieIntake; 
+    private String[] selectedAllergy;
+    
+    private String statusMessage; 
+    
+
     private static final String YUMMLY_ID = "f6004e71";
     private static final String YUMMLY_KEY = "57e811ae63c25bd48802742327682e7d";
     private static final String YUMMLY_URL = "http://api.yummly.com/v1/api/recipes?_app_id=" + YUMMLY_ID + "&_app_key=" + YUMMLY_KEY;
     
     List<RecipeEntry> yummlyRecommendations; 
-    
+
     List<FoodEntry> usdaRecommendations;
     
+
     @EJB
     private ProgressFacade progressFacade;
     
@@ -121,7 +121,19 @@ public class RecommendationManager implements Serializable{
          System.out.println("\n\n\n\n\n\n\n\nHERE\n");
          System.out.println(caloriesMin);
          System.out.println(caloriesMax);
-         URL url = new URL(YUMMLY_URL + min + max + "&maxResult=5"); 
+         String strURL = YUMMLY_URL + min + max + "&maxResult=5";
+          
+         
+         //Handle allergy
+         if(selectedAllergy != null) {
+            for (int i = 0; i < selectedAllergy.length; i++) {
+                if(selectedAllergy[i] != null) {
+                    strURL = strURL + "&allowedAllergy[]=" + selectedAllergy[i];
+                }
+            }
+         }
+         
+         URL url = new URL(strURL);
          
          List<RecipeEntry> recipeResults = new ArrayList(); 
          
@@ -134,7 +146,6 @@ public class RecommendationManager implements Serializable{
                     
                     RecipeEntry tmpName = new RecipeEntry(result.getString("id"), result.getString("recipeName"));    
                     recipeResults.add(tmpName); 
-                    System.out.println(result.getString("recipeName") + "\n");
                }
             }
          
@@ -149,13 +160,22 @@ public class RecommendationManager implements Serializable{
                 for (JsonObject result : results.getValuesAs(JsonObject.class)) {
                     
                     String tmpName = result.getString("attribute");    
-                    if(tmpName.equals("ENERC_KCAL")) {
+                    if (tmpName.equals("ENERC_KCAL")) {
                         int calorie = result.getJsonNumber("value").intValue();
-                        System.out.println(calorie + "\n");
-                        entry.setCalories(calorie);
-                        
+                        entry.setCalories(calorie);  
                     }
-                } 
+                    else if(tmpName.equals("FAT")) {
+                        int fat = result.getJsonNumber("value").intValue();
+                        entry.setFat(fat);  
+                    }
+                    else if(tmpName.equals("PROCNT")) {
+                        int protein = result.getJsonNumber("value").intValue();
+                        entry.setProtein(protein);  
+                    }       
+                    else if(tmpName.equals("CHOCDF")) {
+                        int carbs = result.getJsonNumber("value").intValue();
+                        entry.setCarbs(carbs);  
+                    }} 
             }
          }
          
@@ -167,33 +187,32 @@ public class RecommendationManager implements Serializable{
     public String enterDailyIntake(){
           
         //Get user Id  
-        User user = (User)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+        Integer user = (Integer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
 
         if(user == null) {
             statusMessage = "Oops. You're not logged in!";
             return "";
         }
         
-        int user_id = user.getId();
+        int user_id = user.intValue();
         
         //Get today @ Midnight in epoch 
         int LOGTIME_HARDCODE = 1461744000;
-        LocalTime midnight = LocalTime.MIDNIGHT;
-        LocalDate today = LocalDate.now(ZoneId.of("Europe/Berlin"));
-        LocalDateTime todayMidnight = LocalDateTime.of(today, midnight);
-        
-        //Create primary comp key with userId + time 
-        ProgressPK proPK = new ProgressPK();
-        proPK.setDay(todayMidnight.getSecond());
-        proPK.setId(user_id);
-        
+        Calendar c = Calendar.getInstance();
+        c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
+        Integer epochMidnight =  (int)(c.getTimeInMillis()/1000);
+ 
         //connect to find progress entry
-        Progress entry = progressFacade.getProgressEntry(proPK);
+        Progress entry = progressFacade.getProgressEntry(user, epochMidnight);
+        System.out.println("\n\n\n\n\n\n\n\nHERE");
+        System.out.println("\n\n USER" + user);
+        System.out.println("\n\n Midnight" + epochMidnight);
         
         if(entry != null) {
             //update progress entry
             try {
-                entry.setCaloriesIn(calorieIntake);
+                //Update the value instead of reseting
+                entry.setCaloriesIn(entry.getCaloriesIn() + calorieIntake);
 
                 progressFacade.edit(entry);
             } catch (EJBException e) {
@@ -203,12 +222,54 @@ public class RecommendationManager implements Serializable{
             }
         }
         else {
-            statusMessage = "Progress entry not found.";
-            return "";
+            
+            //Create new entry 
+            try {   
+                createProgressEntry(user_id, calorieIntake);
+
+            } catch (EJBException e) {
+
+                statusMessage = "Something went wrong while editing your profile!";
+                return "";
+            }
         }
         
         //return appropriate page 
-        return "MyAccount";
+        return "DailyProgress";
+    }
+    
+    public void createProgressEntry(int user_id, int caloriesIn) {
+        
+        Calendar c = Calendar.getInstance();
+        c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
+
+        Progress progress = new Progress(user_id, (int)((c.getTimeInMillis()/1000)));
+        progress.setCaloriesIn(caloriesIn);
+        progress.setCaloriesOut(0);
+        progress.setMiles(777);
+        progress.setWeight(0);
+        progress.setSteps(0);
+        
+        progressFacade.create(progress);
+        
+    }
+    
+    public Progress getToday(){
+        Calendar c = Calendar.getInstance();
+        c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
+        Integer epochMidnight =  (int)(c.getTimeInMillis()/1000);
+        
+        //Get user Id  
+        Integer user = (Integer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+
+        if(user == null) {
+            statusMessage = "Oops. You're not logged in!";
+        }
+        
+        int user_id = user.intValue();
+        
+        Progress entry = progressFacade.getProgressEntry(user_id, epochMidnight);
+        return entry;    
     }
     
     
@@ -239,7 +300,13 @@ public class RecommendationManager implements Serializable{
         this.calorieIntake = calorieIntake; 
     }
     
+    public String[] getSelectedAllergy(){
+        return selectedAllergy; 
+    }
     
+    public void setSelectedAllergy(String[] allergy) {
+        this.selectedAllergy = allergy;
+    }
     
     public String getStatusMessage(){
         return statusMessage; 
