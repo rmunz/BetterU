@@ -5,6 +5,7 @@
 package com.betteru.managers;
 
 import com.betteru.sessionbeanpackage.ProgressFacade;
+import com.betteru.sessionbeanpackage.UserFacade;
 import com.betteru.sourcepackage.Progress;
 import com.betteru.sourcepackage.ProgressPK;
 import com.betteru.sourcepackage.User;
@@ -19,6 +20,7 @@ import javax.ejb.EJBException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import org.primefaces.event.SlideEndEvent;
 
 @ManagedBean(name = "exerciseManager")
 @SessionScoped
@@ -37,6 +39,9 @@ public class ExerciseManager implements Serializable{
     
     @EJB
     private ProgressFacade progressFacade;
+    
+    @EJB
+    private UserFacade userFacade;
     
     public ExerciseManager(){
         
@@ -68,7 +73,7 @@ public class ExerciseManager implements Serializable{
         //connect to find progress entry
         Progress entry = progressFacade.getProgressEntry(user_id, epochMidnight);
         
-        caloriesOut = ((int)(intensity * 3.5 * 120)/200) * duration;
+        caloriesOut = ((int)(intensity * 3.5 * (userFacade.getUser(user_id).getWeight() * 2.2))) * duration;
         
         if(entry != null) {
             //update progress entry
@@ -172,4 +177,18 @@ public class ExerciseManager implements Serializable{
     public void setWeight(double weight) {
         this.weight = weight; 
     }
+    
+     public void onSlideEnd(SlideEndEvent event) {
+         
+          //Get user Id
+        Integer user = (Integer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+
+       
+        
+        int user_id = user.intValue();
+        
+        caloriesOut = ((int)(intensity * 3.5 * (userFacade.getUser(user_id).getWeight()*2.2))/200) * duration;
+
+    } 
+    
 }
