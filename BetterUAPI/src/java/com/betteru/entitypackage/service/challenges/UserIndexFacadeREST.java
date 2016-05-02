@@ -309,7 +309,7 @@ public class UserIndexFacadeREST extends AbstractFacade<UserIndex> {
                     .setParameter("uid", uid).getSingleResult()).getPoints() + awardedPoints;
         
         em.createQuery("UPDATE User u SET u.points = :pts WHERE u.id = :uid")
-                    .setParameter("uid", uid).setParameter("pts", currentUserPoints);
+                    .setParameter("uid", uid).setParameter("pts", currentUserPoints).executeUpdate();
     }
     
     @GET
