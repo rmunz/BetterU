@@ -246,8 +246,8 @@ public class RecommendationManager implements Serializable{
         Progress progress = new Progress(user_id, (int)((c.getTimeInMillis()/1000)));
         progress.setCaloriesIn(caloriesIn);
         progress.setCaloriesOut(0);
-        progress.setMiles(777);
-        progress.setWeight(0);
+        progress.setMiles(0);
+        progress.setWeight(0.0);
         progress.setSteps(0);
         
         progressFacade.create(progress);

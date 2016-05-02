@@ -381,7 +381,7 @@ public class AccountManager implements Serializable {
                     progress.setCaloriesIn(0);
                     progress.setCaloriesOut(0);
                     progress.setMiles(0);
-                    progress.setWeight(user.getWeight());
+                    progress.setWeight((double)user.getWeight());
                     progress.setSteps(0);
                     pf.create(progress);
                 }
