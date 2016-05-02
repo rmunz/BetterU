@@ -256,9 +256,9 @@ public class UserIndexFacadeREST extends AbstractFacade<UserIndex> {
         int uid = Integer.parseInt(temp[0]);
         String challengeType = temp[1];
         
-        List<DailyChallenges> dailyChallengesList = em.createQuery("SELECT dc FROM DailyChallenges dc").getResultList();
+        //List<DailyChallenges> dailyChallengesList = em.createQuery("SELECT dc FROM DailyChallenges dc").getResultList();
         List<WeeklyChallenges> weeklyChallengesList = em.createQuery("SELECT dc FROM WeeklyChallenges dc").getResultList();
-        int numDailyChallenges = dailyChallengesList.size();
+        //int numDailyChallenges = dailyChallengesList.size();
         int numWeeklyChallenges = weeklyChallengesList.size();
 
         
@@ -284,14 +284,21 @@ public class UserIndexFacadeREST extends AbstractFacade<UserIndex> {
                 .setParameter("uid", uid).setParameter("ctype", "Weekly").setParameter("index", index).executeUpdate();   
             
         } else {
-            if((index) == numDailyChallenges) {
+            
+            List<DailyChallenges> dailyChallengesOfCType;
+            dailyChallengesOfCType = em.createQuery("SELECT dc FROM DailyChallenges dc WHERE dc.challengeType = :ctype")
+                    .setParameter("ctype", challengeType).getResultList();
+            int numCType = dailyChallengesOfCType.size();
+            
+            // Prevents the user from exceeding the maximum index for a specific challenge type
+            if((index) >= numCType) {
                 index = 0;
                 queryInd = 1;
             } else {
                 queryInd = index;
             }
-            DailyChallenges dailyChallenge = (DailyChallenges) em.createQuery("SELECT dc FROM DailyChallenges dc WHERE dc.ind = :index")
-                .setParameter("index", queryInd).getSingleResult();
+            DailyChallenges dailyChallenge = (DailyChallenges) em.createQuery("SELECT dc FROM DailyChallenges dc WHERE dc.ind = :index AND dc.challengeType = :ctype")
+                .setParameter("index", queryInd).setParameter("ctype", challengeType).getSingleResult();
             awardedPoints = dailyChallenge.getPointsAwarded();
             // Update user index to point to next daily challenge
             em.createQuery("UPDATE UserIndex u SET u.ind = :index WHERE u.userIndexPK.challengeType = :ctype AND u.userIndexPK.userID = :uid")
