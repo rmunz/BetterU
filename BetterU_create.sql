@@ -1,36 +1,26 @@
--- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2016-03-24 18:47:45.761
-
-
--- tables
 -- Table Challenges
 CREATE TABLE Challenges (
     Name varchar(255)  NOT NULL,
     Description varchar(255)  NOT NULL,
     ChallengeType varchar(255)  NOT NULL,
     PointsAwarded int  NOT NULL,
+    Ind int  NOT NULL,
+    GoalType int  NOT NULL,
     CONSTRAINT Challenges_pk PRIMARY KEY (Name)
-);
-
--- Table Goal
-CREATE TABLE Goal (
-    id int  NOT NULL,
-    GoalWeight int  NOT NULL,
-    ActivityGoal varchar(255)  NOT NULL,
-    MuscleGroup varchar(255)  NOT NULL,
-    CONSTRAINT Goal_pk PRIMARY KEY (id)
 );
 
 -- Table Progress
 CREATE TABLE Progress (
     id int NOT NULL,
-    Day date  NOT NULL,
+    Day int  NOT NULL,
     CaloriesIn int,
     CaloriesOut int,
     Weight int,
     Miles int, 
     Steps int,
-    CONSTRAINT Progress_pk PRIMARY KEY (id)
+    UserId int,
+    CONSTRAINT Progress_pk PRIMARY KEY (id, Day),
+    FOREIGN KEY (UserId) REFERENCES User(id) ON DELETE CASCADE
 );
 
 -- Table User
@@ -44,17 +34,42 @@ CREATE TABLE User (
     Gender char(1)  NOT NULL,
     Height int  NOT NULL,
     Weight int  NOT NULL,
-    GoalID int  NOT NULL,
     Units char(1)  NOT NULL,
     Email varchar(255)  NOT NULL,
     Points int  NOT NULL,
     ActivityLevel int  NOT NULL,
+    security_question INT NOT NULL,
+    security_answer VARCHAR (255) NOT NULL,
     BMR int  NOT NULL,
-    CurrentDailyChallenge varchar(255),
-    CurrentWeeklyChallenge varchar(255),
+    GoalType int,
+    GoalWeight int  NOT NULL,
+    ActivityGoal varchar(255)  NOT NULL, 
+    DailyChallengeIndex int,
+    DCSkipped varchar(255),
+    WeeklyChallengeIndex int,
+    WCSkipped varchar(255),
+    SecurityQuestion int NOT NULL,
+    SecurityAnswer varchar(255) NOT NULL,   
+    Breakfast varchar(255),
+    Lunch varchar(255),
+    Dinner varchar(255),
+    Snack varchar(255),
+    Photo varchar(62000),
     CONSTRAINT User_pk PRIMARY KEY (id)
 );
 
+-- User/Progress Relation
+CREATE TABLE UsersProgress (
+    uid int REFERENCES User(id),
+    pid int REFERENCES Progress(id),
+    PRIMARY KEY (uid, pid)
+);
 
-
--- End of file.
+-- User profile picture
+CREATE TABLE Photo
+(
+   id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
+   extension ENUM('jpeg', 'jpg', 'png') NOT NULL,
+   user_id INT,
+   FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE
+);

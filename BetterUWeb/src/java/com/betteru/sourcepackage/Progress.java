@@ -1,22 +1,23 @@
 /*
- * Created by Ojas Mhetar on 2016.03.30  * 
+ * Created by Ojas Mhetar on 2016.04.03  * 
  * Copyright © 2016 Ojas Mhetar. All rights reserved. * 
  */
 package com.betteru.sourcepackage;
 
 import java.io.Serializable;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -26,11 +27,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "Progress")
+@IdClass(value=ProgressPK.class)
 @XmlRootElement
 @NamedQueries({
+  @NamedQuery(name = "Progress.findMonth", query = "SELECT p FROM Progress p WHERE p.userId = :userId AND p.logDate BETWEEN :aMonthAgo AND :logDate"),
+    @NamedQuery(name = "Progress.findWeek", query = "SELECT p FROM Progress p WHERE p.userId = :userId AND p.logDate BETWEEN :aWeekAgo AND :logDate"),
+    
     @NamedQuery(name = "Progress.findAll", query = "SELECT p FROM Progress p"),
-    @NamedQuery(name = "Progress.findById", query = "SELECT p FROM Progress p WHERE p.id = :id"),
-    @NamedQuery(name = "Progress.findByDay", query = "SELECT p FROM Progress p WHERE p.day = :day"),
+    @NamedQuery(name = "Progress.findByUserId", query = "SELECT p FROM Progress p WHERE p.userId = :userId"),
+    @NamedQuery(name = "Progress.findByLogDate", query = "SELECT p FROM Progress p WHERE p.logDate = :logDate"),
     @NamedQuery(name = "Progress.findByCaloriesIn", query = "SELECT p FROM Progress p WHERE p.caloriesIn = :caloriesIn"),
     @NamedQuery(name = "Progress.findByCaloriesOut", query = "SELECT p FROM Progress p WHERE p.caloriesOut = :caloriesOut"),
     @NamedQuery(name = "Progress.findByWeight", query = "SELECT p FROM Progress p WHERE p.weight = :weight"),
@@ -40,15 +45,15 @@ public class Progress implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id")
-    private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "Day")
-    @Temporal(TemporalType.DATE)
-    private Date day;
+    @Column(name = "UserId")
+    private Integer userId;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "LogDate")
+    private Integer logDate;
     @Column(name = "CaloriesIn")
     private Integer caloriesIn;
     @Column(name = "CaloriesOut")
@@ -59,33 +64,46 @@ public class Progress implements Serializable {
     private Integer miles;
     @Column(name = "Steps")
     private Integer steps;
-
+    //@JoinColumn(name = "user_id", referencedColumnName = "UserId")
+    //@ManyToOne
+    //private User user;
+    
     public Progress() {
     }
 
-    public Progress(Integer id) {
-        this.id = id;
+    public Progress(Integer userId) {
+        this.userId = userId;
     }
 
-    public Progress(Integer id, Date day) {
-        this.id = id;
-        this.day = day;
+    public Progress(Integer userId, Integer logDate) {
+        this.userId = userId;
+        this.logDate = logDate;
     }
 
-    public Integer getId() {
-        return id;
+    /*
+    public User getUser() {
+            return user;
+    }
+    
+    public void setUser(User user) {
+            this.user = user;
+    }
+    */
+    
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public Date getDay() {
-        return day;
+    public Integer getLogDate() {
+        return logDate;
     }
 
-    public void setDay(Date day) {
-        this.day = day;
+    public void setLogDate(Integer logDate) {
+        this.logDate = logDate;
     }
 
     public Integer getCaloriesIn() {
@@ -131,7 +149,7 @@ public class Progress implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (userId != null ? userId.hashCode() : 0);
         return hash;
     }
 
@@ -142,7 +160,7 @@ public class Progress implements Serializable {
             return false;
         }
         Progress other = (Progress) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.userId == null && other.userId != null) || (this.userId != null && !this.userId.equals(other.userId))) {
             return false;
         }
         return true;
@@ -150,7 +168,17 @@ public class Progress implements Serializable {
 
     @Override
     public String toString() {
-        return "com.betteru.sourcepackage.Progress[ id=" + id + " ]";
+        return "com.betteru.sourcepackage.Progress[ userId=" + userId + " ]";
+    }
+
+    public Integer getId() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public String getDayString() {
+        Date date = new Date((long) this.getLogDate()* 1000);
+        Format format = new SimpleDateFormat("yyy-MM-dd");
+        return format.format(date);
     }
     
 }

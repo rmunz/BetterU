@@ -1,2 +1,10 @@
 /BetterUWeb/nbproject/private/
 /BetterUWeb/src/conf/persistence.xml
+/BetterUWeb/dist/
+/BetterUWeb/build/
+/BetterUAPI/nbproject/private/
+/BetterUAPI/build/
+/BetterUAPI/dist/
+/BetterUAPI/build/web/WEB-INF/classes/
+/BetterUAPI/build/generated-sources/
+/BetterUAPI/dist/BetterUAPI.war

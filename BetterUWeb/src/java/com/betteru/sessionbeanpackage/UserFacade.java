@@ -1,13 +1,16 @@
 /*
- * Created by Ojas Mhetar on 2016.03.30  * 
+ * Created by Ojas Mhetar on 2016.04.03  * 
  * Copyright © 2016 Ojas Mhetar. All rights reserved. * 
  */
 package com.betteru.sessionbeanpackage;
 
+import com.betteru.sourcepackage.Progress;
 import com.betteru.sourcepackage.User;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -16,7 +19,7 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class UserFacade extends AbstractFacade<User> {
 
-    @PersistenceContext(unitName = "BetterUWebPU")
+    @PersistenceContext(unitName = "BetterU-WebPU")
     private EntityManager em;
 
     @Override
@@ -51,6 +54,11 @@ public class UserFacade extends AbstractFacade<User> {
         
         User user = em.find(User.class, id);
         em.remove(user);
+    }
+    
+    public List<User> findAllUsers() {
+        TypedQuery<User> query = em.createNamedQuery("User.findAll", User.class);                                       
+        return query.getResultList();
     }
     
 }

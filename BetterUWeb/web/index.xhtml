@@ -1,27 +1,43 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-        <h:outputStylesheet name="css/jsfcrud.css"/>
-    </h:head>
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:body>
-        Hello from Facelets
-        <br />
-        <h:link outcome="/challenges/List" value="Show All Challenges Items"/>
-        <br />
-        <h:link outcome="/goal/List" value="Show All Goal Items"/>
-        <br />
-        <h:link outcome="/progress/List" value="Show All Progress Items"/>
-        <br />
-        <h:link outcome="/user/List" value="Show All User Items"/>
-        <br />
-        <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" />
+        <ui:composition template="template/siteTemplate.xhtml">
+            <!-- Page title -->
+            <title><ui:define name="title">BetterU</ui:define></title>
+            <!-- Additional CSS styles needed -->
+            <ui:define name="css">
+                <link rel="stylesheet" type="text/css" href="resources/css/index.css"/>
+            </ui:define>
+            <!-- Additional JS files needed -->
+            
+            <!-- Page content -->
+            <ui:define name="editableContent">
+                <div id="banner-wrapper">
+                    <div id="banner-inner-wrapper">
+                        <img id="banner-img" src="resources/images/welcome-image.png" alt="Food Plate" />
+                        <div id="banner-message">
+                            Be you,<br/>but better.<br/>
+                        </div>
+                        <a id="banner-btn" href="CreateAccount.xhtml">Start living healthier today</a>
+                    </div>
+                </div>
+                <div id="app-wrapper">
+                    <img id="app-img" src="resources/images/iphone.png" alt="iPhone" />
+                    <div id="app-message-wrapper">
+                        <div id="app-message-large">
+                            Track your health and fitness on the go!
+                        </div>
+                        Download our free app on the <a href="#">Apple App Store.</a>
+                        <br/><br/>
+                        <img id="app-sync" src="resources/images/sync.png" alt="Sync" />
+                        <div id="app-sync-message">We'll keep your data synced between all of your devices.</div>
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
     </h:body>
-
-
-
-
 </html>
-
