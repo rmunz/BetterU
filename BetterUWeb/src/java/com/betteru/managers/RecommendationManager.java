@@ -7,16 +7,10 @@ package com.betteru.managers;
 import com.betteru.sessionbeanpackage.ProgressFacade;
 import com.betteru.sessionbeanpackage.UserFacade;
 import com.betteru.sourcepackage.Progress;
-import com.betteru.sourcepackage.ProgressPK;
-import com.betteru.sourcepackage.User;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -38,30 +32,88 @@ import javax.json.JsonReader;
  */
 public class RecommendationManager implements Serializable{
     
+//--------------------------------------------------------------
+    //For Usda Search url is built in descending order q+sort+max...
+    private String foodToSearchForUSDA; //q term for usda food search
+    private String ndbno; //the number for the food to search for
+    private String sort = "&sort=n";
+    private String max = "&max=5";
+    private String offset = "&offset=0";
+    private static final String USDA_KEY = "&api_key=lmng23Wvez10CHDEqiWE90dL1qWhJrkXlqIIXRmN";
+    private static final String USDA_KEY_DEMO = "&api_key=DEMO_KEY";
+    private static final String USDA_URL = "http://api.nal.usda.gov/ndb/search/?format=json&q=";
+   //----------------------------------------------------------------
+   //WGER Stuff below 
+    private static final String WGER_Key = "fae3c283d251f4797c4338e8782236d6de49512b";
+   //-----------------------------------------------------------------   
     
+//Created by ojas/corey ask about later how they do stuff
     private int caloriesMin = 50; 
     private int caloriesMax = 1000;
+
     private int calorieIntake; 
     private String[] selectedAllergy;
     
     private String statusMessage; 
     
+
     private static final String YUMMLY_ID = "f6004e71";
     private static final String YUMMLY_KEY = "57e811ae63c25bd48802742327682e7d";
     private static final String YUMMLY_URL = "http://api.yummly.com/v1/api/recipes?_app_id=" + YUMMLY_ID + "&_app_key=" + YUMMLY_KEY;
     
     List<RecipeEntry> yummlyRecommendations; 
+
+    List<FoodEntry> usdaRecommendations;
     
+
     @EJB
     private ProgressFacade progressFacade;
     
     public RecommendationManager(){  
         caloriesMin = 50; 
         caloriesMax = 1000; 
-        statusMessage = "Status message for testing";
-        
+        statusMessage = "Status message for testing";   
     }
     
+  
+   
+    /**
+     * To get the list of USDA foods 
+     * @return
+     * @throws IOException 
+     */
+    public List<FoodEntry> getUSDAEntries() throws IOException{
+        
+        System.out.println("Yo");//self test
+        
+        List<FoodEntry> usdaResults = new ArrayList();
+        
+        URL usdaURL = new URL(USDA_URL + getFoodToSearchForUSDA()+sort+max+offset+ USDA_KEY);
+        
+        try (InputStream is = usdaURL.openStream(); JsonReader rdr = Json.createReader(is)) {
+
+                JsonObject obj = rdr.readObject();
+                
+                JsonObject newObj = obj.getJsonObject("list");
+                
+                JsonArray results = newObj.getJsonArray("item");
+                
+                for (JsonObject result : results.getValuesAs(JsonObject.class)) {
+                    FoodEntry tmpName = new FoodEntry(result.getInt("offset"), result.getString("group"),result.getString("name"),result.getString("ndbno"));    
+                    usdaResults.add(tmpName); 
+                    
+               }
+            }
+            this.usdaRecommendations = usdaResults;
+            
+        return usdaResults;    
+    }
+    
+    /**
+     * To get Yummly Recipe recommendations
+     * @return list of recipe's
+     * @throws IOException ?
+     */
     public List<RecipeEntry> getYummlyRecommendations() throws IOException{
          String min = "&nutrition.ENERC_KCAL.min=" + caloriesMin; 
          String max = "&nutrition.ENERC_KCAL.max=" + caloriesMax; 
@@ -220,6 +272,10 @@ public class RecommendationManager implements Serializable{
         return entry;    
     }
     
+    
+    
+    
+    
     public int getCaloriesMin() {
         return caloriesMin; 
     }
@@ -265,6 +321,48 @@ public class RecommendationManager implements Serializable{
     
     public String refresh(){
         return "";
+    }
+
+    /**
+     * @return the usdaRecommendations
+     */
+    public List<FoodEntry> getUsdaRecommendations() {
+        return usdaRecommendations;
+    }
+
+    /**
+     * @param usdaRecommendations the usdaRecommendations to set
+     */
+    public void setUsdaRecommendations(List<FoodEntry> usdaRecommendations) {
+        this.usdaRecommendations = usdaRecommendations;
+    }
+
+    /**
+     * @return the foodToSearchForUSDA
+     */
+    public String getFoodToSearchForUSDA() {
+        return foodToSearchForUSDA;
+    }
+
+    /**
+     * @param foodToSearchForUSDA the foodToSearchForUSDA to set
+     */
+    public void setFoodToSearchForUSDA(String foodToSearchForUSDA) {
+        this.foodToSearchForUSDA = foodToSearchForUSDA;
+    }
+
+    /**
+     * @return the ndbno
+     */
+    public String getNdbno() {
+        return ndbno;
+    }
+
+    /**
+     * @param ndbno the ndbno to set
+     */
+    public void setNdbno(String ndbno) {
+        this.ndbno = ndbno;
     }
     
 }
