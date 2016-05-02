@@ -36,7 +36,7 @@
                     <h:outputLabel value ="#{recommmendationManager.statusMessage}" />
                     <h:outputLabel value="Your target for today is #{accountManager.selected.targetCalories} calories."/>
                     <br />
-                    <h:outputLabel value="Look's like you've got #{accountManager.selected.targetCalories - recommendationManager.calorieIntake} calories to go!"  />
+                    <h:outputLabel value="Look's like you've got #{accountManager.selected.targetCalories - recommendationManager.getToday().caloriesIn} calories to go!"  />
                     <br /><br /><br />
                     <h:form class="form-recommendation">
                         
@@ -102,9 +102,6 @@
                     
                     <!--How to update the data table when button is hit? -->
                     <p:dataTable class="rec-table" var="rec" value="#{recommendationManager.usdaRecommendations}">
-                        <p:column headerText="Number">
-                            <h:outputText value="#{rec.offset}" />
-                        </p:column>
 
                         <p:column headerText="Food Group">
                             <h:outputText value="#{rec.foodGroup}" />
@@ -114,8 +111,20 @@
                             <h:outputText value="#{rec.name}" />
                         </p:column>
                         
-                        <p:column headerText="Food Ndbno">
-                            <h:outputText value="#{rec.ndbno}" />
+                        <p:column headerText="KCal">
+                            <h:outputText value="#{rec.kcal}" />
+                        </p:column>
+                        
+                        <p:column headerText="Protien">
+                            <h:outputText value="#{rec.protien}" />
+                        </p:column>
+                        
+                        <p:column headerText="Carbs">
+                            <h:outputText value="#{rec.carbs}" />
+                        </p:column>
+                        
+                        <p:column headerText="Fat">
+                            <h:outputText value="#{rec.fat}" />
                         </p:column>
                         
                         <p:column headerText="Add Meal">

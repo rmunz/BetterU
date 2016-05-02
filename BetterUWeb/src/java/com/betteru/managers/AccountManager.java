@@ -61,6 +61,8 @@ public class AccountManager implements Serializable {
         
     private Map<String, Object> security_questions;
     private String statusMessage;
+    private String profileStatusMessage;
+    private String advancedStatusMessage;
     private User selected;
     
     /**
@@ -317,9 +319,24 @@ public class AccountManager implements Serializable {
     public void setStatusMessage(String statusMessage) {
         this.statusMessage = statusMessage;
     }
+    
+    public String getProfileStatusMessage() {
+        return this.profileStatusMessage;
+    }
+    
+    public void setProfileStatusMessage(String statusMessage) {
+        this.profileStatusMessage = statusMessage;
+    }
+    
+    public String getAdvancedStatusMessage() {
+        return this.advancedStatusMessage;
+    }
+    
+    public void setAdvancedStatusMessage(String statusMessage) {
+        this.advancedStatusMessage = statusMessage;
+    }
 
     public User getSelected() {
-        
         selected = userFacade.find(FacesContext.getCurrentInstance().
                 getExternalContext().getSessionMap().get("user_id"));
         
@@ -444,6 +461,14 @@ public class AccountManager implements Serializable {
         return "";
     }
     
+    public String updateProfile() {
+        return "";
+    }
+    
+    public String updateAdvanced() {
+        return "";
+    }
+    
     public String deleteAccount() {
         if (statusMessage.isEmpty()) {
             int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
@@ -486,6 +511,14 @@ public class AccountManager implements Serializable {
         } else {
             statusMessage = "";
         }   
+    }
+    
+    public void validateProfile(ComponentSystemEvent event) {
+        
+    }
+    
+    public void validateAdvanced(ComponentSystemEvent event) {
+        
     }
 
     public void initializeSessionMap() {
