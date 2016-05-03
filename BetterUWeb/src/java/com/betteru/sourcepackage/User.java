@@ -4,7 +4,9 @@
  */
 package com.betteru.sourcepackage;
 
+import com.betteru.sessionbeanpackage.ProgressFacade;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;

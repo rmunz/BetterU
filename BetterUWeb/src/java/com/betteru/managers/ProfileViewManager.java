@@ -38,8 +38,8 @@ public class ProfileViewManager implements Serializable {
     private double maxWeight = 0;
     private int minSteps = Integer.MAX_VALUE;
     private int maxSteps = 0;
-    private double minMiles = Integer.MAX_VALUE;
-    private double maxMiles = 0;
+    private double minMiles = Double.MAX_VALUE;
+    private double maxMiles = 0.0;
     private int minCalories = Integer.MAX_VALUE;
     private int maxCalories = 0;
     
