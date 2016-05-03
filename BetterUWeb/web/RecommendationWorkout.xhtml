@@ -30,43 +30,56 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <br /><br /><br /><br /><br /><br /><br />
                 <div align="center">     
-                    
+
+                    <h1> Please click a picture to populate the table below with appropriate workouts </h1>
                     <br /><br /><br />
-                    
+
                     <!--How do you make pictures click able -->
                     <!-- images below must be clickable --> 
-                   <img id="Abs-Pic" src="resources/images/Abs.png" onClick="alert('yo')" alt="Abs"/>
-                   <br />
-                   <img id="Arms-Pic" src="resources/images/Arms.png" alt="Arms"/>
-                   <br />
-                   <img id="Back-Pic" src="resources/images/Back.png" alt="Back"/>
-                   <br />
-                   <img id="Chest-Pic" src="resources/images/Chest.png" alt="Chest"/>
-                   <br />
-                   <img id="Legs-Pic" src="resources/images/Legs.png" alt="Legs"/>
-                   <br />
-                   <img id="Shoulders-Pic" src="resources/images/Shoulders.png" alt="Shoulders"/>
-                   <br />
-                   
-                    
-                    
-                    
+
+                    <a <img id="Abs-Pic" src="resources/images/Abs.png"  onClick="recommendationManager.getAbsEntries()"  alt="Abs" width="200px" height="200px"/>
+
+                    <img id="Arms-Pic" src="resources/images/Arms.png"  alt="Arms" width="200px" height="200px"/>
+
+                    <img id="Back-Pic" src="resources/images/Back.png" alt="Back" width="200px" height="200px" />
+
+                    <img id="Chest-Pic" src="resources/images/Chest.png"  alt="Chest" width="200px" height="200px"/>
+
+                    <img id="Legs-Pic" src="resources/images/Legs.png"  alt="Legs" width="200px" height="200px" />
+
+                    <img id="Shoulders-Pic" src="resources/images/Shoulders.png" alt="Shoulders" width="200px" height="200px" />
+
+
+                    <p:dataTable class="workout-table" var="workout" value="#{recommendationManager.workoutRecommendations}">
+
+
+                        <p:column headerText="Name">
+                            <h:outputText value="#{workout.name}" />
+                        </p:column>
+
+                        <p:column headerText="Description">
+                            <h:outputText value="#{workout.description}" />
+                        </p:column>
+
+                        <p:column headerText="Muscles to workout">
+                            <h:outputText value="#{workout.muscles_to_workout}" />
+                        </p:column>
+
+                        <p:column headerText="Equipment">
+                            <h:outputText value="#{workout.equipment}" />
+                        </p:column>
+
+                    </p:dataTable>
+
+
                     <br /><br />
-                    
-                    
-                   
-                    <br /><br /><br /><br /><br /><br /><br />
-                    <h:form id="dailyEntry" class="form-daily-entry">
 
-                        <h:outputLabel styleClass="outputLabel" for="caloriesin" value="Calories Eaten: " />
-                        <h:inputText class="form-control" id="caloriesin" value="#{recommendationManager.calorieIntake}"/>
-                        <br/>
 
-                        <h:commandButton id="daily-submit"  action="#{recommendationManager.enterDailyIntake()}" value="Submit" styleClass="buttonText"/>
-                    </h:form>
+
+
                     <br /><br /><br /><br /><br /><br /><br />
                 </div>
             </ui:define>

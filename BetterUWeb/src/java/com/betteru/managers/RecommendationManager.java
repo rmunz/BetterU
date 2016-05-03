@@ -47,24 +47,25 @@ public class RecommendationManager implements Serializable {
     private static final String USDA_URL_NUTR = "http://api.nal.usda.gov/ndb/reports/?ndbno=";
     //----------------------------------------------------------------
     //WGER Stuff below 
+    //currently the api does not require a api key but have one incase this changes
     private static final String WGER_Key = "fae3c283d251f4797c4338e8782236d6de49512b";
+    private static final String WGER_URL_EX = "https://wger.de/api/v2/exercise/";
+    private static final String workout_part = "?muscles=";
+    private static final String language_eng = "&language=2";
+    //main points to aim at for each body part...
     private static final String abs_id = "14";
     private static final String arms_id = "1";
     private static final String back_id = "12";
     private static final String chest_id = "4";
     private static final String legs_id = "11";
     private static final String shoulders_id = "2";
-    
-    
-    //-----------------------------------------------------------------   
 
+    //-----------------------------------------------------------------   
 //Created by ojas/corey ask about later how they do stuff
     private int caloriesMin = 50;
     private int caloriesMax = 1000;
-
     private int calorieIntake;
     private String[] selectedAllergy;
-
     private String statusMessage;
 
     private static final String YUMMLY_ID = "f6004e71";
@@ -72,9 +73,9 @@ public class RecommendationManager implements Serializable {
     private static final String YUMMLY_URL = "http://api.yummly.com/v1/api/recipes?_app_id=" + YUMMLY_ID + "&_app_key=" + YUMMLY_KEY;
 
     List<RecipeEntry> yummlyRecommendations;
-
     List<FoodEntry> usdaRecommendations;
-
+    List<WorkoutEntry>workoutRecommendations;
+    
     @EJB
     private ProgressFacade progressFacade;
 
@@ -83,6 +84,25 @@ public class RecommendationManager implements Serializable {
         caloriesMax = 1000;
         statusMessage = "Status message for testing";
     }
+    
+    
+    public List<WorkoutEntry> getAbsEntries() throws IOException
+    {
+        List<WorkoutEntry> wgerResults = new ArrayList();
+        URL wgerURL = new URL(WGER_URL_EX +workout_part+abs_id+language_eng);
+        try (InputStream is = wgerURL.openStream(); JsonReader rdr = Json.createReader(is)) {
+
+            JsonObject obj = rdr.readObject();
+            JsonObject newObj = obj.getJsonObject("count");
+            System.out.println("YO");
+        }
+        
+        
+        return workoutRecommendations;
+    }
+    
+    
+    
 
     /**
      * To get the list of USDA foods
@@ -137,17 +157,13 @@ public class RecommendationManager implements Serializable {
                                 tmpName.setFat(temp.getInt("value"));
                                 break;
                         }
-
                     }
                 }
-
                 //add to the list to then add it to 
                 usdaResults.add(tmpName);
-
             }
         }
         this.usdaRecommendations = usdaResults;
-
         return usdaResults;
     }
 
@@ -379,6 +395,20 @@ public class RecommendationManager implements Serializable {
      */
     public void setFoodToSearchForUSDA(String foodToSearchForUSDA) {
         this.foodToSearchForUSDA = foodToSearchForUSDA;
+    }
+
+    /**
+     * @return the workoutRecommendations
+     */
+    public List<WorkoutEntry> getWorkoutRecommendations() {
+        return workoutRecommendations;
+    }
+
+    /**
+     * @param workoutRecommendations the workoutRecommendations to set
+     */
+    public void setWorkoutRecommendations(List<WorkoutEntry> workoutRecommendations) {
+        this.workoutRecommendations = workoutRecommendations;
     }
 
 }
