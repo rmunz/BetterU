@@ -28,6 +28,7 @@ public class ChallengesManager implements Serializable {
     private User selected;
     private List<DailyChallenges> currentUserDailyChallenges;
     private WeeklyChallenges currentUserWeeklyChallenge;
+    private boolean weeklyChallengeCompleted;
 
     /**
      * The instance variable 'UserIndexFacade' is annotated with the @EJB
@@ -66,6 +67,7 @@ public class ChallengesManager implements Serializable {
     private UserFacade userFacade;
 
     public ChallengesManager() {
+        weeklyChallengeCompleted = false;
     }
 
     public List<DailyChallenges> getCurrentUserDailyChallenges() {
@@ -95,6 +97,7 @@ public class ChallengesManager implements Serializable {
                 if(!u.getUserIndexPK().getChallengeType().equals("Weekly")) {
                     currentUserDailyChallenges.add(dailyChallengesFacade.getChallengeAtIndWithType(u.getInd(), u.getUserIndexPK().getChallengeType()));
                 } else {
+                    this.weeklyChallengeCompleted = true;
                     currentUserWeeklyChallenge = weeklyChallengesFacade.findWeeklyChallengeWithInd(u.getInd());
                 }
             }
@@ -102,8 +105,52 @@ public class ChallengesManager implements Serializable {
     }
 
     public User getSelected() {
-        selected = userFacade.find(FacesContext.getCurrentInstance().
+        if(selected == null) {
+            selected = userFacade.find(FacesContext.getCurrentInstance().
                 getExternalContext().getSessionMap().get("user_id"));
+        }
         return selected;
     }
+
+    public boolean isWeeklyChallengeCompleted() {
+        return weeklyChallengeCompleted;
+    }
+
+    public void setWeeklyChallengeCompleted(boolean weeklyChallengeCompleted) {
+        this.weeklyChallengeCompleted = weeklyChallengeCompleted;
+    } 
+
+    public UserIndexFacade getUserIndexFacade() {
+        return userIndexFacade;
+    }
+
+    public void setUserIndexFacade(UserIndexFacade userIndexFacade) {
+        this.userIndexFacade = userIndexFacade;
+    }
+
+    public DailyChallengesFacade getDailyChallengesFacade() {
+        return dailyChallengesFacade;
+    }
+
+    public void setDailyChallengesFacade(DailyChallengesFacade dailyChallengesFacade) {
+        this.dailyChallengesFacade = dailyChallengesFacade;
+    }
+
+    public WeeklyChallengesFacade getWeeklyChallengesFacade() {
+        return weeklyChallengesFacade;
+    }
+
+    public void setWeeklyChallengesFacade(WeeklyChallengesFacade weeklyChallengesFacade) {
+        this.weeklyChallengesFacade = weeklyChallengesFacade;
+    }
+
+    public UserFacade getUserFacade() {
+        return userFacade;
+    }
+
+    public void setUserFacade(UserFacade userFacade) {
+        this.userFacade = userFacade;
+    }
+    
+    
 }

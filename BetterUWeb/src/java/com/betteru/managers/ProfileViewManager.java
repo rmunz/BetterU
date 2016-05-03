@@ -100,10 +100,24 @@ public class ProfileViewManager implements Serializable {
     public void refreshCharts() {
         interval = weekly ? "Weekly" : "Monthly";
         
+        resetMinMax();
+        
         buildWeightModel();
         buildCalorieModel();
         buildStepModel();
         buildMileModel();
+    }
+    
+    private void resetMinMax() {
+        minWeight = Integer.MAX_VALUE;
+        maxWeight = 0;
+        minSteps = Integer.MAX_VALUE;
+        maxSteps = 0;
+        minMiles = Integer.MAX_VALUE;
+        maxMiles = 0;
+        minCalories = Integer.MAX_VALUE;
+        maxCalories = 0;
+    
     }
     
     public void changeInterval() {
@@ -145,10 +159,12 @@ public class ProfileViewManager implements Serializable {
         
         if (weekly) {
             progressList = progressFacade.findWeekByUid(getLoggedInUser().getId(), getEndOfWeek(referenceTime));
-            numTicks = 7;
         } else {
             progressList = progressFacade.findMonthByUid(getLoggedInUser().getId(), getEndOfMonth(referenceTime), numDaysInMonth);
-            numTicks = numDaysInMonth;
+        }
+        
+        if (progressList != null) {
+            numTicks = progressList.size();
         }
         
         return progressList;
@@ -198,27 +214,28 @@ public class ProfileViewManager implements Serializable {
         LineChartSeries weightSeries = new LineChartSeries();
         weightSeries.setLabel("Weight");
         
-        if (progressList != null) {
-            for (Progress p : progressList) {
-                weightSeries.set(p.getDayString(), p.getWeight());
-
-                if (p.getWeight() < minWeight) {
-                    minWeight = p.getWeight();
-                }
-                if (p.getWeight() > maxWeight) {
-                    maxWeight = p.getWeight();
-                }
-            }
-        } else {
+        if (progressList == null) {
             return null;
+        }
+        
+        for (Progress p : progressList) {
+            weightSeries.set(p.getDayString(), p.getWeight());
+
+            if (p.getWeight() < minWeight) {
+                minWeight = p.getWeight();
+            }
+            if (p.getWeight() > maxWeight) {
+                maxWeight = p.getWeight();
+            }
         }
         
         weightModel.addSeries(weightSeries);
         weightModel.setTitle("Weight");
         
         Axis yAxis = weightModel.getAxis(AxisType.Y);
-        yAxis.setMin(minWeight - padding);
+        yAxis.setMin((minWeight - padding) < 0 ? 0 : (minWeight - padding));
         yAxis.setMax(maxWeight + padding);
+        yAxis.setLabel("Pounds");
         
         DateAxis axis = new DateAxis("Dates");
         axis.setTickAngle(-45);
@@ -240,27 +257,28 @@ public class ProfileViewManager implements Serializable {
         LineChartSeries stepSeries = new LineChartSeries();
         stepSeries.setLabel("Steps");
         
-        if (progressList != null) {
-            for (Progress p : progressList) {
-                stepSeries.set(p.getDayString(), p.getSteps());
-
-                if (p.getSteps()< minSteps) {
-                    minSteps = p.getSteps();
-                }
-                if (p.getSteps() > maxSteps) {
-                    maxSteps = p.getSteps();
-                }
-            }
-        } else {
+        if (progressList == null) {
             return null;
+        }
+        
+        for (Progress p : progressList) {
+            stepSeries.set(p.getDayString(), p.getSteps());
+
+            if (p.getSteps()< minSteps) {
+                minSteps = p.getSteps();
+            }
+            if (p.getSteps() > maxSteps) {
+                maxSteps = p.getSteps();
+            }
         }
         
         stepModel.addSeries(stepSeries);
         stepModel.setTitle("Steps");
         
         Axis yAxis = stepModel.getAxis(AxisType.Y);
-        yAxis.setMin(minSteps - padding);
+        yAxis.setMin((minSteps - padding) < 0 ? 0 : (minSteps - padding));
         yAxis.setMax(maxSteps + padding);
+        yAxis.setLabel("Steps");
         
         DateAxis axis = new DateAxis("Dates");
         axis.setTickAngle(-45);
@@ -282,27 +300,28 @@ public class ProfileViewManager implements Serializable {
         LineChartSeries mileSeries = new LineChartSeries();
         mileSeries.setLabel("Miles");
         
-        if (progressList != null) {
-            for (Progress p : progressList) {
-                mileSeries.set(p.getDayString(), p.getMiles());
-
-                if (p.getMiles() < minMiles) {
-                    minMiles = p.getMiles();
-                }
-                if (p.getMiles() > maxMiles) {
-                    maxMiles = p.getMiles();
-                }
-            }
-        } else {
+        if (progressList == null) {
             return null;
+        }
+        
+        for (Progress p : progressList) {
+            mileSeries.set(p.getDayString(), p.getMiles());
+
+            if (p.getMiles() < minMiles) {
+                minMiles = p.getMiles();
+            }
+            if (p.getMiles() > maxMiles) {
+                maxMiles = p.getMiles();
+            }
         }
         
         mileModel.addSeries(mileSeries);
         mileModel.setTitle("Miles");
         
         Axis yAxis = mileModel.getAxis(AxisType.Y);
-        yAxis.setMin(minMiles - padding);
+        yAxis.setMin((minMiles - padding) < 0 ? 0 : (minMiles - padding));
         yAxis.setMax(maxMiles + padding);
+        yAxis.setLabel("Miles");
         
         DateAxis axis = new DateAxis("Dates");
         axis.setTickAngle(-45);
@@ -326,20 +345,20 @@ public class ProfileViewManager implements Serializable {
         calorieInSeries.setLabel("Calories In");
         calorieOutSeries.setLabel("Calories Out");
         
-        if (progressList != null) {
-            for (Progress p : progressList) {
-                calorieInSeries.set(p.getDayString(), p.getCaloriesIn());
-                calorieOutSeries.set(p.getDayString(), p.getCaloriesOut());
-
-                if (p.getCaloriesIn() < minCalories || p.getCaloriesOut() < minCalories) {
-                    minCalories = Math.min(p.getCaloriesIn(), p.getCaloriesOut());
-                }
-                if (p.getCaloriesIn() > maxCalories || p.getCaloriesOut() > maxCalories) {
-                    maxCalories = Math.max(p.getCaloriesIn(), p.getCaloriesOut());
-                }
-            }
-        } else {
+        if (progressList == null) {
             return null;
+        }
+        
+        for (Progress p : progressList) {
+            calorieInSeries.set(p.getDayString(), p.getCaloriesIn());
+            calorieOutSeries.set(p.getDayString(), p.getCaloriesOut());
+
+            if (p.getCaloriesIn() < minCalories || p.getCaloriesOut() < minCalories) {
+                minCalories = Math.min(p.getCaloriesIn(), p.getCaloriesOut());
+            }
+            if (p.getCaloriesIn() > maxCalories || p.getCaloriesOut() > maxCalories) {
+                maxCalories = Math.max(p.getCaloriesIn(), p.getCaloriesOut());
+            }
         }
         
         calorieModel.addSeries(calorieInSeries);
@@ -349,8 +368,9 @@ public class ProfileViewManager implements Serializable {
         calorieModel.setLegendPosition("ne");
         
         Axis yAxis = calorieModel.getAxis(AxisType.Y);
-        yAxis.setMin(minCalories - padding);
+        yAxis.setMin((minCalories - padding) < 0 ? 0 : (minCalories - padding));
         yAxis.setMax(maxCalories + padding);
+        yAxis.setLabel("Calories");
         
         DateAxis axis = new DateAxis("Dates");
         axis.setTickAngle(-45);

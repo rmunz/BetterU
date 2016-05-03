@@ -60,7 +60,7 @@ public class AccountManager implements Serializable {
     private String photo;
         
     private Map<String, Object> security_questions;
-    private String statusMessage;
+    private String statusMessage = "";
     private String profileStatusMessage;
     private String advancedStatusMessage;
     private User selected;
@@ -497,7 +497,7 @@ public class AccountManager implements Serializable {
             
             return "/index.xhtml?faces-redirect=true";
         }
-        return "";
+        return "/index.xhtml?faces-redirect=true";
     }
     
     public void validateInformation(ComponentSystemEvent event) {
