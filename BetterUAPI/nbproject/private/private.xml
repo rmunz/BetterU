@@ -3,25 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/ojmhetar/Projects/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/User.java</file>
-            <file>file:/Users/ojmhetar/Projects/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/service/UserFacadeREST.java</file>
-            <file>file:/Users/ojmhetar/Projects/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/UserIndex.java</file>
-            <file>file:/Users/ojmhetar/Projects/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/UserIndexPK.java</file>
-            <file>file:/Users/ojmhetar/Projects/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/service/ProgressFacadeREST.java</file>
-            <file>file:/Users/ojmhetar/Projects/BetterU/BetterUAPI/nbproject/build-impl.xml~</file>
-            <file>file:/Users/ojmhetar/Projects/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/service/PhotoFacadeREST.java</file>
-            <file>file:/Users/ojmhetar/Projects/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/service/UsersProgressFacadeREST.java</file>
-            <file>file:/Users/ojmhetar/Projects/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/service/challenges/UserIndexFacadeREST.java</file>
-            <file>file:/Users/ojmhetar/Projects/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/Photo.java</file>
-            <file>file:/Users/ojmhetar/Projects/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/service/challenges/WeeklyChallengesFacadeREST.java</file>
-            <file>file:/Users/ojmhetar/Projects/BetterU/BetterUAPI/src/conf/persistence.xml</file>
-            <file>file:/Users/ojmhetar/Projects/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/Progress.java</file>
-            <file>file:/Users/ojmhetar/Projects/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/UsersProgress.java</file>
-            <file>file:/Users/ojmhetar/Projects/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/ProgressPK.java</file>
-            <file>file:/Users/ojmhetar/Projects/BetterU/BetterUAPI/web/WEB-INF/glassfish-resources.xml</file>
-            <file>file:/Users/ojmhetar/Projects/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/service/AbstractFacade.java</file>
-            <file>file:/Users/ojmhetar/Projects/BetterU/BetterUAPI/src/conf/MANIFEST.MF</file>
-            <file>file:/Users/ojmhetar/Projects/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/service/ApplicationConfig.java</file>
+            <file>file:/Users/juliabinger/Documents/School/Spring%202016/capstone/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/service/UserFacadeREST.java</file>
+            <file>file:/Users/juliabinger/Documents/School/Spring%202016/capstone/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/ProgressPK.java</file>
+            <file>file:/Users/juliabinger/Documents/School/Spring%202016/capstone/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/UserIndex.java</file>
+            <file>file:/Users/juliabinger/Documents/School/Spring%202016/capstone/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/Progress.java</file>
+            <file>file:/Users/juliabinger/Documents/School/Spring%202016/capstone/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/service/ApplicationConfig.java</file>
+            <file>file:/Users/juliabinger/Documents/School/Spring%202016/capstone/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/service/AbstractFacade.java</file>
+            <file>file:/Users/juliabinger/Documents/School/Spring%202016/capstone/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/service/ProgressFacadeREST.java</file>
+            <file>file:/Users/juliabinger/Documents/School/Spring%202016/capstone/BetterU/BetterUAPI/src/java/com/betteru/entitypackage/User.java</file>
         </group>
     </open-files>
 </project-private>
