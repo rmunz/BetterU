@@ -4,10 +4,12 @@
  */
 package com.betteru.sourcepackage;
 
+import com.betteru.sessionbeanpackage.UserFacade;
 import java.io.Serializable;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.ejb.EJB;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,7 +45,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Progress.findByMiles", query = "SELECT p FROM Progress p WHERE p.miles = :miles"),
     @NamedQuery(name = "Progress.findBySteps", query = "SELECT p FROM Progress p WHERE p.steps = :steps")})
 public class Progress implements Serializable {
-
+    
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -67,18 +69,22 @@ public class Progress implements Serializable {
     private Integer steps;
     //@JoinColumn(name = "user_id", referencedColumnName = "UserId")
     //@ManyToOne
-    //private User user;
+    private User user; 
     
     public Progress() {
     }
 
     public Progress(Integer userId) {
         this.userId = userId;
+        UserFacade uf = new UserFacade();
+        user = uf.getUser(userId);
     }
 
     public Progress(Integer userId, Integer logDate) {
         this.userId = userId;
         this.logDate = logDate;
+        UserFacade uf = new UserFacade();
+        user = uf.getUser(userId);
     }
 
     /*
@@ -127,8 +133,9 @@ public class Progress implements Serializable {
         return weight;
     }
 
-    public void setWeight(Double weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
+        if (weight > 0) user.setWeight((int)weight);
     }
 
     public Double getMiles() {
