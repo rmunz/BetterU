@@ -95,7 +95,7 @@ public class ChallengesManager implements Serializable {
                 if(!u.getUserIndexPK().getChallengeType().equals("Weekly")) {
                     currentUserDailyChallenges.add(dailyChallengesFacade.getChallengeAtIndWithType(u.getInd(), u.getUserIndexPK().getChallengeType()));
                 } else {
-                    currentUserWeeklyChallenge = weeklyChallengesFacade.find(u.getInd());
+                    currentUserWeeklyChallenge = weeklyChallengesFacade.findWeeklyChallengeWithInd(u.getInd());
                 }
             }
         }
