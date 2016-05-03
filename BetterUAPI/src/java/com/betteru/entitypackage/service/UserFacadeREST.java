@@ -74,6 +74,47 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") Integer id, User entity) {
+        
+        User user = super.find(id);
+        user.setActivityGoal(entity.getActivityGoal());
+        user.setActivityLevel(entity.getActivityLevel());
+        user.setAge(entity.getAge());
+        user.setBmr(user.getBmr());
+        user.setBreakfast(entity.getBreakfast());
+        user.setDCSkipped(entity.getDCSkipped());
+        user.setDailyChallengeIndex(entity.getDailyChallengeIndex());
+        user.setDinner(entity.getDinner());
+        user.setEmail(user.getEmail());
+        user.setFirstName(entity.getFirstName());
+        user.setGender(entity.getGender());
+        user.setGoalType(entity.getGoalType());
+        user.setGoalWeight(entity.getGoalWeight());
+        user.setHeight(entity.getHeight());
+        user.setId(entity.getId());
+        user.setLastName(entity.getLastName());
+        user.setLunch(entity.getLunch());
+        user.setPassword(entity.getPassword());
+        user.setPhoto(entity.getPhoto());
+        user.setPhotoCollection(entity.getPhotoCollection());
+        user.setPoints(entity.getPoints());
+        user.setSecurityAnswer(entity.getSecurityAnswer());
+        user.setSecurityQuestion(entity.getSecurityQuestion());
+        user.setSnack(entity.getSnack());
+        user.setTargetCalories(entity.getTargetCalories());
+        user.setUnits(entity.getUnits());
+        user.setUsername(entity.getUsername());
+        user.setWCSkipped(entity.getWCSkipped());
+        user.setWeeklyChallengeIndex(entity.getWeeklyChallengeIndex());
+        int weight = entity.getWeight();
+        if (weight > 0) {
+            user.setWeight(weight);
+            Calendar c = Calendar.getInstance();
+            c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
+            Progress prog = pf.find(id, (int)(c.getTimeInMillis()/1000));
+            prog.setWeight((double)weight);
+        }
+        
+        
         super.edit(entity);
     }
 

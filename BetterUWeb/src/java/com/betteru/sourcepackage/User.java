@@ -303,11 +303,6 @@ public class User implements Serializable {
 
     public void setWeight(int weight) {
         this.weight = weight;
-        Calendar c = Calendar.getInstance();
-        c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
-        ProgressFacade pf = new ProgressFacade();
-        Progress p = pf.getProgressEntry(id, (int)(c.getTimeInMillis()/1000));
-        p.setWeight((double)weight);
     }
 
     public Character getUnits() {

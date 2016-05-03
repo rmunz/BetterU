@@ -58,9 +58,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "User.findBySecurityAnswer", query = "SELECT u FROM User u WHERE u.securityAnswer = :securityAnswer")})
 public class User implements Serializable {
 
-    @EJB
-    ProgressFacadeREST pf;
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -274,10 +271,6 @@ public class User implements Serializable {
 
     public void setHeight(int height) {
         this.height = height;
-        Calendar c = Calendar.getInstance();
-        c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
-        Progress p = pf.find(id, (int)(c.getTimeInMillis()/1000));
-        p.setWeight((double)weight);
     }
 
     public int getWeight() {
