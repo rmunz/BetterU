@@ -27,5 +27,20 @@ public class DailyChallengesFacade extends AbstractFacade<DailyChallenges> {
     public DailyChallengesFacade() {
         super(DailyChallenges.class);
     }
-    
+
+    /* Methods added to auto-generated code. */
+    public DailyChallenges getChallengeAtIndWithType(int index, String challengeType) {
+        if (em.createQuery("SELECT dc FROM DailyChallenges dc WHERE dc.ind = :ind AND dc.challengeType = :ctype")
+                .setParameter("ind", index)
+                .setParameter("ctype", challengeType)
+                .getResultList().isEmpty()) {
+            return null;
+        } else {
+            return (DailyChallenges) em.createQuery("SELECT dc FROM DailyChallenges dc WHERE dc.ind = :ind AND dc.challengeType = :ctype")
+                    .setParameter("ind", index)
+                    .setParameter("ctype", challengeType)
+                    .getSingleResult();
+        }
+    }
+
 }

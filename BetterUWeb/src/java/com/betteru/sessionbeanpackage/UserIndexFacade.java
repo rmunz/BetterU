@@ -5,6 +5,7 @@
 package com.betteru.sessionbeanpackage;
 
 import com.betteru.sourcepackage.UserIndex;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,4 +29,14 @@ public class UserIndexFacade extends AbstractFacade<UserIndex> {
         super(UserIndex.class);
     }
     
+    public List<UserIndex> retrieveEntriesForUserId(int uid) {
+        if(em.createQuery("SELECT ui FROM UserIndex ui WHERE ui.userIndexPK.userID = :id")
+                .setParameter("id", uid).getResultList().isEmpty()) {
+            return null;
+        }
+        else {
+            return (List<UserIndex>) em.createQuery("SELECT ui FROM UserIndex ui WHERE ui.userIndexPK.userID = :id")
+                .setParameter("id", uid).getResultList();
+        }      
+    }
 }
