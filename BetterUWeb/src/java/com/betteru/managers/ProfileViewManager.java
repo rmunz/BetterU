@@ -145,10 +145,12 @@ public class ProfileViewManager implements Serializable {
         
         if (weekly) {
             progressList = progressFacade.findWeekByUid(getLoggedInUser().getId(), getEndOfWeek(referenceTime));
-            numTicks = 7;
         } else {
             progressList = progressFacade.findMonthByUid(getLoggedInUser().getId(), getEndOfMonth(referenceTime), numDaysInMonth);
-            numTicks = numDaysInMonth;
+        }
+        
+        if (progressList != null) {
+            numTicks = progressList.size();
         }
         
         return progressList;
