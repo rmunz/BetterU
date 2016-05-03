@@ -114,8 +114,6 @@ public class UserFacadeREST extends AbstractFacade<User> {
             prog.setWeight((double)weight);
         }
         
-        
-        super.edit(entity);
     }
 
     @DELETE
