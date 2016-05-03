@@ -4,8 +4,16 @@
  */
 package com.betteru.entitypackage;
 
+import com.betteru.entitypackage.service.ProgressFacadeREST;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -54,6 +62,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "User.findBySecurityQuestion", query = "SELECT u FROM User u WHERE u.securityQuestion = :securityQuestion"),
     @NamedQuery(name = "User.findBySecurityAnswer", query = "SELECT u FROM User u WHERE u.securityAnswer = :securityAnswer")})
 public class User implements Serializable {
+
+    @EJB
+    ProgressFacadeREST pf;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -268,6 +279,10 @@ public class User implements Serializable {
 
     public void setHeight(int height) {
         this.height = height;
+        Calendar c = Calendar.getInstance();
+        c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
+        Progress p = pf.find(id, (int)(c.getTimeInMillis()/1000));
+        p.setWeight((double)weight);
     }
 
     public int getWeight() {
@@ -470,6 +485,16 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "com.betteru.entitypackage.User[ id=" + id + " ]";
+    }
+
+    private ProgressFacadeREST lookupProgressFacadeRESTBean() {
+        try {
+            Context c = new InitialContext();
+            return (ProgressFacadeREST) c.lookup("java:global/BetterUAPI/ProgressFacadeREST!com.betteru.entitypackage.service.ProgressFacadeREST");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
     }
     
 }
