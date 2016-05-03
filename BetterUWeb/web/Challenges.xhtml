@@ -50,7 +50,6 @@ Copyright © 2016 Timothy Street. All rights reserved.
                                             <h:outputText value="#{dc.description}"/>
                                             <br/>
                                             <h:outputText value="#{dc.pointsAwarded}"/>
-                                            <br/>
                                         </ui:repeat>
                                     </c:when>
                                     <!-- Display message if pins list is empty -->
@@ -65,9 +64,8 @@ Copyright © 2016 Timothy Street. All rights reserved.
                                     <h:outputText value="#{challengesManager.currentUserWeeklyChallenge.description}"/>
                                     <br/>
                                     <h:outputText value="#{challengesManager.currentUserWeeklyChallenge.pointsAwarded}"/>
-                                    <br/>
                                 </c:when>
-                                <c:when test="#{!challengesManager.currentUserDailyChallenges}">
+                                <c:when test="#{!challengesManager.weeklyChallengeCompleted}">
                                         <h:outputText value="You haven't completed any weekly challenges yet."/>
                                 </c:when>
                             </c:choose>

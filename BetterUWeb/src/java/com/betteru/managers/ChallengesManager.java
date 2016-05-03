@@ -86,6 +86,9 @@ public class ChallengesManager implements Serializable {
         this.currentUserWeeklyChallenge = currentUserWeeklyChallenge;
     }
     
+    /**
+     * Make this display previously completed challenges along with points awarded
+     */
     public void setChallengesDisplay() {
         User selectedUser = this.getSelected();
         if(selected != null) {
