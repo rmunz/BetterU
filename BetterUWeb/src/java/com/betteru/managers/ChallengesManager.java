@@ -85,14 +85,17 @@ public class ChallengesManager implements Serializable {
     }
     
     public void setChallengesDisplay() {
+        User selectedUser = this.getSelected();
         if(selected != null) {
             List<UserIndex> userIndices = userIndexFacade.
-                    retrieveEntriesForUserId(selected.getId());
+                    retrieveEntriesForUserId(selectedUser.getId());
             currentUserDailyChallenges = new ArrayList<DailyChallenges>();
 
             for(UserIndex u: userIndices) {
                 if(!u.getUserIndexPK().getChallengeType().equals("Weekly")) {
                     currentUserDailyChallenges.add(dailyChallengesFacade.getChallengeAtIndWithType(u.getInd(), u.getUserIndexPK().getChallengeType()));
+                } else {
+                    currentUserWeeklyChallenge = weeklyChallengesFacade.find(u.getInd());
                 }
             }
         }
@@ -102,9 +105,5 @@ public class ChallengesManager implements Serializable {
         selected = userFacade.find(FacesContext.getCurrentInstance().
                 getExternalContext().getSessionMap().get("user_id"));
         return selected;
-    }
-
-    public void setSelected(User selected) {
-        this.selected = selected;
     }
 }

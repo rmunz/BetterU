@@ -41,10 +41,17 @@ Copyright © 2016 Timothy Street. All rights reserved.
                             <h1>Your progress in each category</h1>
                                 <ui:repeat value="#{challengesManager.currentUserDailyChallenges}" var="dc">
                                     <h:outputText value="#{dc.challengeType}"/>
+                                    <br/>
                                     <h:outputText value="#{dc.description}"/>
+                                    <br/>
                                     <h:outputText value="#{dc.pointsAwarded}"/>
                                     <br/>
                                 </ui:repeat>
+                                    <h:outputText value="Weekly"/>
+                                    <br/>
+                                    <h:outputText value="#{challengesManager.currentUserWeeklyChallenge.description}"/>
+                                    <br/>
+                                    <h:outputText value="#{challengesManager.currentUserWeeklyChallenge.pointsAwarded}"/>
                             <h:commandButton id="challenges-display-btn" 
                                              style="display: none" 
                                              action="#{challengesManager.setChallengesDisplay()}">
