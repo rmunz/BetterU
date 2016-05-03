@@ -100,10 +100,24 @@ public class ProfileViewManager implements Serializable {
     public void refreshCharts() {
         interval = weekly ? "Weekly" : "Monthly";
         
+        resetMinMax();
+        
         buildWeightModel();
         buildCalorieModel();
         buildStepModel();
         buildMileModel();
+    }
+    
+    private void resetMinMax() {
+        minWeight = Integer.MAX_VALUE;
+        maxWeight = 0;
+        minSteps = Integer.MAX_VALUE;
+        maxSteps = 0;
+        minMiles = Integer.MAX_VALUE;
+        maxMiles = 0;
+        minCalories = Integer.MAX_VALUE;
+        maxCalories = 0;
+    
     }
     
     public void changeInterval() {
