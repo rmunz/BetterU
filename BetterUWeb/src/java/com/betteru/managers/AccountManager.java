@@ -340,8 +340,10 @@ public class AccountManager implements Serializable {
     }
 
     public User getSelected() {
-        selected = userFacade.find(FacesContext.getCurrentInstance().
+        if (selected == null) {
+            selected = userFacade.find(FacesContext.getCurrentInstance().
                 getExternalContext().getSessionMap().get("user_id"));
+        }
         
         return selected;
     }
