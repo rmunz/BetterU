@@ -483,7 +483,7 @@ public class AccountManager implements Serializable {
             
             return "/index.xhtml?faces-redirect=true";
         }
-        return "";
+        return "/index.xhtml?faces-redirect=true";
     }
     
     public void validateInformation(ComponentSystemEvent event) {
