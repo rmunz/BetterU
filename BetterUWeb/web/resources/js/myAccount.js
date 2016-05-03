@@ -51,6 +51,11 @@ $(document).ready(function () {
         $("#form-advanced\\:edit-advanced-save-btn").show();
         $("#form-advanced\\:edit-advanced-cancel-btn").show();
     });
+    
+    // Open delete dialog
+    $("#delete-account-btn").on("click", function () {
+        $("#delete-dialog").dialog("open");
+    });
 });
 
 function changeProfileFields(enabled) {

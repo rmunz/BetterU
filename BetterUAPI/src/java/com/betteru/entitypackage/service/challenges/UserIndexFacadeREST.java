@@ -94,7 +94,7 @@ public class UserIndexFacadeREST extends AbstractFacade<UserIndex> {
 
     @GET
     @Override
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<UserIndex> findAll() {
         return super.findAll();
     }
