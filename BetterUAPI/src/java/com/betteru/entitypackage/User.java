@@ -8,12 +8,7 @@ import com.betteru.entitypackage.service.ProgressFacadeREST;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -487,14 +482,5 @@ public class User implements Serializable {
         return "com.betteru.entitypackage.User[ id=" + id + " ]";
     }
 
-    private ProgressFacadeREST lookupProgressFacadeRESTBean() {
-        try {
-            Context c = new InitialContext();
-            return (ProgressFacadeREST) c.lookup("java:global/BetterUAPI/ProgressFacadeREST!com.betteru.entitypackage.service.ProgressFacadeREST");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
-    }
     
 }
