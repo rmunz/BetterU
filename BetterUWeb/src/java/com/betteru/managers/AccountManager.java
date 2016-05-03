@@ -60,7 +60,7 @@ public class AccountManager implements Serializable {
     private String photo;
         
     private Map<String, Object> security_questions;
-    private String statusMessage;
+    private String statusMessage = "";
     private String profileStatusMessage;
     private String advancedStatusMessage;
     private User selected;

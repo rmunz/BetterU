@@ -233,7 +233,7 @@ public class ProfileViewManager implements Serializable {
         weightModel.setTitle("Weight");
         
         Axis yAxis = weightModel.getAxis(AxisType.Y);
-        yAxis.setMin(minWeight - padding);
+        yAxis.setMin((minWeight - padding) < 0 ? 0 : (minWeight - padding));
         yAxis.setMax(maxWeight + padding);
         yAxis.setLabel("Pounds");
         
@@ -276,7 +276,7 @@ public class ProfileViewManager implements Serializable {
         stepModel.setTitle("Steps");
         
         Axis yAxis = stepModel.getAxis(AxisType.Y);
-        yAxis.setMin(minSteps - padding);
+        yAxis.setMin((minSteps - padding) < 0 ? 0 : (minSteps - padding));
         yAxis.setMax(maxSteps + padding);
         yAxis.setLabel("Steps");
         
@@ -319,7 +319,7 @@ public class ProfileViewManager implements Serializable {
         mileModel.setTitle("Miles");
         
         Axis yAxis = mileModel.getAxis(AxisType.Y);
-        yAxis.setMin(minMiles - padding);
+        yAxis.setMin((minMiles - padding) < 0 ? 0 : (minMiles - padding));
         yAxis.setMax(maxMiles + padding);
         yAxis.setLabel("Miles");
         
@@ -368,7 +368,7 @@ public class ProfileViewManager implements Serializable {
         calorieModel.setLegendPosition("ne");
         
         Axis yAxis = calorieModel.getAxis(AxisType.Y);
-        yAxis.setMin(minCalories - padding);
+        yAxis.setMin((minCalories - padding) < 0 ? 0 : (minCalories - padding));
         yAxis.setMax(maxCalories + padding);
         yAxis.setLabel("Calories");
         
