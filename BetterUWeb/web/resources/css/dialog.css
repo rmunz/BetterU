@@ -1,0 +1,40 @@
+/*
+ * These styles are applied to dialog windows. Fixes most of the default stuff
+ * from the jquery ui lightness css class.
+ */
+
+.ui-widget,
+.ui-dialog {
+    font-family: 'Franklin Gothic Book' !important;
+    font-size: 16px;
+    color: #333;
+    padding: 0;
+    font-weight: normal !important;
+    z-index: 5 !important;
+}
+
+.ui-widget-content {
+    font-family: 'Franklin Gothic Book' !important;
+    border: none !important;
+}
+
+.ui-dialog > .ui-widget-header {
+    background-color: #4aa3e5;
+    background-image: none;
+    border: 1px #4aa3e5 solid !important;
+    text-shadow: none !important;
+    font-size: 18px;
+    font-weight: normal;
+    margin: 0;
+    padding: 12px !important;
+    cursor: default;
+}
+
+.ui-dialog-titlebar-close {
+    visibility: hidden;
+}
+
+.ui-widget-overlay.ui-front {
+    background-image: none;
+    opacity: 0.6;
+}
