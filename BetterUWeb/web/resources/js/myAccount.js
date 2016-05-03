@@ -30,11 +30,11 @@ $(document).ready(function () {
     changeAdvancedFields(true);
     
     // Edit profile button click
-    $("#form-profile\\:edit-profile-btn").bind("click", function(e) {
+    $("#edit-profile-btn").bind("click", function(e) {
         // Enable fields
         changeProfileFields(false);
         // Show/hide appropriate buttons
-        $("#form-profile\\:edit-profile-btn").hide();
+        $("#edit-profile-btn").hide();
         $("#form-profile\\:edit-profile-save-btn").show();
         $("#form-profile\\:edit-profile-cancel-btn").show();
     });

@@ -168,6 +168,9 @@ public class AccountManager implements Serializable {
      * Creates a new instance of AccountManager
      */
     public AccountManager() {
+        statusMessage = "";
+        profileStatusMessage = "";
+        advancedStatusMessage = "";
     }
 
     /**
@@ -411,7 +414,7 @@ public class AccountManager implements Serializable {
             initializeSessionMap();
             
             
-            return "MyAccount";
+            return "MyProgress?faces-redirect=true";
         }
         return "";
     }
@@ -452,7 +455,6 @@ public class AccountManager implements Serializable {
                 editUser.setPassword(this.selected.getPassword());
                 userFacade.edit(editUser);
             } catch (EJBException e) {
-                username = "";
                 statusMessage = "Something went wrong while editing your profile!";
                 return "";
             }
@@ -462,10 +464,44 @@ public class AccountManager implements Serializable {
     }
     
     public String updateProfile() {
+        if (profileStatusMessage.isEmpty()) {
+            int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+            User editUser = userFacade.getUser(user_id);
+            try {
+                editUser.setFirstName(this.selected.getFirstName());
+                editUser.setLastName(this.selected.getLastName());
+                editUser.setAge(this.selected.getAge());
+                editUser.setHeight(this.selected.getHeight());
+                editUser.setWeight(this.selected.getWeight());
+                editUser.setGender(this.selected.getGender());
+                userFacade.edit(editUser);
+            } catch (EJBException e) {
+                String msg = e.getMessage();
+                profileStatusMessage = "Something went wrong while editing your profile.";
+                return "";
+            }
+            return "MyAccount?faces-redirect=true";
+        }
         return "";
     }
     
     public String updateAdvanced() {
+        if (advancedStatusMessage.isEmpty()) {
+            int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+            User editUser = userFacade.getUser(user_id);
+            try {
+                editUser.setEmail(this.selected.getEmail());
+                editUser.setGoalWeight(this.selected.getGoalWeight());
+                editUser.setActivityLevel(this.selected.getActivityLevel());
+                editUser.setActivityGoal(this.selected.getActivityGoal());
+                editUser.setPassword(this.selected.getPassword());
+                userFacade.edit(editUser);
+            } catch (EJBException e) {
+                advancedStatusMessage = "Something went wrong while editing your profile.";
+                return "";
+            }
+            return "MyAccount?faces-redirect=true";
+        }
         return "";
     }
     
@@ -513,12 +549,31 @@ public class AccountManager implements Serializable {
         }   
     }
     
-    public void validateProfile(ComponentSystemEvent event) {
-        
-    }
-    
     public void validateAdvanced(ComponentSystemEvent event) {
-        
+        FacesContext fc = FacesContext.getCurrentInstance();
+
+        UIComponent components = event.getComponent();
+        // Get password
+        UIInput uiInputPassword = (UIInput) components.findComponent("password");
+        String pwd = uiInputPassword.getLocalValue() == null ? ""
+                : uiInputPassword.getLocalValue().toString();
+
+        // Get confirm password
+        UIInput uiInputConfirmPassword = (UIInput) components.findComponent("confirm-password");
+        String confirmPassword = uiInputConfirmPassword.getLocalValue() == null ? ""
+                : uiInputConfirmPassword.getLocalValue().toString();
+
+        if (pwd.isEmpty() || confirmPassword.isEmpty()) {
+            // Do not take any action. 
+            // The required="true" in the XHTML file will catch this and produce an error message.
+            return;
+        }
+
+        if (!pwd.equals(confirmPassword)) {
+            advancedStatusMessage = "Passwords must match!";
+        } else {
+            advancedStatusMessage = "";
+        }
     }
 
     public void initializeSessionMap() {

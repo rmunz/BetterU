@@ -46,8 +46,8 @@ Copyright © 2016 Osman Balci. All rights reserved.
                                                  requiredMessage="Gender is required."
                                                  styleClass="input-control #{component.valid?'':'validation-failed'}">
                                     <f:selectItem itemValue="#{null}" itemLabel="--Gender--" />
-                                    <f:selectItem itemValue="Male" itemLabel="Male" />
-                                    <f:selectItem itemValue="Female" itemLabel="Female" />
+                                    <f:selectItem itemValue="M" itemLabel="Male" />
+                                    <f:selectItem itemValue="F" itemLabel="Female" />
                                 </h:selectOneMenu>
                             </div>
                             <div id="part-2">
@@ -88,9 +88,9 @@ Copyright © 2016 Osman Balci. All rights reserved.
                                                  requiredMessage="Activity Goal is required."
                                                  styleClass="input-control #{component.valid?'':'validation-failed'}">
                                     <f:selectItem itemValue="#{null}" itemLabel="--How active do you want to be?--" />
-                                    <f:selectItem itemValue="1" itemLabel="I want to spend some of my day being physical" />
-                                    <f:selectItem itemValue="2" itemLabel="I want to spend more of my day being physical" />
-                                    <f:selectItem itemValue="3" itemLabel="I want to spend most of my day being physical" />
+                                    <f:selectItem itemValue="Lightly Active" itemLabel="I want to spend some of my day being physical" />
+                                    <f:selectItem itemValue="Active" itemLabel="I want to spend more of my day being physical" />
+                                    <f:selectItem itemValue="Very Active" itemLabel="I want to spend most of my day being physical" />
                                 </h:selectOneMenu>
                             </div>
                             <div id="part-4">
@@ -102,7 +102,9 @@ Copyright © 2016 Osman Balci. All rights reserved.
                                 <h:inputText id="email" label="Email" 
                                              styleClass="input-control #{component.valid?'':'validation-failed'}"
                                              value="#{accountManager.email}" a:placeholder="Email*"
-                                             required="true" requiredMessage="Email is required." />
+                                             required="true" requiredMessage="Email is required.">
+                                    <f:validator validatorId="emailValidator" />
+                                </h:inputText>
                                 <h:selectOneMenu id="security-question" label="Security Questions" styleClass="input-control"
                                          value="#{accountManager.security_question}" required="true">
                                     <f:selectItems value="#{accountManager.security_questions}" />
