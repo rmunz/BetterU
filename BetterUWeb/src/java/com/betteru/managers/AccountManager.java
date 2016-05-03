@@ -10,12 +10,9 @@ import com.betteru.sessionbeanpackage.UserFacade;
 import com.betteru.sourcepackage.Progress;
 import com.sendgrid.SendGrid;
 import com.sendgrid.SendGridException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
-import javax.swing.Timer;
 import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -25,7 +22,6 @@ import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Named;
-import static javax.ws.rs.client.Entity.entity;
  
 @Named(value = "accountManager")
 @SessionScoped
@@ -392,12 +388,12 @@ public class AccountManager implements Serializable {
                 
                 Calendar c = Calendar.getInstance();
                 c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
-                for(int i = 0; i < 7; i++) {
+                for(int i = 0; i < 30; i++) {
                     //...Perform a task...
                     Progress progress = new Progress(user.getId(), (int)((c.getTimeInMillis()-i*86400000)/1000));
                     progress.setCaloriesIn(0);
                     progress.setCaloriesOut(0);
-                    progress.setMiles(0);
+                    progress.setMiles(0.0);
                     progress.setWeight((double)user.getWeight());
                     progress.setSteps(0);
                     pf.create(progress);
