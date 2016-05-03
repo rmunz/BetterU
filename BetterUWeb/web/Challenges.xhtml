@@ -7,12 +7,9 @@ Copyright © 2016 Timothy Street. All rights reserved.
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-    <head>
-        <title>Daily Progress</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:body>
         <ui:composition template="template/siteTemplate.xhtml">
             <!-- Page title -->
             <title><ui:define name="title">BetterU - Challenges</ui:define></title>
@@ -22,6 +19,10 @@ Copyright © 2016 Timothy Street. All rights reserved.
             </ui:define>
             
             <!-- Additional JS files needed -->
+            <ui:define name="js">
+                <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+                <script type="text/javascript" src="resources/js/challenges.js"></script>
+            </ui:define>
             
             <!-- Page content -->
             <ui:define name="editableContent">
@@ -34,38 +35,33 @@ Copyright © 2016 Timothy Street. All rights reserved.
                 </div>
                 
                 <br /><br /><br /><br /><br /><br /><br />
-                <div align="center">     
-                    
+                <div align="center">                        
                     <div>
-                        <h1>Your progress in each category</h1>
-                        
-                        <table>
-                            <tr>
-                                <td>Core:</td>
-                                <td>a</td>
-                            </tr>
-                            <tr>
-                                <td>Lower:</td>
-                                <td>a</td>
-                            </tr>
-                            <tr>
-                                <td>Upper:</td>
-                                <td>a</td>
-                            </tr>
-                            <tr>
-                                <td>Cardio:</td>
-                                <td>a</td>
-                            </tr>
-                            <tr>
-                                <td>Weekly:</td>
-                                <td>a</td>
-                            </tr>
-                        </table>
+                        <h:form id="challenges-list-form">
+                            <h1>Your progress in each category</h1>
+                                <ui:repeat value="#{challengesManager.currentUserDailyChallenges}" var="dc">
+                                    <h:outputText value="#{dc.challengeType}"/>
+                                    <br/>
+                                    <h:outputText value="#{dc.description}"/>
+                                    <br/>
+                                    <h:outputText value="#{dc.pointsAwarded}"/>
+                                    <br/>
+                                </ui:repeat>
+                                    <h:outputText value="Weekly"/>
+                                    <br/>
+                                    <h:outputText value="#{challengesManager.currentUserWeeklyChallenge.description}"/>
+                                    <br/>
+                                    <h:outputText value="#{challengesManager.currentUserWeeklyChallenge.pointsAwarded}"/>
+                            <h:commandButton id="challenges-display-btn" 
+                                             style="display: none" 
+                                             action="#{challengesManager.setChallengesDisplay()}">
+                                <f:ajax render="@form" execute="@form"/>
+                            </h:commandButton>
+                        </h:form>
                     </div>
-
                     <br /><br /><br /><br /><br /><br /><br />
                 </div>
             </ui:define>
         </ui:composition>
-    </body>
+    </h:body>
 </html>
