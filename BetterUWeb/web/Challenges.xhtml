@@ -31,34 +31,36 @@ Copyright © 2016 Timothy Street. All rights reserved.
                 <div id="banner-wrapper">
                     <div id="banner-inner-wrapper">
                         <div id="banner-message" align="center">
-                            Have you pushed yourself lately?<br/>
+                            Challenges<br/>
                         </div>
                     </div>
                 </div>
                 
                 <br/><br/><br/><br/>
                 <div align="center">                        
-                    <div id="challenges-list-div">
-                        <h:form style="challenges-list-form">
-                            <h1>Daily Challenges Progress:</h1>
+                    <div id="challenges-list-div">                        
+                        <h1>Daily Challenges Progress:</h1>
+                        <h:form id="challenges-daily-list-form">
                             <c:choose>                               
-                                    <!-- Display challenges list if it's not empty -->
-                                    <c:when test="#{!empty challengesManager.currentUserDailyChallenges}">                                   
-                                        <ui:repeat value="#{challengesManager.currentUserDailyChallenges}" var="dc">
-                                            <h:outputText value="#{dc.challengeType}"/>
-                                            <br/>
-                                            <h:outputText value="#{dc.description}"/>
-                                            <br/>
-                                            <h:outputText value="#{dc.pointsAwarded}"/>
-                                        </ui:repeat>
-                                    </c:when>
-                                    <!-- Display message if pins list is empty -->
-                                    <c:when test="#{empty challengesManager.currentUserDailyChallenges}">
-                                        <h:outputText value="You haven't completed any daily challenges yet."/>
-                                    </c:when>
+                                <!-- Display challenges list if it's not empty -->
+                                <c:when test="#{!empty challengesManager.currentUserDailyChallenges}">                                   
+                                    <ui:repeat value="#{challengesManager.currentUserDailyChallenges}" var="dc">
+                                        <h:outputText value="#{dc.challengeType}"/>
+                                        <br/>
+                                        <h:outputText value="#{dc.description}"/>
+                                        <br/>
+                                        <h:outputText value="#{dc.pointsAwarded}"/>
+                                    </ui:repeat>
+                                </c:when>
+                                <!-- Display message if pins list is empty -->
+                                <c:when test="#{empty challengesManager.currentUserDailyChallenges}">
+                                    <h:outputText value="You haven't completed any daily challenges yet."/>
+                                </c:when>
                             </c:choose>
-                            <br/><br/><br/>                           
-                            <h1>Weekly Challenges Progress:</h1>
+                        </h:form>
+                        <br/><br/><br/>
+                        <h1>Weekly Challenges Progress:</h1>
+                        <h:form id="challenges-weekly-list-form">    
                             <c:choose>
                                 <c:when test="#{challengesManager.weeklyChallengeCompleted}">
                                     <h:outputText value="#{challengesManager.currentUserWeeklyChallenge.description}"/>
@@ -68,13 +70,12 @@ Copyright © 2016 Timothy Street. All rights reserved.
                                 <c:when test="#{!challengesManager.weeklyChallengeCompleted}">
                                         <h:outputText value="You haven't completed any weekly challenges yet."/>
                                 </c:when>
-                            </c:choose>
+                            </c:choose>                                   
                         </h:form>
+                        <h1>Weekly Challenges Progress:</h1>
                         <h:form id="hidden-btn-form">
-                            <h:commandButton id="challenges-display-btn" 
-                                         style="display: none" 
-                                         action="#{challengesManager.setChallengesDisplay()}">
-                                <f:ajax render="challenges-list-form" execute="challenges-list-form"/>
+                            <h:commandButton id="challenges-display-btn" style="display: none" action="#{challengesManager.setChallengesDisplay()}">
+                                <f:ajax execute="@form" render=":challenges-daily-list-form :challenges-weekly-list-form"/>
                             </h:commandButton>
                         </h:form>
                     </div>
