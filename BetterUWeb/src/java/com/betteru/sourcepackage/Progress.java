@@ -62,7 +62,7 @@ public class Progress implements Serializable {
     @Column(name = "Weight")
     private Double weight;
     @Column(name = "Miles")
-    private Integer miles;
+    private Double miles;
     @Column(name = "Steps")
     private Integer steps;
     //@JoinColumn(name = "user_id", referencedColumnName = "UserId")
@@ -131,11 +131,11 @@ public class Progress implements Serializable {
         this.weight = weight;
     }
 
-    public Integer getMiles() {
+    public Double getMiles() {
         return miles;
     }
 
-    public void setMiles(Integer miles) {
+    public void setMiles(Double miles) {
         this.miles = miles;
     }
 

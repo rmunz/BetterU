@@ -1,0 +1,139 @@
+#account-wrapper {
+    width: 550px;
+    margin: 0 auto;
+    overflow: auto;
+}
+
+#form-btns\:sign-out-btn {
+    margin: 0 15px 60px 0;
+}
+
+#form-btns\:delete-account-btn {
+    margin: 0 0 60px 0;
+}
+
+.section-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+#profile-table {
+    clear: both;
+    float: left;
+    margin: 0 20px 10px 0;
+    color: #333;
+    font-size: 18px;
+}
+
+#profile-table td.label {
+    width: 100px;
+    vertical-align: middle;
+    font-size: 16px;
+}
+
+#profile-table td.value {
+    padding: 4px 0 4px 0;
+    vertical-align: middle;
+}
+
+#profile-messages-wrapper {
+    clear: both;
+    float: left;
+}
+
+#form-profile\:edit-profile-btn {
+    clear: both;
+    float: left;
+}
+
+#form-profile\:edit-profile-save-btn {
+    clear: both;
+    float: left;
+    margin-right: 15px;
+}
+
+#form-profile\:edit-profile-cancel-btn {
+    float: left;
+    background-color: #999999;
+}
+
+#advanced-table {
+    clear: both;
+    float: left;
+    margin: 0 20px 10px 0;
+    color: #333;
+    font-size: 18px;
+}
+
+#advanced-table td.label {
+    width: 140px;
+    vertical-align: middle;
+    font-size: 16px;
+}
+
+#advanced-table td.value {
+    padding: 4px 0 4px 0;
+    vertical-align: middle;
+}
+
+#advanced-messages-wrapper {
+    clear: both;
+    float: left;
+}
+
+#form-advanced\:edit-advanced-btn {
+    clear: both;
+    float: left;
+}
+
+#form-advanced\:edit-advanced-save-btn {
+    clear: both;
+    float: left;
+    margin-right: 15px;
+}
+
+#form-advanced\:edit-advanced-cancel-btn {
+    float: left;
+    background-color: #999999;
+}
+
+.input-control {
+    margin-bottom: 0px;
+}
+
+.input-control:disabled {
+    color: #333333;
+    background-color: #f3f3f3;
+}
+
+.btn {
+    margin-top: 10px;
+    padding: 10px 20px 10px 20px;
+}
+
+
+/* Dialog stuff */
+
+#delete-dialog {
+    display: none;
+}
+
+#delete-text {
+    margin: 10px 0 40px 0;
+    font-family: "Franklin Gothic Book" !important;
+}
+
+#delete-dialog-form\:close-button {
+    float: right;
+    width: 85px;
+    margin-top: 5px;
+    background-color: #999;
+    font-family: "Franklin Gothic Book" !important;
+}
+
+#delete-dialog-form\:yes-delete-button {
+    float: right;
+    width: 180px;
+    margin: 5px 15px 0 0;
+    font-family: "Franklin Gothic Book" !important;
+}

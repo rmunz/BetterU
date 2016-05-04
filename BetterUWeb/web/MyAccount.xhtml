@@ -13,81 +13,249 @@
             <!-- Additional CSS styles needed -->
             <ui:define name="css">
                 <link rel="stylesheet" type="text/css" href="resources/css/myAccount.css"/>
+                <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/ui-lightness/jquery-ui.min.css"/>
+                <link rel="stylesheet" type="text/css" href="resources/css/dialog.css" />
             </ui:define>
             <!-- Additional JS files needed -->
-            
+            <ui:define name="js">
+                <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+                <script type="text/javascript" src="resources/js/myAccount.js"></script>
+                <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+                <script type="text/javascript" src="resources/js/dialog.js"></script>
+            </ui:define>
+
             <!-- Page content -->
             <ui:define name="editableContent">
-                <div align="center" style="width:50%; margin:0 auto;">
-                <h:form class="form-signin">
-                    <br/>
-                    <f:event listener="#{accountManager.validateInformation}" type="postValidate"/>
-                    <p:panel id="panel"
-                             style="border: 0px solid white">
-                        <p:messages id="msgs" />
-
-                        <h:panelGrid columns="3" cellpadding="5">
-                            <p:outputLabel for="firstName" value="First Name" />
-                            <h:inputText id="firstName" value="#{accountManager.selected.firstName}"
-                                         required="true" label="First Name">
-                                <f:validateLength minimum="2" />
-                            </h:inputText>
-                            <p:message for="firstName" display="icon" />
-
-                            <p:outputLabel for="lastName" value="Last Name" />
-                            <h:inputText id="lastName" value="#{accountManager.selected.lastName}"
-                                         required="true" label="Last Name">
-                                <f:validateLength minimum="2" />
-                            </h:inputText>
-                            <p:message for="lastName" display="icon" />
-
-                            <p:outputLabel for="height" value="Height in Inches: " />
-                            <h:inputText id="height" value="#{accountManager.selected.height}"
-                                         required="true" label="height">
-                                <f:validateLongRange minimum="36" maximum="96" />
-                            </h:inputText>
-                            <p:message for="height" display="icon" />
-
-                            <p:outputLabel for="weight" value="Weight in Pounds: " />
-                            <h:inputText id="weight" value="#{accountManager.selected.weight}"
-                                         required="true" label="weight">
-                                <f:validateLongRange minimum="50" maximum="400" />
-                            </h:inputText>
-                            <p:message for="weight" display="icon" />
-
-                            <p:outputLabel for="email" value="Email:" />
-                            <h:inputText id="email" value="#{accountManager.selected.email}"
-                                         label="Email" required="true">
-                                <f:validateLength minimum="2" />
-<!--                                <f:validator validatorId="emailValidator" /> -->
-                            </h:inputText>
-                            <p:message for="email" display="icon" />
-
-                            <p:outputLabel for="password" value="Password:" />
-                            <h:inputSecret id="password" value="#{accountManager.selected.password}"
-                                        required="true" label="Password">
-<!--                                <f:validator validatorId="passwordValidator" />-->
-                            </h:inputSecret>
-                            <p:message for="password" display="icon" />
-
-                            <p:outputLabel for="confirmPassword" value="Confirm Password:" />
-                            <h:inputSecret id="confirmPassword"
-                                        required="true" label="Confirm Password">
-                                <f:validateLength minimum="3" />
-                            </h:inputSecret>
-                            <p:message for="confirmPassword" display="icon"/>
-                        </h:panelGrid>
-                    </p:panel>
-                    <h:outputLabel id="error" value="#{accountManager.statusMessage}"  />
-                    <br/>
-                    <h:commandButton class="btn btn-lg btn-success" id="submit"
-                                     action="#{accountManager.updateAccount()}" value="Submit" />
-
-                    <h:button class="btn btn-lg btn-danger" id="cancel" outcome="Profile" value="Cancel" />
-                </h:form>
+                <div id="page-title">My Account</div>
+                <div id="account-wrapper">
+                    <!-- Sign out / delete account buttons -->
+                    <h:form id="form-btns">
+                        <h:commandButton id="sign-out-btn" class="btn" value="Sign Out"
+                                         action="#{accountManager.logout()}"/>
+                        <input type="button" id="delete-account-btn" class="btn" value="Delete Account" />
+                    </h:form>
                     
+                    <!-- Profile settings -->
+                    <div class="section-title">Profile Settings</div>
+                    <div id="profile-section">
+                        <h:form id="form-profile">
+                            <f:event listener="#{accountManager.validateProfile}" type="postValidate"/>
+                            <table id="profile-table">
+                                <tr>
+                                    <td class="label">
+                                        <h:outputText value="First Name:"/>
+                                    </td>
+                                    <td class="value">
+                                        <h:inputText id="first-name" label="First Name"
+                                                     styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                                     value="#{accountManager.selected.firstName}" required="true"
+                                                     requiredMessage="First Name is required."
+                                                     style="width: 150px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label">
+                                        <h:outputText value="Last Name:"/>
+                                    </td>
+                                    <td class="value">
+                                        <h:inputText id="last-name" label="Last Name"
+                                                     styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                                     value="#{accountManager.selected.lastName}" required="true"
+                                                     requiredMessage="Last Name is required."
+                                                     style="width: 150px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label">
+                                        <h:outputText value="Age:"/>
+                                    </td>
+                                    <td class="value">
+                                        <h:inputText id="age" label="Age"
+                                                     styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                                     value="#{accountManager.selected.age}" required="true"
+                                                     requiredMessage="Age is required." style="width: 40px;"/>
+                                        &nbsp;<span style="font-size: 15px;">years</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label">
+                                        <h:outputText value="Height:"/>
+                                    </td>
+                                    <td class="value">
+                                        <h:inputText id="height" label="Height"
+                                                     styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                                     value="#{accountManager.selected.height}" required="true"
+                                                     requiredMessage="Height is required." style="width: 40px;"/>
+                                        &nbsp;<span style="font-size: 15px;">inches</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label">
+                                        <h:outputText value="Weight:"/>
+                                    </td>
+                                    <td class="value">
+                                        <h:inputText id="weight" label="Weight"
+                                                     styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                                     value="#{accountManager.selected.weight}" required="true"
+                                                     requiredMessage="Weight is required." style="width: 40px;"/>
+                                        &nbsp;<span style="font-size: 15px;">lbs</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label">
+                                        <h:outputText value="Gender:"/>
+                                    </td>
+                                    <td class="value">
+                                        <h:selectOneMenu id="gender" label="Gender"
+                                                         value="#{accountManager.gender}" required="true"
+                                                         requiredMessage="Gender is required."
+                                                         style="width: 120px;"
+                                                         styleClass="input-control #{component.valid?'':'validation-failed'}">
+                                            <f:selectItem itemValue="#{null}" itemLabel="--Gender--" />
+                                            <f:selectItem itemValue="Male" itemLabel="Male" />
+                                            <f:selectItem itemValue="Female" itemLabel="Female" />
+                                        </h:selectOneMenu>
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- Error message output -->
+                            <div id="profile-messages-wrapper">
+                                <p:messages id="profile-msgs" showIcon="false"/>
+                                <h:outputLabel id="profile-error-message" class="error-message" 
+                                               value="#{accountManager.profileStatusMessage}"/>
+                            </div>
+                            <!-- Buttons -->
+                            <h:commandButton id="edit-profile-btn" class="btn noupdate" value="Edit Profile" type="button" />
+                            <p:commandButton id="edit-profile-save-btn" class="btn noupdate" value="Save"
+                                             action="#{accountManager.updateProfile()}" update="@(form :not(.noupdate))"
+                                             oncomplete="if (!args.validationFailed) window.location.reload();" />
+                            <h:button id="edit-profile-cancel-btn" class="btn noupdate" value="Cancel" outcome="MyAccount.xhtml" />
+                        </h:form>
+                    </div>
+                    
+                    <!-- Advanced settings -->
+                    <div class="section-title" style="clear: both; float: left; margin-top: 60px;">
+                        Advanced Settings
+                    </div>
+                    <div id="advanced-section">
+                        <h:form id="form-advanced">
+                            <f:event listener="#{accountManager.validateAdvanced}" type="postValidate"/>
+                            <table id="advanced-table">
+                                <tr>
+                                    <td class="label">
+                                        <h:outputText value="Email:"/>
+                                    </td>
+                                    <td class="value">
+                                        <h:inputText id="email" label="Email"
+                                                     styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                                     value="#{accountManager.selected.email}" required="true"
+                                                     requiredMessage="Email is required." 
+                                                     style="width: 200px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label">
+                                        <h:outputText value="Goal Weight:"/>
+                                    </td>
+                                    <td class="value">
+                                        <h:inputText id="goal-weight" label="Goal Weight"
+                                                     styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                                     value="#{accountManager.selected.goalWeight}" required="true"
+                                                     requiredMessage="Goal Weight is required." 
+                                                     style="width: 40px;"/>
+                                        &nbsp;<span style="font-size: 15px;">lbs</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label">
+                                        <h:outputText value="Activity Level:"/>
+                                    </td>
+                                    <td class="value">
+                                        <h:selectOneMenu id="activity-level" label="Activity Level"
+                                                         value="#{accountManager.selected.activityLevel}" required="true"
+                                                         requiredMessage="Activity Level is required." style="width: 360px;"
+                                                         styleClass="input-control #{component.valid?'':'validation-failed'}">
+                                            <f:selectItem itemValue="#{null}" itemLabel="--How active are you?--" />
+                                            <f:selectItem itemValue="0" itemLabel="I am exercising less than 1 hour per week" />
+                                            <f:selectItem itemValue="1" itemLabel="I am exercising about 2-5 hours per week" />
+                                            <f:selectItem itemValue="2" itemLabel="I am exercising about 5-7 hours per week" />
+                                            <f:selectItem itemValue="3" itemLabel="I am exercising for 8+ hours per week" />
+                                        </h:selectOneMenu>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label">
+                                        <h:outputText value="Activity Goal:"/>
+                                    </td>
+                                    <td class="value">
+                                        <h:selectOneMenu id="activity-goal" label="Activity Goal"
+                                                         value="#{accountManager.selected.activityGoal}" required="true"
+                                                         requiredMessage="Activity Goal is required." style="width: 360px;"
+                                                         styleClass="input-control #{component.valid?'':'validation-failed'}">
+                                            <f:selectItem itemValue="#{null}" itemLabel="--How active do you want to be?--" />
+                                            <f:selectItem itemValue="1" itemLabel="I want to spend some of my day being physical" />
+                                            <f:selectItem itemValue="2" itemLabel="I want to spend more of my day being physical" />
+                                            <f:selectItem itemValue="3" itemLabel="I want to spend most of my day being physical" />
+                                        </h:selectOneMenu>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label">
+                                        <h:outputText value="Password:"/>
+                                    </td>
+                                    <td class="value">
+                                        <h:inputSecret id="password" label="Password" 
+                                                       styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                                       required="true" requiredMessage="Password is required."
+                                                       style="width: 150px;">
+                                            <f:validator validatorId="passwordValidator" />
+                                        </h:inputSecret>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label">
+                                        <h:outputText value="Confirm Password:"/>
+                                    </td>
+                                    <td class="value">
+                                        <h:inputSecret id="confirm-password" label="Confirm Password" 
+                                                       styleClass="input-control #{component.valid?'':'validation-failed'}"
+                                                       required="true" requiredMessage="Confirm Password is required." 
+                                                       style="width: 150px;"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div id="advanced-messages-wrapper">
+                                <p:messages id="advanced-msgs" showIcon="false"/>
+                                <h:outputLabel id="advanced-error-message" class="error-message" 
+                                               value="#{accountManager.advancedStatusMessage}"/>
+                            </div>
+                            <h:commandButton id="edit-advanced-btn" class="btn noupdate" value="Edit Advanced Settings" type="button" />
+                            <p:commandButton id="edit-advanced-save-btn" class="btn noupdate" value="Save"
+                                             action="#{accountManager.updateAdvanced()}" update="@(form :not(.noupdate))"
+                                             oncomplete="if (!args.validationFailed) window.location.reload();" />
+                            <h:button id="edit-advanced-cancel-btn" class="btn noupdate" value="Cancel" outcome="MyAccount.xhtml" />
+                        </h:form>
+                    </div>
                 </div>
-                <a href="MyProgress.xhtml">View Progress</a>
+                
+                <!-- This div will appear as a dialog box when the user clicks the 
+                     "delete account" button -->
+                <div id="delete-dialog" title="Delete Account Confirmation">
+                    <h:form id="delete-dialog-form" enctype="multipart/form-data">
+                        <!-- Are your sure?! -->
+                        <div id="delete-text">
+                            Are you sure you really want to delete your account?<br/>
+                            This action cannot be undone.
+                        </div>
+                        <!-- Divider -->
+                        <hr style="margin: 15px 0 15px 0" />
+                        <!-- Delete / close buttons -->
+                        <h:button id="close-button" class="btn" 
+                                         value="Cancel" onclick="closeDialogs()"/>
+                        <h:commandButton id="yes-delete-button" class="btn" 
+                                         value="Yes, Delete Account" action="#{accountManager.deleteAccount()}"/>
+                    </h:form>
+                </div>
             </ui:define>
         </ui:composition>
     </h:body>

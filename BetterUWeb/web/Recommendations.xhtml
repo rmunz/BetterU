@@ -14,7 +14,7 @@
         <ui:composition template="template/siteTemplate.xhtml">
             <!-- Page title -->
             <title><ui:define name="title">BetterU</ui:define></title>
-
+            <!-- Additional CSS files needed -->
             <ui:define name="css">
                 <link rel="stylesheet" type="text/css" href="resources/css/recommendations.css"/>
             </ui:define>
@@ -23,20 +23,12 @@
 
             <!-- Page content -->
             <ui:define name="editableContent">
-                <div id="banner-wrapper">
-                    <div id="banner-inner-wrapper">
-                        <div id="banner-message" align="center">
-                            Let's Eat.<br/>
-                        </div>
-                    </div>
-                </div>
-                
-                <br /><br /><br /><br /><br /><br /><br />
+                <div id="page-title">Let's Eat!</div>
                 <div align="center">     
                     <h:outputLabel value ="#{recommmendationManager.statusMessage}" />
                     <h:outputLabel value="Your target for today is #{accountManager.selected.targetCalories} calories."/>
                     <br />
-                    <h:outputLabel value="Look's like you've got #{accountManager.selected.targetCalories - recommendationManager.calorieIntake} calories to go!"  />
+                    <h:outputLabel value="Look's like you've got #{accountManager.selected.targetCalories - recommendationManager.getToday().caloriesIn} calories to go!"  />
                     <br /><br /><br />
                     <h:form class="form-recommendation">
                         
@@ -57,7 +49,7 @@
 
                         <h:commandButton id="refresh"  action="#{recommendationManager.refresh()}" value="Submit" styleClass="buttonText"/>
                     </h:form>
-                    <br /><br /><br /><br /><br /><br /><br />
+                    <br /><br /><br /><br />
                     <p:dataTable class="rec-table" var="rec" value="#{recommendationManager.yummlyRecommendations}">
 
                         <p:column headerText="Recipie">
@@ -85,12 +77,12 @@
                         </p:column>
 
                     </p:dataTable>
-                    <br /><br /><br /><br /><br /><br /><br />
+                    <br /><br /><br /><br />
                   
                     <!-- adding in section for the USDA search after asking the two...-->
                     <h:form id="usda_search">
                             <span class="section-header">Please enter food to search for</span><br/><br/>
-                            <h:inputText id="first-name" label="Food to search for" 
+                            <h:inputText id="first-name" label="Food to search for" class="input-control"
                                              value="#{recommendationManager.foodToSearchForUSDA}"
                                              required="true" requiredMessage="Please enter a item to search for." />
                             
@@ -102,9 +94,6 @@
                     
                     <!--How to update the data table when button is hit? -->
                     <p:dataTable class="rec-table" var="rec" value="#{recommendationManager.usdaRecommendations}">
-                        <p:column headerText="Number">
-                            <h:outputText value="#{rec.offset}" />
-                        </p:column>
 
                         <p:column headerText="Food Group">
                             <h:outputText value="#{rec.foodGroup}" />
@@ -112,10 +101,6 @@
                         
                         <p:column headerText="Food Name">
                             <h:outputText value="#{rec.name}" />
-                        </p:column>
-                        
-                        <p:column headerText="Food Ndbno">
-                            <h:outputText value="#{rec.ndbno}" />
                         </p:column>
                         
                         <p:column headerText="KCal">
@@ -139,16 +124,15 @@
                         </p:column>
 
                     </p:dataTable>
-                    <br /><br /><br /><br /><br /><br /><br />
+                    <br /><br /><br /><br />
                     <h:form id="dailyEntry" class="form-daily-entry">
 
                         <h:outputLabel styleClass="outputLabel" for="caloriesin" value="Calories Eaten: " />
-                        <h:inputText class="form-control" id="caloriesin" value="#{recommendationManager.calorieIntake}"/>
+                        <h:inputText class="input-control" id="caloriesin" value="#{recommendationManager.calorieIntake}"/>
                         <br/>
 
                         <h:commandButton id="daily-submit"  action="#{recommendationManager.enterDailyIntake()}" value="Submit" styleClass="buttonText"/>
                     </h:form>
-                    <br /><br /><br /><br /><br /><br /><br />
                 </div>
             </ui:define>
         </ui:composition>

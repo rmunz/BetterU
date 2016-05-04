@@ -59,7 +59,9 @@ public class AccountManager implements Serializable {
     private String photo;
 
     private Map<String, Object> security_questions;
-    private String statusMessage;
+    private String statusMessage = "";
+    private String profileStatusMessage;
+    private String advancedStatusMessage;
     private User selected;
 
     /**
@@ -315,9 +317,24 @@ public class AccountManager implements Serializable {
     public void setStatusMessage(String statusMessage) {
         this.statusMessage = statusMessage;
     }
+    
+    public String getProfileStatusMessage() {
+        return this.profileStatusMessage;
+    }
+    
+    public void setProfileStatusMessage(String statusMessage) {
+        this.profileStatusMessage = statusMessage;
+    }
+    
+    public String getAdvancedStatusMessage() {
+        return this.advancedStatusMessage;
+    }
+    
+    public void setAdvancedStatusMessage(String statusMessage) {
+        this.advancedStatusMessage = statusMessage;
+    }
 
     public User getSelected() {
-
         selected = userFacade.find(FacesContext.getCurrentInstance().
                 getExternalContext().getSessionMap().get("user_id"));
 
@@ -367,10 +384,8 @@ public class AccountManager implements Serializable {
                 user.setTargetCalories(user.calcTargetCals());
                 user.setPoints(0);
                 user.setUnits('I');
-
-                sendEmail(email);
-                userFacade.create(user);
-
+                sendEmail(user, "create");
+                userFacade.create(user);    
                 Calendar c = Calendar.getInstance();
                 c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
                 for (int i = 0; i < 7; i++) {
@@ -378,8 +393,8 @@ public class AccountManager implements Serializable {
                     Progress progress = new Progress(user.getId(), (int) ((c.getTimeInMillis() - i * 86400000) / 1000));
                     progress.setCaloriesIn(0);
                     progress.setCaloriesOut(0);
-                    progress.setMiles(0);
-                    progress.setWeight((double) user.getWeight());
+                    progress.setMiles(0.0);
+                    progress.setWeight((double)user.getWeight());
                     progress.setSteps(0);
                     pf.create(progress);
                 }
@@ -396,16 +411,30 @@ public class AccountManager implements Serializable {
         return "";
     }
 
-    public void sendEmail(String userEmail) {
+    public void sendEmail(User user, String emailType) {
+
 
         SendGrid sendgrid = new SendGrid("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");
 
         SendGrid.Email email = new SendGrid.Email();
         //Sets up the email format to be sent.
-        email.addTo(userEmail);
+        email.addTo(user.getEmail());
         email.setFrom("BetterU");
-        email.setSubject("TEMPORARY EMAIL: Welcome to BetterU.");
-        email.setHtml("Thanks for signing up!");
+        
+        if(emailType.equals("create")) {
+            email.setSubject(user.getFirstName() + ", Welcome to BetterU.");
+            email.setHtml("Thanks for signing up!");
+        }
+        else if(emailType.equals("delete")) {       
+            email.setSubject("We're sorry to see you go, " + getFirstName());
+            email.setHtml("Come back to BetterU any time."); 
+        }
+        else { 
+            
+            email.setSubject("BetterU");
+            email.setHtml("BetterU."); 
+            
+        }
 
         //Send the email to the user using SendGrid, 
         //if it fails print the error statement
@@ -439,11 +468,20 @@ public class AccountManager implements Serializable {
         }
         return "";
     }
-
+    
+    public String updateProfile() {
+        return "";
+    }
+    
+    public String updateAdvanced() {
+        return "";
+    }
+    
     public String deleteAccount() {
         if (statusMessage.isEmpty()) {
             int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
             try {
+                sendEmail(selected, "delete");
                 userFacade.deleteUser(user_id);
 
             } catch (EJBException e) {
@@ -454,7 +492,7 @@ public class AccountManager implements Serializable {
 
             return "/index.xhtml?faces-redirect=true";
         }
-        return "";
+        return "/index.xhtml?faces-redirect=true";
     }
 
     public void validateInformation(ComponentSystemEvent event) {
@@ -482,6 +520,14 @@ public class AccountManager implements Serializable {
         } else {
             statusMessage = "";
         }
+    }
+    
+    public void validateProfile(ComponentSystemEvent event) {
+        
+    }
+    
+    public void validateAdvanced(ComponentSystemEvent event) {
+        
     }
 
     public void initializeSessionMap() {

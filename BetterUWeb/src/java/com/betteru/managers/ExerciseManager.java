@@ -74,7 +74,7 @@ public class ExerciseManager implements Serializable{
         Progress entry = progressFacade.getProgressEntry(user_id, epochMidnight);
         
        
-        caloriesOut = ((int)(intensity * 3.5 * (userFacade.getUser(user_id).getWeight()*2.2))/200) * duration;
+        caloriesOut = ((int)(intensity * 3.5 * (userFacade.getUser(user_id).getWeight()*0.453592))/200) * duration;
         if(entry != null) {
             //update progress entry
             try {   
@@ -112,7 +112,7 @@ public class ExerciseManager implements Serializable{
         Progress progress = new Progress(user_id, (int)(c.getTimeInMillis()/1000));
         progress.setCaloriesIn(0);
         progress.setCaloriesOut(caloriesOut);
-        progress.setMiles(0);
+        progress.setMiles(0.0);
         progress.setWeight(weight);
         progress.setSteps(0);
         
@@ -187,7 +187,7 @@ public class ExerciseManager implements Serializable{
         
         int user_id = user.intValue();
         
-        caloriesOut = ((int)(intensity * 3.5 * (userFacade.getUser(user_id).getWeight()*2.2))/200) * duration;
+        caloriesOut = ((int)(intensity * 3.5 * (userFacade.getUser(user_id).getWeight()*0.453592))/200) * duration;
 
     } 
     

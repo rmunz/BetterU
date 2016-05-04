@@ -5,6 +5,7 @@
 package com.betteru.entitypackage.service.challenges;
 
 import com.betteru.entitypackage.DailyChallenges;
+import com.betteru.entitypackage.User;
 import com.betteru.entitypackage.UserIndex;
 import com.betteru.entitypackage.UserIndexPK;
 import com.betteru.entitypackage.WeeklyChallenges;
@@ -23,6 +24,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.PathSegment;
 import java.util.Random;
+import java.util.Scanner;
+import javax.persistence.Query;
 
 /**
  *
@@ -194,10 +197,12 @@ public class UserIndexFacadeREST extends AbstractFacade<UserIndex> {
             index = userInd.getInd();
         }
 
-        index++;
-        // if(index > 12) {
-        //     index = 1;
-        //}
+        
+        if(index < 50) {
+            index = 1;
+        } else {
+            index++;
+        }
 
         if (em.createQuery("SELECT dc FROM DailyChallenges dc WHERE dc.ind = :index AND dc.challengeType = :ctype")
                 .setParameter("index", index).setParameter("ctype", challengeType)
@@ -214,7 +219,7 @@ public class UserIndexFacadeREST extends AbstractFacade<UserIndex> {
     @Produces({MediaType.APPLICATION_JSON})
     public WeeklyChallenges setNextWeeklyChallengeForUserId(@PathParam("uid") int uid) {
 
-        int index;
+        int index = 0;
         if (em.createQuery("SELECT u FROM UserIndex u WHERE u.userIndexPK.challengeType = :ctype AND u.userIndexPK.userID = :uid")
                 .setParameter("uid", uid).setParameter("ctype", "Weekly")
                 .getResultList().isEmpty()) {
@@ -225,12 +230,13 @@ public class UserIndexFacadeREST extends AbstractFacade<UserIndex> {
             // Attempt to increment to next Challenge in Challenges table
             index = userInd.getInd();
         }
-
-        index++;
-        if (index > 7) {
+        
+        if(index < 7) {
+            index++;
+        } else {
             index = 1;
         }
-
+        
         if (em.createQuery("SELECT wc FROM WeeklyChallenges wc WHERE wc.ind = :index")
                 .setParameter("index", index)
                 .getResultList().isEmpty()) {
@@ -242,10 +248,140 @@ public class UserIndexFacadeREST extends AbstractFacade<UserIndex> {
     }
 
     @GET
-    @Path("completeChallengeForUserId={uid}{ct}")
-    public void completeChallengeForUserId(@PathParam("uid") int uid, @PathParam("ct") String challengeType) {
+    @Path("completeChallengeForUserId={uidAndChallengeType}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public void completeChallengeForUserId(@PathParam("uidAndChallengeType") String param) {
+        
+        String[] temp = param.split("_");
+        int uid = Integer.parseInt(temp[0]);
+        String challengeType = temp[1];
+        
+        //List<DailyChallenges> dailyChallengesList = em.createQuery("SELECT dc FROM DailyChallenges dc").getResultList();
+        List<WeeklyChallenges> weeklyChallengesList = em.createQuery("SELECT dc FROM WeeklyChallenges dc").getResultList();
+        //int numDailyChallenges = dailyChallengesList.size();
+        int numWeeklyChallenges = weeklyChallengesList.size();
 
-        em.createQuery("UPDATE UserIndex u SET u.ind = u.ind + 1 WHERE u.userIndexPK.challengeType = :ctype AND u.userIndexPK.userID = :uid")
-                .setParameter("uid", uid).setParameter("ctype", challengeType);
+        
+        int awardedPoints = 0;
+        UserIndex userIndex = (UserIndex) em.createQuery("SELECT ui FROM UserIndex ui WHERE ui.userIndexPK.userID = :uid AND ui.userIndexPK.challengeType = :ct")
+                .setParameter("uid", uid).setParameter("ct",challengeType).getSingleResult(); 
+        int index = userIndex.getInd() + 1;
+        int queryInd = 0;
+        if (challengeType.equals("Weekly")) {
+            
+            if((index) == numWeeklyChallenges ) {
+                index = 0;
+                queryInd = 1;
+            }
+            else {
+                queryInd = index;
+            }
+            WeeklyChallenges weeklyChallenge = (WeeklyChallenges) em.createQuery("SELECT wc FROM WeeklyChallenges wc WHERE wc.ind = :index")
+                .setParameter("index", queryInd).getSingleResult();
+            awardedPoints = weeklyChallenge.getPointsAwarded();
+            // Update user index to point to next weekly challenge
+            em.createQuery("UPDATE UserIndex u SET u.ind = :index WHERE u.userIndexPK.challengeType = :ctype AND u.userIndexPK.userID = :uid")
+                .setParameter("uid", uid).setParameter("ctype", "Weekly").setParameter("index", index).executeUpdate();   
+            
+        } else {
+            
+            List<DailyChallenges> dailyChallengesOfCType;
+            dailyChallengesOfCType = em.createQuery("SELECT dc FROM DailyChallenges dc WHERE dc.challengeType = :ctype")
+                    .setParameter("ctype", challengeType).getResultList();
+            int numCType = dailyChallengesOfCType.size();
+            
+            // Prevents the user from exceeding the maximum index for a specific challenge type
+            if((index) >= numCType) {
+                index = 0;
+                queryInd = 1;
+            } else {
+                queryInd = index;
+            }
+            DailyChallenges dailyChallenge = (DailyChallenges) em.createQuery("SELECT dc FROM DailyChallenges dc WHERE dc.ind = :index AND dc.challengeType = :ctype")
+                .setParameter("index", queryInd).setParameter("ctype", challengeType).getSingleResult();
+            awardedPoints = dailyChallenge.getPointsAwarded();
+            // Update user index to point to next daily challenge
+            em.createQuery("UPDATE UserIndex u SET u.ind = :index WHERE u.userIndexPK.challengeType = :ctype AND u.userIndexPK.userID = :uid")
+                .setParameter("uid", uid).setParameter("ctype", challengeType).setParameter("index", index).executeUpdate();  
+        }
+        
+        int currentUserPoints = ((User) em.createQuery("SELECT u FROM User u WHERE u.id = :uid")
+                    .setParameter("uid", uid).getSingleResult()).getPoints() + awardedPoints;
+        
+        em.createQuery("UPDATE User u SET u.points = :pts WHERE u.id = :uid")
+                    .setParameter("uid", uid).setParameter("pts", currentUserPoints).executeUpdate();
     }
+    
+    @GET
+    @Path("vetoDailyChallengeForUserId={uidAndChallengeType}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public DailyChallenges vetoChallengeForUserId(@PathParam("uidAndChallengeType") String param) {
+        
+        String[] temp = param.split("_");
+        int uid = Integer.parseInt(temp[0]);
+        String oldChallengeType = temp[1];
+	DailyChallenges dc;
+        Random generator = new Random();
+        String challengeType = "";
+        int randomChallengeType = generator.nextInt(4);
+
+	do {
+        switch (randomChallengeType) {
+            case 0:
+                challengeType = "Core";
+                break;
+            case 1:
+                challengeType = "Upper";
+                break;
+            case 2:
+                challengeType = "Lower";
+                break;
+            default:
+                challengeType = "Cardio";
+                break;
+        }
+        
+        randomChallengeType = generator.nextInt(4);
+        }
+        while (challengeType.equals(oldChallengeType));
+        
+        int index;
+        if (em.createQuery("SELECT u FROM UserIndex u WHERE u.userIndexPK.challengeType = :ctype AND u.userIndexPK.userID = :uid")
+                .setParameter("uid", uid).setParameter("ctype", challengeType)
+                .getResultList().isEmpty()) {
+            return null;
+        } else {
+            UserIndex userInd = (UserIndex) em.createQuery("SELECT u FROM UserIndex u WHERE u.userIndexPK.challengeType = :ctype AND u.userIndexPK.userID = :uid")
+                    .setParameter("uid", uid).setParameter("ctype", challengeType).getSingleResult();
+            // Attempt to increment to next Challenge in Challenges table
+            index = userInd.getInd();
+        }
+
+        index++;
+
+        if (em.createQuery("SELECT dc FROM DailyChallenges dc WHERE dc.ind = :index AND dc.challengeType = :ctype")
+                .setParameter("index", index).setParameter("ctype", challengeType)
+                .getResultList().isEmpty()) {
+            return null;
+        } else {
+            return (DailyChallenges) em.createQuery("SELECT dc FROM DailyChallenges dc WHERE dc.ind = :index AND dc.challengeType = :ctype")
+                    .setParameter("index", index).setParameter("ctype", challengeType).getSingleResult();
+        }
+    }
+    
+    /**
+    @GET
+    @Path("updateIndicesTables")
+    public void updateIndicesTablesForAllUsers() {
+        List<User> userList = em.createQuery("SELECT u FROM User u").getResultList();
+        
+        for (User u : userList) {
+            int uid = u.getId();
+            if (em.createQuery("SELECT u FROM UserIndex u WHERE u.userIndexPK.userID = :uid")
+                .setParameter("uid", uid).getResultList().isEmpty()) {
+                this.createIndicesForUserId(uid);
+            }
+                
+        }
+    }*/
 }
