@@ -30,7 +30,7 @@ public class WeeklyChallengesFacade extends AbstractFacade<WeeklyChallenges> {
     
     /* Added methods */
     
-    public WeeklyChallenges findWeeklyChallengeWithInd(int index) {
+    public WeeklyChallenges getWeeklyChallengeAtInd(int index) {
         if(em.createQuery("SELECT wc FROM WeeklyChallenges wc WHERE wc.ind = :index")
                 .setParameter("index", index).getResultList().isEmpty()) {
             return null;
