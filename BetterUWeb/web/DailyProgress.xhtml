@@ -18,24 +18,23 @@ Copyright © 2016 Osman Balci. All rights reserved.
             <ui:define name="css">
                 <link rel="stylesheet" type="text/css" href="resources/css/recommendations.css"/>
                 <link rel="stylesheet" type="text/css" href="resources/css/circle.css"/>
+                <link rel="stylesheet" href="http://github.hubspot.com/odometer/themes/odometer-theme-minimal.css" />
             </ui:define>
             <!-- Additional JS files needed -->
+            <ui:define name="js">
+                <script src="resources/js/odometer.min.js"></script>
+            </ui:define>
             
             <!-- Page content -->
             <ui:define name="editableContent">
                 <div id="page-title">My Overview Today</div>
                 <div align="center">
                     <div>
-                        <div>
-                        <h:button class="btn" value="Log Food" outcome="Recommendations.xhtml" />
-                        &nbsp;&nbsp;
-                        <h:button class="btn" value="Log Exercise" outcome="LoggingExercise.xhtml" />
-                        </div>
                         <h2>Your Daily Totals</h2>
                         <h:panelGrid columns="3" cellpadding="1" >
                             
                             <column>
-                                <div class="c100 p#{recommendationManager.getGoalPercentage(accountManager.selected.targetCalories)} big #{recommendationManager.checkOver}">
+                                <div id="progCir" class="c100 p#{recommendationManager.getGoalPercentage(accountManager.selected.targetCalories)} big #{recommendationManager.checkOver}">
                                     <span> #{recommendationManager.getGoalPercentage(accountManager.selected.targetCalories)}%</span>
                                     <div class="slice">
                                       <div class="bar"></div>
@@ -45,23 +44,11 @@ Copyright © 2016 Osman Balci. All rights reserved.
                             </column>
                             
                             <column>
-                                <div class="c100 p50 big">
-                                    <span>25%</span>
-                                    <div class="slice">
-                                      <div class="bar"></div>
-                                      <div class="fill"></div>
-                                    </div>
-                                  </div>
+                         
                             </column>
                             
                             <column>
-                                <div class="c100 p50 big">
-                                    <span>25%</span>
-                                    <div class="slice">
-                                      <div class="bar"></div>
-                                      <div class="fill"></div>
-                                    </div>
-                                  </div>
+          
                             </column>
                             
                             
@@ -69,25 +56,44 @@ Copyright © 2016 Osman Balci. All rights reserved.
                         <table>
                             <tr>
                                 <td style="padding-right: 10px; text-align: right;">Calories Eaten:</td>
-                                <td>#{recommendationManager.getToday().caloriesIn}</td>
+                                <td id="cIn" class="odometer" style="font-size: 30px;"> 0 </td>
                             </tr>
                             <tr>
                                 <td style="padding-right: 10px; text-align: right;">Calories Burned:</td>
-                                <td>#{exerciseManager.getToday().caloriesOut}</td>
+                                <td id="cOut" class="odometer" style="font-size: 30px;">#{exerciseManager.getToday().caloriesOut}</td>
                             </tr>
                             <tr>
                                 
                             </tr>
                             <tr>
                                 <td style="padding-right: 10px; text-align: right;">Calories Remaining:</td>
-                                <td>#{accountManager.selected.targetCalories - recommendationManager.getToday().caloriesIn}</td>
+                                <td id="cRem" class="odometer" style="font-size: 30px;">#{accountManager.selected.targetCalories}</td>
                             </tr>
                             <tr>
                                 <td style="padding-right: 10px; text-align: right;">Weight:</td>
-                                <td>#{exerciseManager.getToday().weight}</td>
+                                <td style="font-size: 30px;">#{exerciseManager.getToday().weight}</td>
                             </tr>
 
                         </table>
+                        
+                        <script>
+                            var calIn  = document.getElementById('cIn');
+                            var calOut = document.getElementById('cOut');
+                            var CalRem = document.getElementById('cRem');
+                            var progressCir = document.getElementById('progCir');
+                            setTimeout(function(){
+                                calIn.innerHTML = #{recommendationManager.getToday().caloriesIn};
+                                calOut.innerHTML = #{exerciseManager.getToday().caloriesOut};
+                                calRem.innerHTML = #{accountManager.selected.targetCalories - recommendationManager.getToday().caloriesIn};
+                            }, 1000);
+                        </script>
+                    </div>
+                    
+                    <br/><br/><br/><br/>
+                    <div>
+                        <h:button class="btn" value="Log Food" outcome="Recommendations.xhtml" />
+                        &nbsp;&nbsp;
+                        <h:button class="btn" value="Log Exercise" outcome="LoggingExercise.xhtml" />
                     </div>
                     
                     <br/><br/>
