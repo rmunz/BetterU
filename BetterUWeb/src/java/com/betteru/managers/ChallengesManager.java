@@ -26,9 +26,11 @@ import javax.faces.context.FacesContext;
 public class ChallengesManager implements Serializable {
 
     private User selected;
-    private List<DailyChallenges> currentUserDailyChallenges;
-    private WeeklyChallenges currentUserWeeklyChallenge;
-    private boolean weeklyChallengeCompleted;
+    private List<DailyChallenges> completedUserDailyChallenges;
+    private List<WeeklyChallenges>  completedUserWeeklyChallenges;
+    private DailyChallenges currentDailyChallenges;
+    private WeeklyChallenges currentWeeklyChallenge;
+    //private boolean weeklyChallengeCompleted;
 
     /**
      * The instance variable 'UserIndexFacade' is annotated with the @EJB
@@ -67,38 +69,36 @@ public class ChallengesManager implements Serializable {
     private UserFacade userFacade;
 
     public ChallengesManager() {
-        weeklyChallengeCompleted = false;
-    }
-
-    public List<DailyChallenges> getCurrentUserDailyChallenges() {
-        return currentUserDailyChallenges;
-    }
-
-    public void setCurrentUserDailyChallenges(List<DailyChallenges> currentUserDailyChallenges) {
-        this.currentUserDailyChallenges = currentUserDailyChallenges;
-    }
-
-    public WeeklyChallenges getCurrentUserWeeklyChallenge() {
-        return currentUserWeeklyChallenge;
-    }
-
-    public void setCurrentUserWeeklyChallenge(WeeklyChallenges currentUserWeeklyChallenge) {
-        this.currentUserWeeklyChallenge = currentUserWeeklyChallenge;
+        //weeklyChallengeCompleted = false;
     }
     
+    /**
+     * 
+     */
     public void setChallengesDisplay() {
         User selectedUser = this.getSelected();
         if(selected != null) {
             List<UserIndex> userIndices = userIndexFacade.
                     retrieveEntriesForUserId(selectedUser.getId());
-            currentUserDailyChallenges = new ArrayList<DailyChallenges>();
-
+            this.completedUserDailyChallenges = new ArrayList<DailyChallenges>();
+            this.completedUserWeeklyChallenges = new ArrayList<WeeklyChallenges>();
+            
             for(UserIndex u: userIndices) {
-                if(!u.getUserIndexPK().getChallengeType().equals("Weekly")) {
-                    currentUserDailyChallenges.add(dailyChallengesFacade.getChallengeAtIndWithType(u.getInd(), u.getUserIndexPK().getChallengeType()));
+                String currChallengeType = u.getUserIndexPK().getChallengeType();
+                int ind = u.getInd();
+                if(!currChallengeType.equals("Weekly")) {
+                    for(int i = 1; i <= ind; i++) {                       
+                        completedUserDailyChallenges.add(dailyChallengesFacade.getChallengeAtIndWithType(i, currChallengeType));
+                    }
                 } else {
-                    this.weeklyChallengeCompleted = true;
-                    currentUserWeeklyChallenge = weeklyChallengesFacade.findWeeklyChallengeWithInd(u.getInd());
+                    for(int i = 1; i <= ind; i++) {
+                        completedUserWeeklyChallenges.add(weeklyChallengesFacade.getWeeklyChallengeAtInd(i));
+                        if(i == ind && ind < 7) {
+                            this.currentWeeklyChallenge = weeklyChallengesFacade.getWeeklyChallengeAtInd(i + 1);
+                        } else if(i == ind) {
+                            this.currentWeeklyChallenge = weeklyChallengesFacade.getWeeklyChallengeAtInd(1);
+                        }                        
+                    }
                 }
             }
         }
@@ -111,14 +111,6 @@ public class ChallengesManager implements Serializable {
         }
         return selected;
     }
-
-    public boolean isWeeklyChallengeCompleted() {
-        return weeklyChallengeCompleted;
-    }
-
-    public void setWeeklyChallengeCompleted(boolean weeklyChallengeCompleted) {
-        this.weeklyChallengeCompleted = weeklyChallengeCompleted;
-    } 
 
     public UserIndexFacade getUserIndexFacade() {
         return userIndexFacade;
@@ -151,6 +143,36 @@ public class ChallengesManager implements Serializable {
     public void setUserFacade(UserFacade userFacade) {
         this.userFacade = userFacade;
     }
-    
-    
+
+    public List<DailyChallenges> getCompletedUserDailyChallenges() {
+        return completedUserDailyChallenges;
+    }
+
+    public void setCompletedUserDailyChallenges(List<DailyChallenges> completedUserDailyChallenges) {
+        this.completedUserDailyChallenges = completedUserDailyChallenges;
+    }
+
+    public List<WeeklyChallenges> getCompletedUserWeeklyChallenges() {
+        return completedUserWeeklyChallenges;
+    }
+
+    public void setCompletedUserWeeklyChallenges(List<WeeklyChallenges> completedUserWeeklyChallenges) {
+        this.completedUserWeeklyChallenges = completedUserWeeklyChallenges;
+    }    
+
+    public DailyChallenges getCurrentDailyChallenges() {
+        return currentDailyChallenges;
+    }
+
+    public void setCurrentDailyChallenges(DailyChallenges currentDailyChallenges) {
+        this.currentDailyChallenges = currentDailyChallenges;
+    }
+
+    public WeeklyChallenges getCurrentWeeklyChallenge() {
+        return currentWeeklyChallenge;
+    }
+
+    public void setCurrentWeeklyChallenge(WeeklyChallenges currentWeeklyChallenge) {
+        this.currentWeeklyChallenge = currentWeeklyChallenge;
+    }   
 }
