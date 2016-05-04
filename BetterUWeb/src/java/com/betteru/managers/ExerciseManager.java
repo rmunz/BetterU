@@ -112,8 +112,17 @@ public class ExerciseManager implements Serializable{
         Progress progress = new Progress(user_id, (int)(c.getTimeInMillis()/1000));
         progress.setCaloriesIn(0);
         progress.setCaloriesOut(caloriesOut);
-        progress.setMiles(0);
-        progress.setWeight(weight);
+        progress.setMiles(0.0);
+        
+        User user = userFacade.find(user_id);
+        if(weight != 0.0) {
+            progress.setWeight(weight);
+            user.setWeight((int)weight);
+        }
+        else {
+            progress.setWeight((double)user.getWeight());
+        }
+        
         progress.setSteps(0);
         
         progressFacade.create(progress);

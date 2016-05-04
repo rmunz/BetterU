@@ -48,7 +48,8 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Override
     @Consumes({MediaType.APPLICATION_JSON})
     public void create(User entity) {
-
+        super.create(entity);
+        
         SendGrid sendgrid = new SendGrid("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");
         
         SendGrid.Email email = new SendGrid.Email();
@@ -67,20 +68,6 @@ public class UserFacadeREST extends AbstractFacade<User> {
         catch (SendGridException e) {
             System.err.println(e);
         }
-        
-        Calendar c = Calendar.getInstance();
-        c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
-        for(int i = 0; i < 7; i++) {
-            //...Perform a task...
-            Progress progress = new Progress(entity.getId(), (int)((c.getTimeInMillis()-i*86400000)/1000));
-            progress.setCaloriesIn(0);
-            progress.setCaloriesOut(0);
-            progress.setMiles(0);
-            progress.setWeight((double)entity.getWeight());
-            progress.setSteps(0);
-            pf.create(progress);
-        }
-        super.create(entity);
     }
 
     @PUT
