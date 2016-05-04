@@ -26,8 +26,8 @@ import javax.faces.context.FacesContext;
 public class ChallengesManager implements Serializable {
 
     private User selected;
-    private List<DailyChallenges> currentUserDailyChallenges;
-    private WeeklyChallenges currentUserWeeklyChallenge;
+    private List<DailyChallenges> completedUserDailyChallenges;
+    private List<WeeklyChallenges>  completedUserWeeklyChallenges;
     private boolean weeklyChallengeCompleted;
 
     /**
@@ -69,22 +69,6 @@ public class ChallengesManager implements Serializable {
     public ChallengesManager() {
         weeklyChallengeCompleted = false;
     }
-
-    public List<DailyChallenges> getCurrentUserDailyChallenges() {
-        return currentUserDailyChallenges;
-    }
-
-    public void setCurrentUserDailyChallenges(List<DailyChallenges> currentUserDailyChallenges) {
-        this.currentUserDailyChallenges = currentUserDailyChallenges;
-    }
-
-    public WeeklyChallenges getCurrentUserWeeklyChallenge() {
-        return currentUserWeeklyChallenge;
-    }
-
-    public void setCurrentUserWeeklyChallenge(WeeklyChallenges currentUserWeeklyChallenge) {
-        this.currentUserWeeklyChallenge = currentUserWeeklyChallenge;
-    }
     
     /**
      * Make this display previously completed challenges along with points awarded
@@ -94,14 +78,23 @@ public class ChallengesManager implements Serializable {
         if(selected != null) {
             List<UserIndex> userIndices = userIndexFacade.
                     retrieveEntriesForUserId(selectedUser.getId());
-            currentUserDailyChallenges = new ArrayList<DailyChallenges>();
-
+            this.completedUserDailyChallenges = new ArrayList<DailyChallenges>();
+            this.completedUserWeeklyChallenges = new ArrayList<WeeklyChallenges>();
+            
             for(UserIndex u: userIndices) {
-                if(!u.getUserIndexPK().getChallengeType().equals("Weekly")) {
-                    currentUserDailyChallenges.add(dailyChallengesFacade.getChallengeAtIndWithType(u.getInd(), u.getUserIndexPK().getChallengeType()));
+                String currChallengeType = u.getUserIndexPK().getChallengeType();
+                int ind = u.getInd();
+                if(!currChallengeType.equals("Weekly")) {
+                    //List<DailyChallenges> temp = dailyChallengesFacade.getChallengesWithType(currChallengeType);
+                    for(int i = 1; i <= ind; i++) {                       
+                        completedUserDailyChallenges.add(dailyChallengesFacade.getChallengeAtIndWithType(i, currChallengeType));
+                    }
                 } else {
-                    this.weeklyChallengeCompleted = true;
-                    currentUserWeeklyChallenge = weeklyChallengesFacade.findWeeklyChallengeWithInd(u.getInd());
+                    for(int i = 1; i <= ind; i++) {
+                        completedUserWeeklyChallenges.add(weeklyChallengesFacade.getWeeklyChallengeAtInd(i));
+                    }
+                    //this.weeklyChallengeCompleted = true;
+                    //currentUserWeeklyChallenges.add(weeklyChallengesFacade.findWeeklyChallengeWithInd(u.getInd()));
                 }
             }
         }
@@ -154,6 +147,20 @@ public class ChallengesManager implements Serializable {
     public void setUserFacade(UserFacade userFacade) {
         this.userFacade = userFacade;
     }
-    
-    
+
+    public List<DailyChallenges> getCompletedUserDailyChallenges() {
+        return completedUserDailyChallenges;
+    }
+
+    public void setCompletedUserDailyChallenges(List<DailyChallenges> completedUserDailyChallenges) {
+        this.completedUserDailyChallenges = completedUserDailyChallenges;
+    }
+
+    public List<WeeklyChallenges> getCompletedUserWeeklyChallenges() {
+        return completedUserWeeklyChallenges;
+    }
+
+    public void setCompletedUserWeeklyChallenges(List<WeeklyChallenges> completedUserWeeklyChallenges) {
+        this.completedUserWeeklyChallenges = completedUserWeeklyChallenges;
+    }    
 }

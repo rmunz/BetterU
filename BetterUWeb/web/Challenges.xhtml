@@ -38,13 +38,17 @@ Copyright © 2016 Timothy Street. All rights reserved.
                 
                 <br/><br/><br/><br/>
                 <div align="center">                        
-                    <div id="challenges-list-div">                        
-                        <h1>Daily Challenges Progress:</h1>
-                        <h:form id="challenges-daily-list-form">
+                    <div id="challenges-list-div">
+                        <h1>Current Challenges:</h1>
+                        <h:form id="current-challenges-list-form">
+                            <!--- ? -->
+                        </h:form>
+                        <h1>Completed Daily Challenges:</h1>
+                        <h:form id="completed-challenges-daily-list-form">
                             <c:choose>                               
                                 <!-- Display challenges list if it's not empty -->
-                                <c:when test="#{!empty challengesManager.currentUserDailyChallenges}">                                   
-                                    <ui:repeat value="#{challengesManager.currentUserDailyChallenges}" var="dc">
+                                <c:when test="#{!empty challengesManager.completedUserDailyChallenges}">                                   
+                                    <ui:repeat value="#{challengesManager.completedUserDailyChallenges}" var="dc">
                                         <h:outputText value="#{dc.challengeType}"/>
                                         <br/>
                                         <h:outputText value="#{dc.description}"/>
@@ -52,30 +56,33 @@ Copyright © 2016 Timothy Street. All rights reserved.
                                         <h:outputText value="#{dc.pointsAwarded}"/>
                                     </ui:repeat>
                                 </c:when>
-                                <!-- Display message if pins list is empty -->
-                                <c:when test="#{empty challengesManager.currentUserDailyChallenges}">
+                                <!-- Otherwise display message indicating no challenges have been completed -->
+                                <c:when test="#{empty challengesManager.completedUserDailyChallenges}">
                                     <h:outputText value="You haven't completed any daily challenges yet."/>
                                 </c:when>
                             </c:choose>
                         </h:form>
                         <br/><br/><br/>
-                        <h1>Weekly Challenges Progress:</h1>
-                        <h:form id="challenges-weekly-list-form">    
+                        <h1>Completed Weekly Challenges:</h1>
+                        <h:form id="completed-challenges-weekly-list-form">    
                             <c:choose>
-                                <c:when test="#{challengesManager.weeklyChallengeCompleted}">
-                                    <h:outputText value="#{challengesManager.currentUserWeeklyChallenge.description}"/>
-                                    <br/>
-                                    <h:outputText value="#{challengesManager.currentUserWeeklyChallenge.pointsAwarded}"/>
+                                <!-- Display challenges list if it's not empty -->
+                                <c:when test="#{!empty challengesManager.completedUserWeeklyChallenges}">                                   
+                                    <ui:repeat value="#{challengesManager.completedUserWeeklyChallenges}" var="wc">
+                                        <h:outputText value="#{wc.description}"/>
+                                        <br/>
+                                        <h:outputText value="#{wc.pointsAwarded}"/>
+                                    </ui:repeat>
                                 </c:when>
-                                <c:when test="#{!challengesManager.weeklyChallengeCompleted}">
-                                        <h:outputText value="You haven't completed any weekly challenges yet."/>
+                                <!-- Otherwise display message indicating no challenges have been completed -->
+                                <c:when test="#{empty challengesManager.completedUserWeeklyChallenges}">
+                                    <h:outputText value="You haven't completed any weekly challenges yet."/>
                                 </c:when>
-                            </c:choose>                                   
-                        </h:form>
-                        <h1>Weekly Challenges Progress:</h1>
+                            </c:choose>                                
+                        </h:form>                        
                         <h:form id="hidden-btn-form">
                             <h:commandButton id="challenges-display-btn" style="display: none" action="#{challengesManager.setChallengesDisplay()}">
-                                <f:ajax execute="@form" render=":challenges-daily-list-form :challenges-weekly-list-form"/>
+                                <f:ajax execute="@form" render=":completed-challenges-daily-list-form :completed-challenges-weekly-list-form"/>
                             </h:commandButton>
                         </h:form>
                     </div>
