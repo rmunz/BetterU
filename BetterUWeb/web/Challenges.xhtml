@@ -37,32 +37,51 @@ Copyright © 2016 Timothy Street. All rights reserved.
                 </div>
                 
                 <br/><br/><br/><br/>
-                <div style="width:50%;padding-left:40%" align="left">                        
+                <div style="width:60%;padding-left:20%" align="left">                        
                     <div id="challenges-list-div">
                         <h1>Current Challenges:</h1>
                         <h:form id="current-challenges-list-form">
-                            Daily
+                            <h2>Daily</h2>
+                            <p:dataTable value="#{challengesManager.currentDailyChallenges}" var="dc"> 
+                                <p:column headerText="Challenge Type">
+                                    <h:outputText value="#{dc.challengeType}"/>
+                                </p:column>
+                                <p:column headerText="Description">
+                                    <h:outputText value="#{dc.description}"/>
+                                </p:column>
+                            </p:dataTable>
                             <br/>
-                            TODO: Implement this
                             <br/>
-                            <br/>
-                            Weekly
-                            <br/>
-                            <h:outputText value="#{challengesManager.currentWeeklyChallenge.description}"/>
+                            <h2>Weekly</h2>
+                            <p:dataTable value="#{challengesManager.currentWeeklyChallenge}" var="wc"> 
+                                <p:column headerText="Challenge Type">
+                                    <h:outputText value="Weekly"/>
+                                </p:column>
+                                <p:column headerText="Description">
+                                    <h:outputText value="#{wc.description}"/>
+                                </p:column>
+                            </p:dataTable>
                         </h:form>
                         <br/><br/><br/>
                         <h1>Completed Daily Challenges:</h1>
                         <h:form id="completed-challenges-daily-list-form">
                             <c:choose>                               
                                 <!-- Display challenges list if it's not empty -->
-                                <c:when test="#{!empty challengesManager.completedUserDailyChallenges}">                                   
-                                    <ui:repeat value="#{challengesManager.completedUserDailyChallenges}" var="dc">
-                                        <h:outputText value="#{dc.challengeType}"/>
-                                        <br/>
-                                        <h:outputText value="#{dc.description}"/>
-                                        <br/>
-                                        <h:outputText value="#{dc.pointsAwarded}"/>
-                                    </ui:repeat>
+                                <c:when test="#{!empty challengesManager.completedUserDailyChallenges}">                                  
+                                    <p:dataTable value="#{challengesManager.completedUserDailyChallenges}" var="dc"
+                                                 paginator="true"
+                                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 rowsPerPageTemplate="5,10">
+                                        <p:column headerText="Challenge Type">
+                                            <h:outputText value="#{dc.challengeType}" />
+                                        </p:column>
+                                        <p:column headerText="Description">
+                                            <h:outputText value="#{dc.description}" />
+                                        </p:column>
+                                        <p:column headerText="Points Awarded">
+                                            <h:outputText value="#{dc.pointsAwarded}" />
+                                        </p:column>
+                                    </p:dataTable>                                    
                                 </c:when>
                                 <!-- Otherwise display message indicating no challenges have been completed -->
                                 <c:when test="#{empty challengesManager.completedUserDailyChallenges}">
@@ -76,11 +95,20 @@ Copyright © 2016 Timothy Street. All rights reserved.
                             <c:choose>
                                 <!-- Display challenges list if it's not empty -->
                                 <c:when test="#{!empty challengesManager.completedUserWeeklyChallenges}">                                   
-                                    <ui:repeat value="#{challengesManager.completedUserWeeklyChallenges}" var="wc">
-                                        <h:outputText value="#{wc.description}"/>
-                                        <br/>
-                                        <h:outputText value="#{wc.pointsAwarded}"/>
-                                    </ui:repeat>
+                                    <p:dataTable value="#{challengesManager.completedUserWeeklyChallenges}" var="wc"
+                                                 paginator="true"
+                                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 rowsPerPageTemplate="5,10">
+                                        <p:column headerText="Challenge Type">
+                                            <h:outputText value="Weekly"/>
+                                        </p:column>
+                                        <p:column headerText="Description">
+                                            <h:outputText value="#{wc.description}"/>
+                                        </p:column>
+                                        <p:column headerText="Points Awarded">
+                                            <h:outputText value="#{wc.pointsAwarded}"/>
+                                         </p:column>
+                                    </p:dataTable>
                                 </c:when>
                                 <!-- Otherwise display message indicating no challenges have been completed -->
                                 <c:when test="#{empty challengesManager.completedUserWeeklyChallenges}">
