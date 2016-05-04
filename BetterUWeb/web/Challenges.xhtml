@@ -37,12 +37,20 @@ Copyright © 2016 Timothy Street. All rights reserved.
                 </div>
                 
                 <br/><br/><br/><br/>
-                <div align="center">                        
+                <div style="width:50%;padding-left:40%" align="left">                        
                     <div id="challenges-list-div">
                         <h1>Current Challenges:</h1>
                         <h:form id="current-challenges-list-form">
-                            <!--- ? -->
+                            Daily
+                            <br/>
+                            TODO: Implement this
+                            <br/>
+                            <br/>
+                            Weekly
+                            <br/>
+                            <h:outputText value="#{challengesManager.currentWeeklyChallenge.description}"/>
                         </h:form>
+                        <br/><br/><br/>
                         <h1>Completed Daily Challenges:</h1>
                         <h:form id="completed-challenges-daily-list-form">
                             <c:choose>                               
@@ -82,7 +90,7 @@ Copyright © 2016 Timothy Street. All rights reserved.
                         </h:form>                        
                         <h:form id="hidden-btn-form">
                             <h:commandButton id="challenges-display-btn" style="display: none" action="#{challengesManager.setChallengesDisplay()}">
-                                <f:ajax execute="@form" render=":completed-challenges-daily-list-form :completed-challenges-weekly-list-form"/>
+                                <f:ajax execute="@form" render=":completed-challenges-daily-list-form :completed-challenges-weekly-list-form :current-challenges-list-form"/>
                             </h:commandButton>
                         </h:form>
                     </div>

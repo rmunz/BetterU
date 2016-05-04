@@ -28,7 +28,9 @@ public class ChallengesManager implements Serializable {
     private User selected;
     private List<DailyChallenges> completedUserDailyChallenges;
     private List<WeeklyChallenges>  completedUserWeeklyChallenges;
-    private boolean weeklyChallengeCompleted;
+    private DailyChallenges currentDailyChallenges;
+    private WeeklyChallenges currentWeeklyChallenge;
+    //private boolean weeklyChallengeCompleted;
 
     /**
      * The instance variable 'UserIndexFacade' is annotated with the @EJB
@@ -67,11 +69,11 @@ public class ChallengesManager implements Serializable {
     private UserFacade userFacade;
 
     public ChallengesManager() {
-        weeklyChallengeCompleted = false;
+        //weeklyChallengeCompleted = false;
     }
     
     /**
-     * Make this display previously completed challenges along with points awarded
+     * 
      */
     public void setChallengesDisplay() {
         User selectedUser = this.getSelected();
@@ -85,16 +87,18 @@ public class ChallengesManager implements Serializable {
                 String currChallengeType = u.getUserIndexPK().getChallengeType();
                 int ind = u.getInd();
                 if(!currChallengeType.equals("Weekly")) {
-                    //List<DailyChallenges> temp = dailyChallengesFacade.getChallengesWithType(currChallengeType);
                     for(int i = 1; i <= ind; i++) {                       
                         completedUserDailyChallenges.add(dailyChallengesFacade.getChallengeAtIndWithType(i, currChallengeType));
                     }
                 } else {
                     for(int i = 1; i <= ind; i++) {
                         completedUserWeeklyChallenges.add(weeklyChallengesFacade.getWeeklyChallengeAtInd(i));
+                        if(i == ind && ind < 7) {
+                            this.currentWeeklyChallenge = weeklyChallengesFacade.getWeeklyChallengeAtInd(i + 1);
+                        } else if(i == ind) {
+                            this.currentWeeklyChallenge = weeklyChallengesFacade.getWeeklyChallengeAtInd(1);
+                        }                        
                     }
-                    //this.weeklyChallengeCompleted = true;
-                    //currentUserWeeklyChallenges.add(weeklyChallengesFacade.findWeeklyChallengeWithInd(u.getInd()));
                 }
             }
         }
@@ -107,14 +111,6 @@ public class ChallengesManager implements Serializable {
         }
         return selected;
     }
-
-    public boolean isWeeklyChallengeCompleted() {
-        return weeklyChallengeCompleted;
-    }
-
-    public void setWeeklyChallengeCompleted(boolean weeklyChallengeCompleted) {
-        this.weeklyChallengeCompleted = weeklyChallengeCompleted;
-    } 
 
     public UserIndexFacade getUserIndexFacade() {
         return userIndexFacade;
@@ -163,4 +159,20 @@ public class ChallengesManager implements Serializable {
     public void setCompletedUserWeeklyChallenges(List<WeeklyChallenges> completedUserWeeklyChallenges) {
         this.completedUserWeeklyChallenges = completedUserWeeklyChallenges;
     }    
+
+    public DailyChallenges getCurrentDailyChallenges() {
+        return currentDailyChallenges;
+    }
+
+    public void setCurrentDailyChallenges(DailyChallenges currentDailyChallenges) {
+        this.currentDailyChallenges = currentDailyChallenges;
+    }
+
+    public WeeklyChallenges getCurrentWeeklyChallenge() {
+        return currentWeeklyChallenge;
+    }
+
+    public void setCurrentWeeklyChallenge(WeeklyChallenges currentWeeklyChallenge) {
+        this.currentWeeklyChallenge = currentWeeklyChallenge;
+    }   
 }
