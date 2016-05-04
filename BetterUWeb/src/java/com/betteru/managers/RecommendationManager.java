@@ -85,7 +85,14 @@ public class RecommendationManager implements Serializable {
         statusMessage = "Status message for testing";
     }
     
-    
+    /**
+     *
+     * @throws java.io.IOException
+     */
+    public void tester() throws IOException
+    {
+       List<WorkoutEntry> test =  this.getAbsEntries();
+    }
     public List<WorkoutEntry> getAbsEntries() throws IOException
     {
         List<WorkoutEntry> wgerResults = new ArrayList();
@@ -94,6 +101,8 @@ public class RecommendationManager implements Serializable {
 
             JsonObject obj = rdr.readObject();
             JsonObject newObj = obj.getJsonObject("count");
+            
+            
             System.out.println("YO");
         }
         
@@ -101,8 +110,7 @@ public class RecommendationManager implements Serializable {
         return workoutRecommendations;
     }
     
-    
-    
+   
 
     /**
      * To get the list of USDA foods
