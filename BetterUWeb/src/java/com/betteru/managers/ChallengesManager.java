@@ -28,7 +28,7 @@ public class ChallengesManager implements Serializable {
     private User selected;
     private List<DailyChallenges> completedUserDailyChallenges;
     private List<WeeklyChallenges>  completedUserWeeklyChallenges;
-    private DailyChallenges currentDailyChallenges;
+    private List<DailyChallenges> currentDailyChallenges;
     private WeeklyChallenges currentWeeklyChallenge;
     //private boolean weeklyChallengeCompleted;
 
@@ -82,6 +82,7 @@ public class ChallengesManager implements Serializable {
                     retrieveEntriesForUserId(selectedUser.getId());
             this.completedUserDailyChallenges = new ArrayList<DailyChallenges>();
             this.completedUserWeeklyChallenges = new ArrayList<WeeklyChallenges>();
+            this.currentDailyChallenges = new ArrayList<DailyChallenges>();
             
             for(UserIndex u: userIndices) {
                 String currChallengeType = u.getUserIndexPK().getChallengeType();
@@ -89,6 +90,11 @@ public class ChallengesManager implements Serializable {
                 if(!currChallengeType.equals("Weekly")) {
                     for(int i = 1; i <= ind; i++) {                       
                         completedUserDailyChallenges.add(dailyChallengesFacade.getChallengeAtIndWithType(i, currChallengeType));
+                        if(i == ind && ind < (dailyChallengesFacade.findAll().size())) {
+                            this.currentDailyChallenges.add(this.dailyChallengesFacade.getChallengeAtIndWithType(i + 1, currChallengeType));
+                        } else if(i == ind) {
+                            this.currentDailyChallenges.add(this.dailyChallengesFacade.getChallengeAtIndWithType(1, currChallengeType));
+                        }
                     }
                 } else {
                     for(int i = 1; i <= ind; i++) {
@@ -160,11 +166,11 @@ public class ChallengesManager implements Serializable {
         this.completedUserWeeklyChallenges = completedUserWeeklyChallenges;
     }    
 
-    public DailyChallenges getCurrentDailyChallenges() {
+    public List<DailyChallenges> getCurrentDailyChallenges() {
         return currentDailyChallenges;
     }
 
-    public void setCurrentDailyChallenges(DailyChallenges currentDailyChallenges) {
+    public void setCurrentDailyChallenges(List<DailyChallenges> currentDailyChallenges) {
         this.currentDailyChallenges = currentDailyChallenges;
     }
 
