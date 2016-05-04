@@ -8,7 +8,8 @@ Copyright © 2016 Osman Balci. All rights reserved.
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:body>
         <ui:composition template="template/siteTemplate.xhtml">
             <!-- Page title -->
@@ -16,6 +17,7 @@ Copyright © 2016 Osman Balci. All rights reserved.
             <!-- Additional CSS files needed -->
             <ui:define name="css">
                 <link rel="stylesheet" type="text/css" href="resources/css/recommendations.css"/>
+                <link rel="stylesheet" type="text/css" href="resources/css/circle.css"/>
             </ui:define>
             <!-- Additional JS files needed -->
             
@@ -24,7 +26,46 @@ Copyright © 2016 Osman Balci. All rights reserved.
                 <div id="page-title">My Overview Today</div>
                 <div align="center">
                     <div>
+                        <div>
+                        <h:button class="btn" value="Log Food" outcome="Recommendations.xhtml" />
+                        &nbsp;&nbsp;
+                        <h:button class="btn" value="Log Exercise" outcome="LoggingExercise.xhtml" />
+                        </div>
                         <h2>Your Daily Totals</h2>
+                        <h:panelGrid columns="3" cellpadding="1" >
+                            
+                            <column>
+                                <div class="c100 p#{recommendationManager.getGoalPercentage(accountManager.selected.targetCalories)} big #{recommendationManager.checkOver}">
+                                    <span> #{recommendationManager.getGoalPercentage(accountManager.selected.targetCalories)}%</span>
+                                    <div class="slice">
+                                      <div class="bar"></div>
+                                      <div class="fill"></div>
+                                    </div>
+                                  </div>
+                            </column>
+                            
+                            <column>
+                                <div class="c100 p50 big">
+                                    <span>25%</span>
+                                    <div class="slice">
+                                      <div class="bar"></div>
+                                      <div class="fill"></div>
+                                    </div>
+                                  </div>
+                            </column>
+                            
+                            <column>
+                                <div class="c100 p50 big">
+                                    <span>25%</span>
+                                    <div class="slice">
+                                      <div class="bar"></div>
+                                      <div class="fill"></div>
+                                    </div>
+                                  </div>
+                            </column>
+                            
+                            
+                        </h:panelGrid>
                         <table>
                             <tr>
                                 <td style="padding-right: 10px; text-align: right;">Calories Eaten:</td>
@@ -35,23 +76,23 @@ Copyright © 2016 Osman Balci. All rights reserved.
                                 <td>#{exerciseManager.getToday().caloriesOut}</td>
                             </tr>
                             <tr>
+                                
+                            </tr>
+                            <tr>
                                 <td style="padding-right: 10px; text-align: right;">Calories Remaining:</td>
-                                <td>#{accountManager.selected.targetCalories - recommendationManager.calorieIntake}</td>
+                                <td>#{accountManager.selected.targetCalories - recommendationManager.getToday().caloriesIn}</td>
                             </tr>
                             <tr>
                                 <td style="padding-right: 10px; text-align: right;">Weight:</td>
                                 <td>#{exerciseManager.getToday().weight}</td>
                             </tr>
+
                         </table>
                     </div>
                     
                     <br/><br/>
                     
-                    <div>
-                        <h:button class="btn" value="Log Food" outcome="Recommendations.xhtml" />
-                        &nbsp;&nbsp;
-                        <h:button class="btn" value="Log Exercise" outcome="LoggingExercise.xhtml" />
-                    </div>
+                    
                     
                     <br/><br/><br/>
                     
