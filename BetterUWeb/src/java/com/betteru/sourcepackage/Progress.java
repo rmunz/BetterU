@@ -114,7 +114,9 @@ public class Progress implements Serializable {
 
     public void setWeight(double weight) {
         this.weight = weight;
-        user.setWeight((int)weight);
+        if(user != null) {
+            user.setWeight((int)weight);
+        }
     }
 
     public User getUser() {
