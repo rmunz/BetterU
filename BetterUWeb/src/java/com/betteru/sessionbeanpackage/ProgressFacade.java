@@ -32,7 +32,7 @@ public class ProgressFacade extends AbstractFacade<Progress> {
     }
     
     public List<Progress> findAllProgressEntriesByUid(int userId) {
-        String query = "SELECT p FROM Progress p WHERE p.userId = :userId";
+        String query = "SELECT p FROM Progress p WHERE p.progressPK.userId = :userId";
         
         if (em.createQuery(query)
                 .setParameter("userId", userId)
@@ -70,14 +70,14 @@ public class ProgressFacade extends AbstractFacade<Progress> {
     
     
     public Progress getProgressEntry(Integer user_id, Integer epochTime) {
-        if (em.createQuery("SELECT p FROM Progress p WHERE p.userId = :userId AND p.logDate = :time")
+        if (em.createQuery("SELECT p FROM Progress p WHERE p.progressPK.userId = :userId AND p.progressPK.logDate = :time")
                 .setParameter("userId", user_id)
                 .setParameter("time", epochTime)
                 .getResultList().isEmpty()) {
             return null;
         }
         else {
-            return (Progress) (em.createQuery("SELECT p FROM Progress p WHERE p.userId = :userId AND p.logDate = :time")
+            return (Progress) (em.createQuery("SELECT p FROM Progress p WHERE p.progressPK.userId = :userId AND p.progressPK.logDate = :time")
                 .setParameter("userId", user_id)
                 .setParameter("time", epochTime)
                 .getSingleResult());       

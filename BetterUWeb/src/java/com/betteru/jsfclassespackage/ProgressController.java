@@ -153,7 +153,7 @@ public class ProgressController implements Serializable {
             }
             if (object instanceof Progress) {
                 Progress o = (Progress) object;
-                return getStringKey(o.getId());
+                return getStringKey(o.getProgressPK().getUserId());
             } else {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), Progress.class.getName()});
                 return null;
