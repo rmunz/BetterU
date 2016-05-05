@@ -457,7 +457,7 @@ public class AccountManager implements Serializable {
                 editUser.setHeight(this.selected.getHeight());
                 editUser.setWeight(this.selected.getWeight());
                 editUser.setEmail(this.selected.getEmail());
-                editUser.setPassword(this.selected.getPassword());
+                //editUser.setPassword(this.selected.getPassword());
                 userFacade.edit(editUser);
             } catch (EJBException e) {
                 username = "";
@@ -516,7 +516,7 @@ public class AccountManager implements Serializable {
         }
 
         if (!pwd.equals(confirmPassword)) {
-            statusMessage = "Passwords must match!";
+            statusMessage = "";
         } else {
             statusMessage = "";
         }
