@@ -199,5 +199,26 @@ public class ExerciseManager implements Serializable{
         caloriesOut = ((int)(intensity * 3.5 * (userFacade.getUser(user_id).getWeight()*0.453592))/200) * duration;
 
     } 
+     
+    private int caloriePercentage; 
+     
+    
+    public int getCaloriePercentage() {
+        Integer user = (Integer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+        int user_id = user.intValue();
+        User userObj = userFacade.getUser(user_id);
+       
+        if(userObj.getTargetCalories() != 0) {
+            caloriePercentage = (getToday().getCaloriesIn() * 100) / userObj.getTargetCalories();
+        }
+        
+        return caloriePercentage;
+    }
+
+    public void setCaloriePercentage(int caloriePercentage) {
+        this.caloriePercentage = caloriePercentage;
+    }
+    
+    
     
 }

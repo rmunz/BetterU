@@ -73,7 +73,7 @@
                         </p:column>
                         
                         <p:column headerText="Add Meal">
-                            <p:commandButton id="selectRowBtn" value="select" onclick="document.getElementById('dailyEntry:caloriesin').value=#{rec.calories}"/>
+                            <p:commandButton id="selectRowBtn" value="select" onclick="document.getElementById('dailyEntry:caloriesin').value=#{rec.calories}; document.getElementById('dailyEntry:recipeId').value=#{rec.recipeId}"/>
                         </p:column>
 
                     </p:dataTable>
@@ -127,6 +127,7 @@
                     <br /><br /><br /><br />
                     <h:form id="dailyEntry" class="form-daily-entry">
 
+                        <h:inputHidden value="#{accountManager.lunch}"/>
                         <h:outputLabel styleClass="outputLabel" for="caloriesin" value="Calories Eaten: " />
                         <h:inputText class="input-control" id="caloriesin" value="#{recommendationManager.calorieIntake}"/>
                         <br/>

@@ -17,8 +17,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -29,10 +32,14 @@ import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Named;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
  
-import static javax.ws.rs.client.Entity.entity;
 import org.apache.commons.codec.binary.Base64;
 import org.primefaces.model.UploadedFile;
+import org.primefaces.util.ArrayUtils;
 
 @Named(value = "accountManager")
 @SessionScoped
@@ -72,6 +79,11 @@ public class AccountManager implements Serializable {
     private String advancedStatusMessage;
     private User selected;
 
+    private static final String YUMMLY_ID = "f6004e71";
+    private static final String YUMMLY_KEY = "57e811ae63c25bd48802742327682e7d";
+    private static final String YUMMLY_URL = "http://api.yummly.com/v1/api/recipes?_app_id=" + YUMMLY_ID + "&_app_key=" + YUMMLY_KEY;
+
+    
     /**
      * The instance variable 'userFacade' is annotated with the @EJB annotation.
      * This means that the GlassFish application server, at runtime, will inject
@@ -363,6 +375,19 @@ public class AccountManager implements Serializable {
         return FacesContext.getCurrentInstance().getExternalContext().
                 getSessionMap().get("username") != null;
     }
+    
+    private int level;
+    
+    public int getLevel(){
+        int points = selected.getPoints();
+        
+        level = (points - (points % 100))/100; 
+        return level; 
+    }
+    
+    public void setLevel(int level) {
+        this.level = level;
+    }
 
     public String createAccount() {
 
@@ -647,7 +672,51 @@ public class AccountManager implements Serializable {
         }
     }
     
-    
+    public List<RecipeEntry> getMealsEaten() throws IOException{
+       String[] dinnerV =  selected.getDinner().split("\\s*,\\s*");
+       String[] lunchV =  selected.getLunch().split("\\s*,\\s*");
+       String[] breakfastV =  selected.getBreakfast().split("\\s*,\\s*");
+       String[] snackV =  selected.getSnack().split("\\s*,\\s*");
+         
+       String[] meals = (String[])ArrayUtils.concat(dinnerV, lunchV, breakfastV, snackV);
+       List<RecipeEntry> recipeResults = new ArrayList();
+       
+       for (int i = 0; i < meals.length; i++) {
+            String recipeId = meals[i];
+            if(recipeId.isEmpty()) {
+                continue; 
+            }
+            RecipeEntry entry = new RecipeEntry(recipeId, ""); 
+            
+            URL urlRecipe = new URL("http://api.yummly.com/v1/api/recipe/" + recipeId + "?_app_id=" + YUMMLY_ID + "&_app_key=" + YUMMLY_KEY);
+            try (InputStream is = urlRecipe.openStream(); JsonReader rdr = Json.createReader(is)) {
+
+                JsonObject obj = rdr.readObject();
+                entry.setName(obj.getString("name"));
+                JsonArray results = obj.getJsonArray("nutritionEstimates");
+                for (JsonObject result : results.getValuesAs(JsonObject.class)) {
+
+                    String tmpName = result.getString("attribute");
+                    if (tmpName.equals("ENERC_KCAL")) {
+                        int calorie = result.getJsonNumber("value").intValue();
+                        entry.setCalories(calorie);
+                    } else if (tmpName.equals("FAT")) {
+                        int fat = result.getJsonNumber("value").intValue();
+                        entry.setFat(fat);
+                    } else if (tmpName.equals("PROCNT")) {
+                        int protein = result.getJsonNumber("value").intValue();
+                        entry.setProtein(protein);
+                    } else if (tmpName.equals("CHOCDF")) {
+                        int carbs = result.getJsonNumber("value").intValue();
+                        entry.setCarbs(carbs);
+                    }
+                }
+                recipeResults.add(entry);
+            }
+        }
+       
+        return recipeResults; 
+    }
     
     public String cancel() {
         message = "";
@@ -657,22 +726,16 @@ public class AccountManager implements Serializable {
     public FacesMessage copyFile(UploadedFile file) {
         try {
             
-            
-            //deletePhoto();
-            
             InputStream in = file.getInputstream();
-
-            System.out.println("\n\n\n\n\n\n\n\n HELLO TEST");
-            
+         
             File tempFile = inputStreamToFile(in, Constants.TEMP_FILE);
             byte[] bytes = loadFile(tempFile);
             byte[] encoded = Base64.encodeBase64(bytes);
-            System.out.println(encoded);
+            //System.out.println(encoded);
             String encodedString = new String(encoded);
             
-             System.out.println(encodedString);
-            
-            System.out.println("\n\n\n\n\n\n\n\n Upto");
+            System.out.println(encodedString);
+             
             int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
             User editUser = userFacade.getUser(user_id);
             //System.out.println(user_name);
