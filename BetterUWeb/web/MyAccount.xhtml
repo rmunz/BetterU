@@ -34,7 +34,7 @@
                                          action="#{accountManager.logout()}"/>
                         <input type="button" id="delete-account-btn" class="btn" value="Delete Account" />
                     </h:form>
-                    
+
                     <!-- Profile settings -->
                     <div class="section-title">Profile Settings</div>
                     <div id="profile-section">
@@ -118,6 +118,12 @@
                                     </td>
                                 </tr>
                             </table>
+                            <!-- Account photo -->
+                            <div id="photo-wrapper">
+                                <h:graphicImage id="profile-pic" value="" alt="Profile Picture"/><br/>
+                                <input id="edit-photo-button" class="btn" type="button" 
+                                       value="Change Photo"/>
+                            </div>
                             <!-- Error message output -->
                             <div id="profile-messages-wrapper">
                                 <p:messages id="profile-msgs" showIcon="false"/>
@@ -237,7 +243,30 @@
                         </h:form>
                     </div>
                 </div>
-                
+
+                <!-- This div will appear as a dialog box when the user clicks the 
+                     "change photo" button -->
+                <div id="photo-dialog" title="Change Profile Photo">
+                    <h:form id="photo-dialog-form" enctype="multipart/form-data">
+                        <!-- Instructions and upload button -->
+                        <div id="photo-upload-area">
+                            Use the 'Choose File' button below to select a photo from your 
+                            computer and then use the 'Upload Photo' button to change 
+                            your picture.
+                            <p:fileUpload id="browse-button" mode="simple"
+                                          value="#{fileManager.file}"/>
+                            <h:outputText id="upload-message" value="#{fileManager.message}"/>
+                        </div>
+                        <!-- Divider -->
+                        <hr/>
+                        <!-- Upload / close button -->
+                        <h:commandButton id="close-button" class="btn" 
+                                         value="Cancel" action="#{fileManager.cancel()}" />
+                        <h:commandButton id="upload-button" class="btn" 
+                                         value="Upload Photo" action="#{fileManager.upload()}" />
+                    </h:form>
+                </div>
+
                 <!-- This div will appear as a dialog box when the user clicks the 
                      "delete account" button -->
                 <div id="delete-dialog" title="Delete Account Confirmation">
@@ -251,7 +280,7 @@
                         <hr style="margin: 15px 0 15px 0" />
                         <!-- Delete / close buttons -->
                         <h:button id="close-button" class="btn" 
-                                         value="Cancel" onclick="closeDialogs()"/>
+                                  value="Cancel" onclick="closeDialogs()"/>
                         <h:commandButton id="yes-delete-button" class="btn" 
                                          value="Yes, Delete Account" action="#{accountManager.deleteAccount()}"/>
                     </h:form>

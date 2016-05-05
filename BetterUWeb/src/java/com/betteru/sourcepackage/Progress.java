@@ -1,116 +1,79 @@
 /*
- * Created by Ojas Mhetar on 2016.04.03  * 
- * Copyright © 2016 Ojas Mhetar. All rights reserved. * 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package com.betteru.sourcepackage;
 
-import com.betteru.sessionbeanpackage.UserFacade;
 import java.io.Serializable;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.ejb.EJB;
-import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author ojmhetar
+ * @author juliabinger
  */
 @Entity
 @Table(name = "Progress")
-@IdClass(value=ProgressPK.class)
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Progress.findMonth", query = "SELECT p FROM Progress p WHERE p.userId = :userId AND p.logDate BETWEEN :aMonthAgo AND :logDate"),
-    @NamedQuery(name = "Progress.findWeek", query = "SELECT p FROM Progress p WHERE p.userId = :userId AND p.logDate BETWEEN :aWeekAgo AND :logDate"),
-    @NamedQuery(name = "Progress.findDay", query = "SELECT p FROM Progress p WHERE p.userId = :userId AND p.logDate = :logDate"),
-    
+    @NamedQuery(name = "Progress.findMonth", query = "SELECT p FROM Progress p WHERE p.progressPK.userId = :userId AND p.progressPK.logDate BETWEEN :aMonthAgo AND :logDate"),
+    @NamedQuery(name = "Progress.findWeek", query = "SELECT p FROM Progress p WHERE p.progressPK.userId = :userId AND p.progressPK.logDate BETWEEN :aWeekAgo AND :logDate"),
     @NamedQuery(name = "Progress.findAll", query = "SELECT p FROM Progress p"),
-    @NamedQuery(name = "Progress.findByUserId", query = "SELECT p FROM Progress p WHERE p.userId = :userId"),
-    @NamedQuery(name = "Progress.findByLogDate", query = "SELECT p FROM Progress p WHERE p.logDate = :logDate"),
+    @NamedQuery(name = "Progress.findByUserId", query = "SELECT p FROM Progress p WHERE p.progressPK.userId = :userId"),
+    @NamedQuery(name = "Progress.findByLogDate", query = "SELECT p FROM Progress p WHERE p.progressPK.logDate = :logDate"),
     @NamedQuery(name = "Progress.findByCaloriesIn", query = "SELECT p FROM Progress p WHERE p.caloriesIn = :caloriesIn"),
     @NamedQuery(name = "Progress.findByCaloriesOut", query = "SELECT p FROM Progress p WHERE p.caloriesOut = :caloriesOut"),
-    @NamedQuery(name = "Progress.findByWeight", query = "SELECT p FROM Progress p WHERE p.weight = :weight"),
     @NamedQuery(name = "Progress.findByMiles", query = "SELECT p FROM Progress p WHERE p.miles = :miles"),
-    @NamedQuery(name = "Progress.findBySteps", query = "SELECT p FROM Progress p WHERE p.steps = :steps")})
+    @NamedQuery(name = "Progress.findBySteps", query = "SELECT p FROM Progress p WHERE p.steps = :steps"),
+    @NamedQuery(name = "Progress.findByWeight", query = "SELECT p FROM Progress p WHERE p.weight = :weight")})
 public class Progress implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "UserId")
-    private Integer userId;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "LogDate")
-    private Integer logDate;
+    @EmbeddedId
+    protected ProgressPK progressPK;
     @Column(name = "CaloriesIn")
     private Integer caloriesIn;
     @Column(name = "CaloriesOut")
     private Integer caloriesOut;
-    @Column(name = "Weight")
-    private Double weight;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "Miles")
     private Double miles;
     @Column(name = "Steps")
     private Integer steps;
-    //@JoinColumn(name = "user_id", referencedColumnName = "UserId")
-    //@ManyToOne
-    private User user; 
-    
+    @Column(name = "Weight")
+    private Double weight;
+    @JoinColumn(name = "UserId", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private User user;
+
     public Progress() {
     }
 
-    public Progress(Integer userId) {
-        this.userId = userId;
-        UserFacade uf = new UserFacade();
-        user = uf.getUser(userId);
+    public Progress(ProgressPK progressPK) {
+        this.progressPK = progressPK;
     }
 
-    public Progress(Integer userId, Integer logDate) {
-        this.userId = userId;
-        this.logDate = logDate;
-        UserFacade uf = new UserFacade();
-        user = uf.getUser(userId);
+    public Progress(int userId, int logDate) {
+        this.progressPK = new ProgressPK(userId, logDate);
     }
 
-    /*
-    public User getUser() {
-            return user;
-    }
-    
-    public void setUser(User user) {
-            this.user = user;
-    }
-    */
-    
-    public Integer getUserId() {
-        return userId;
+    public ProgressPK getProgressPK() {
+        return progressPK;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getLogDate() {
-        return logDate;
-    }
-
-    public void setLogDate(Integer logDate) {
-        this.logDate = logDate;
+    public void setProgressPK(ProgressPK progressPK) {
+        this.progressPK = progressPK;
     }
 
     public Integer getCaloriesIn() {
@@ -129,15 +92,6 @@ public class Progress implements Serializable {
         this.caloriesOut = caloriesOut;
     }
 
-    public Double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-        if (weight > 0) user.setWeight((int)weight);
-    }
-
     public Double getMiles() {
         return miles;
     }
@@ -154,10 +108,27 @@ public class Progress implements Serializable {
         this.steps = steps;
     }
 
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+        user.setWeight((int)weight);
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (userId != null ? userId.hashCode() : 0);
+        hash += (progressPK != null ? progressPK.hashCode() : 0);
         return hash;
     }
 
@@ -168,7 +139,7 @@ public class Progress implements Serializable {
             return false;
         }
         Progress other = (Progress) object;
-        if ((this.userId == null && other.userId != null) || (this.userId != null && !this.userId.equals(other.userId))) {
+        if ((this.progressPK == null && other.progressPK != null) || (this.progressPK != null && !this.progressPK.equals(other.progressPK))) {
             return false;
         }
         return true;
@@ -176,17 +147,12 @@ public class Progress implements Serializable {
 
     @Override
     public String toString() {
-        return "com.betteru.sourcepackage.Progress[ userId=" + userId + " ]";
-    }
-
-    public Integer getId() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "com.betteru.sourcepackage.Progress[ progressPK=" + progressPK + " ]";
     }
     
     public String getDayString() {
-        Date date = new Date((long) this.getLogDate()* 1000);
+        Date date = new Date((long) this.getProgressPK().getLogDate()* 1000);
         Format format = new SimpleDateFormat("yyy-MM-dd");
         return format.format(date);
     }
-    
 }

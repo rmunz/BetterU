@@ -1,14 +1,14 @@
 /*
- * Created by Ojas Mhetar on 2016.04.03  * 
- * Copyright © 2016 Ojas Mhetar. All rights reserved. * 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package com.betteru.sourcepackage;
 
-import com.betteru.sessionbeanpackage.ProgressFacade;
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author ojmhetar
+ * @author juliabinger
  */
 @Entity
 @Table(name = "User")
@@ -54,7 +54,13 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "User.findByWeeklyChallengeIndex", query = "SELECT u FROM User u WHERE u.weeklyChallengeIndex = :weeklyChallengeIndex"),
     @NamedQuery(name = "User.findByWCSkipped", query = "SELECT u FROM User u WHERE u.wCSkipped = :wCSkipped"),
     @NamedQuery(name = "User.findBySecurityQuestion", query = "SELECT u FROM User u WHERE u.securityQuestion = :securityQuestion"),
-    @NamedQuery(name = "User.findBySecurityAnswer", query = "SELECT u FROM User u WHERE u.securityAnswer = :securityAnswer")})
+    @NamedQuery(name = "User.findBySecurityAnswer", query = "SELECT u FROM User u WHERE u.securityAnswer = :securityAnswer"),
+    @NamedQuery(name = "User.findByTargetCalories", query = "SELECT u FROM User u WHERE u.targetCalories = :targetCalories"),
+    @NamedQuery(name = "User.findByBreakfast", query = "SELECT u FROM User u WHERE u.breakfast = :breakfast"),
+    @NamedQuery(name = "User.findByLunch", query = "SELECT u FROM User u WHERE u.lunch = :lunch"),
+    @NamedQuery(name = "User.findByDinner", query = "SELECT u FROM User u WHERE u.dinner = :dinner"),
+    @NamedQuery(name = "User.findBySnack", query = "SELECT u FROM User u WHERE u.snack = :snack"),
+    @NamedQuery(name = "User.findByPhoto", query = "SELECT u FROM User u WHERE u.photo = :photo")})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -139,8 +145,9 @@ public class User implements Serializable {
     private String dCSkipped;
     @Column(name = "WeeklyChallengeIndex")
     private Integer weeklyChallengeIndex;
+    @Size(max = 255)
     @Column(name = "WCSkipped")
-    private Integer wCSkipped;
+    private String wCSkipped;
     @Basic(optional = false)
     @NotNull
     @Column(name = "SecurityQuestion")
@@ -150,6 +157,8 @@ public class User implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "SecurityAnswer")
     private String securityAnswer;
+    @Column(name = "TargetCalories")
+    private Integer targetCalories;
     @Size(max = 255)
     @Column(name = "Breakfast")
     private String breakfast;
@@ -162,16 +171,12 @@ public class User implements Serializable {
     @Size(max = 255)
     @Column(name = "Snack")
     private String snack;
-    @Size(max = 255)
+    @Size(max = 62000)
     @Column(name = "Photo")
     private String photo;
-    
-    @OneToMany(mappedBy = "userId")
-    private Collection<Photo> photoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Collection<Progress> progressCollection;
 
-    @Column(name = "TargetCalories")
-    private Integer targetCalories;
-    
     public User() {
     }
 
@@ -179,11 +184,7 @@ public class User implements Serializable {
         this.id = id;
     }
 
-     public User(Integer id, String firstName, String lastName, String username, 
-            String password, int age, Character gender, int height, int weight, 
-            Character units, String email, int points, int activityLevel, int bmr, 
-            int goalWeight, String activityGoal, int securityQuestion, String securityAnswer,
-            String breakfast, String lunch, String dinner, String snack, String photo) {
+    public User(Integer id, String firstName, String lastName, String username, String password, int age, Character gender, int height, int weight, Character units, String email, int points, int activityLevel, int bmr, int goalWeight, String activityGoal, int securityQuestion, String securityAnswer) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -202,37 +203,8 @@ public class User implements Serializable {
         this.activityGoal = activityGoal;
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
-        this.breakfast = breakfast;
-        this.lunch = lunch;
-        this.dinner = dinner;
-        this.snack = snack;
-        this.photo = photo;
     }
-    public Integer calcTargetCals() {
-        int baseline = 0;
-        switch (this.activityLevel) {
-            case 0:
-                baseline = 11;
-                break;
-            case 1:
-                baseline = 12;
-                break;
-            case 2:
-                baseline = 13;
-                break;
-            default:
-                break;
-        }
-        int target = this.weight * baseline + 450; 
-        if (this.goalWeight < this.weight) {
-            target -= 750;
-        }
-        if (this.goalWeight > this.weight) {
-            target += 750;
-        }
-        return target;
-    }
-    
+
     public Integer getId() {
         return id;
     }
@@ -303,6 +275,9 @@ public class User implements Serializable {
 
     public void setWeight(int weight) {
         this.weight = weight;
+       /* for (Progress prog : this.progressCollection) {
+            if (prog.getProgressPK.getLogDate == )
+        }*/
     }
 
     public Character getUnits() {
@@ -340,27 +315,11 @@ public class User implements Serializable {
     public int getBmr() {
         return bmr;
     }
-     
+
     public void setBmr(int bmr) {
         this.bmr = bmr;
     }
 
-    /**
-     * Sets the BMR to the appropriate value according to gender, height, height, and age
-     */
-    public void calculateBMR() {
-        //Women: BMR = 655 + ( 4.35 x weight in pounds ) + ( 4.7 x height in inches ) - ( 4.7 x age in years )
-        //Men: BMR = 66 + ( 6.23 x weight in pounds ) + ( 12.7 x height in inches ) - ( 6.8 x age in year )
-        
-        if (this.gender == 'F') {
-            this.bmr = (int) (655 + (4.35 * this.weight) + (4.7 * this.height) - (4.7 * this.age));
-        }
-        else {
-            this.bmr = (int) (66 + (6.23 * this.weight) + (12.7 * this.height) - (6.8 * this.age));
-        }
-
-    }
-     
     public Integer getGoalType() {
         return goalType;
     }
@@ -409,11 +368,11 @@ public class User implements Serializable {
         this.weeklyChallengeIndex = weeklyChallengeIndex;
     }
 
-    public Integer getWCSkipped() {
+    public String getWCSkipped() {
         return wCSkipped;
     }
 
-    public void setWCSkipped(Integer wCSkipped) {
+    public void setWCSkipped(String wCSkipped) {
         this.wCSkipped = wCSkipped;
     }
 
@@ -433,22 +392,30 @@ public class User implements Serializable {
         this.securityAnswer = securityAnswer;
     }
 
-     public String getBreakfast() {
+    public Integer getTargetCalories() {
+        return targetCalories;
+    }
+
+    public void setTargetCalories(Integer targetCalories) {
+        this.targetCalories = targetCalories;
+    }
+
+    public String getBreakfast() {
         return breakfast;
     }
 
     public void setBreakfast(String breakfast) {
         this.breakfast = breakfast;
     }
-    
-        public String getLunch() {
+
+    public String getLunch() {
         return lunch;
     }
 
-    public void setLunh(String lunch) {
+    public void setLunch(String lunch) {
         this.lunch = lunch;
     }
-    
+
     public String getDinner() {
         return dinner;
     }
@@ -456,7 +423,7 @@ public class User implements Serializable {
     public void setDinner(String dinner) {
         this.dinner = dinner;
     }
-    
+
     public String getSnack() {
         return snack;
     }
@@ -464,7 +431,7 @@ public class User implements Serializable {
     public void setSnack(String snack) {
         this.snack = snack;
     }
-    
+
     public String getPhoto() {
         return photo;
     }
@@ -472,25 +439,16 @@ public class User implements Serializable {
     public void setPhoto(String photo) {
         this.photo = photo;
     }
-    
+
     @XmlTransient
-    public Collection<Photo> getPhotoCollection() {
-        return photoCollection;
+    public Collection<Progress> getProgressCollection() {
+        return progressCollection;
     }
 
-    public void setPhotoCollection(Collection<Photo> photoCollection) {
-        this.photoCollection = photoCollection;
+    public void setProgressCollection(Collection<Progress> progressCollection) {
+        this.progressCollection = progressCollection;
     }
 
-    
-    public Integer getTargetCalories() {
-        return targetCalories;
-    }
-    
-    public void setTargetCalories(Integer targetCalories) {
-        this.targetCalories = targetCalories;
-    }
-    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -516,4 +474,44 @@ public class User implements Serializable {
         return "com.betteru.sourcepackage.User[ id=" + id + " ]";
     }
     
+        /**
+     * Sets the BMR to the appropriate value according to gender, height, height, and age
+     */
+    public void calculateBMR() {
+        //Women: BMR = 655 + ( 4.35 x weight in pounds ) + ( 4.7 x height in inches ) - ( 4.7 x age in years )
+        //Men: BMR = 66 + ( 6.23 x weight in pounds ) + ( 12.7 x height in inches ) - ( 6.8 x age in year )
+        
+        if (this.gender == 'F') {
+            this.bmr = (int) (655 + (4.35 * this.weight) + (4.7 * this.height) - (4.7 * this.age));
+        }
+        else {
+            this.bmr = (int) (66 + (6.23 * this.weight) + (12.7 * this.height) - (6.8 * this.age));
+        }
+
+    }
+    
+    public Integer calcTargetCals() {
+        int baseline = 0;
+        switch (this.activityLevel) {
+            case 0:
+                baseline = 11;
+                break;
+            case 1:
+                baseline = 12;
+                break;
+            case 2:
+                baseline = 13;
+                break;
+            default:
+                break;
+        }
+        int target = this.weight * baseline + 450; 
+        if (this.goalWeight < this.weight) {
+            target -= 750;
+        }
+        if (this.goalWeight > this.weight) {
+            target += 750;
+        }
+        return target;
+    }
 }

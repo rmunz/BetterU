@@ -25,9 +25,7 @@ Copyright © 2016 Corey McQuay. All rights reserved.
 
             <!-- Page content -->
             <ui:define name="editableContent">
-
-                <br />
-                <br />
+                <div id="page-title">Log Exercise</div>
                 <div align="center">
 
 
@@ -58,47 +56,23 @@ Copyright © 2016 Corey McQuay. All rights reserved.
                             <h3><b>Weight: Optional</b> </h3>
                             <p:inputText id="weight" value="#{exerciseManager.weight}" />
                         </h:panelGrid>
-                        <img id="intensity" src="resources/images/CaloriesBurnedIcon.png" alt="intensity" /><b>Calories Burned:    </b> <h:outputLabel id="caloriesBurned" value="#{exerciseManager.caloriesOut}" />
+                        <br/>
+                        <img id="intensity" style="width: 30px;" src="resources/images/CaloriesBurnedIcon.png" alt="intensity" />
+                        <b>Calories Burned:    </b>
+                        <h:outputLabel id="caloriesBurned" value="#{exerciseManager.caloriesOut}" />
+                        <br/>
                        <!--                        <h:inputHidden id="caloriesBurned" value="#{exerciseManager.caloriesOut}" />-->
 
                         <br />
                         
-                        <h:commandButton id="calcCalories-btn"  action="#{exerciseManager.enterDailyExercise}" value="Log" styleClass="buttonText"/>
+                        <h:commandButton id="calcCalories-btn"  action="#{exerciseManager.enterDailyExercise}" value="Log" styleClass="btn"/>
 
-                        <br />
-
-
+                        <br /><br/><br/>
 
                         <img id="intensity" src="resources/images/intensityChart.jpg" alt="intensity" />
 
                         <br /><br /><br />
-
-
-
-
                     </h:form>
-
-                    <!--                    <script type="text/javascript">
-                                            function getCaloriesBurned() {
-                                                var intensity = document.getElementById("calcCal:intensitySlider").value;
-                                                var duration = document.getElementById("calcCal:durationSlider").value;
-                    
-                    
-                    
-                                                var cBurn = ((intensity * 3.5 * 120) / 200) * duration;
-                                                var elem = document.getElementById("calcCal:caloriesBurned");
-                    
-                                                elem.innerHTML = cBurn;
-                    
-                                                document.getElementById("displayCals").innerHTML
-                                            }
-                                        </script> -->
-
-
-
-
-
-                    <br />
 
                 </div> 
             </ui:define>

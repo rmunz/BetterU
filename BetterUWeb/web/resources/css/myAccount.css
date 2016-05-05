@@ -1,5 +1,5 @@
 #account-wrapper {
-    width: 550px;
+    width: 500px;
     margin: 0 auto;
     overflow: auto;
 }
@@ -136,4 +136,50 @@
     width: 180px;
     margin: 5px 15px 0 0;
     font-family: "Franklin Gothic Book" !important;
+}
+
+#photo-wrapper {
+    float: right;
+}
+
+#form-profile\:profile-pic {
+    width: 135px;
+}
+
+#photo-dialog {
+    display: none;
+}
+
+#photo-upload-area {
+    margin-top: 5px;
+    height: 145px;
+}
+
+hr {
+    width: 100%;
+    color: #bbb;
+}
+
+#photo-dialog-form\:upload-message {
+    font-size: 16px;
+    color: #ba2a2a;
+}
+
+#photo-dialog-form\:browse-button {
+    width: 100%;
+    margin: 25px 0 22px 0;
+    font-size: 14px;
+}
+
+#photo-dialog-form\:upload-button {
+    float: right;
+    width: 150px;
+    margin: 5px 10px 0 0;
+}
+
+#photo-dialog-form\:close-button {
+    float: right;
+    width: 85px;
+    margin-top: 5px;
+    background-color: #999;
 }

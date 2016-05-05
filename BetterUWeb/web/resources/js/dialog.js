@@ -14,6 +14,15 @@ $(function () {
         draggable: false,
         modal: true
     });
+    
+    // Dialog properties
+    $("#photo-dialog").dialog({
+        autoOpen: false,
+        height: 286,
+        width: 420,
+        resizable: false,
+        modal: true
+    });
 });
 
 /*
@@ -22,4 +31,5 @@ $(function () {
 function closeDialogs() {
     // Close all dialogs
     $("#delete-dialog").dialog("close");
+    $("#photo-dialog").dialog("close");
 }

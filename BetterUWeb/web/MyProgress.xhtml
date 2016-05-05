@@ -18,9 +18,9 @@
             
             <!-- Page content -->
             <ui:define name="editableContent">
+                <div id="page-title">My Progress</div>
                 <div align="center" width="50%">
                 <h:form>
-                <h1>Progress</h1>
                 
                 <h2>#{profileViewManager.loggedInUser.firstName} #{profileViewManager.loggedInUser.lastName}</h2>
 
@@ -68,11 +68,6 @@
                 
                 </h:form>
                 </div>
-                
-                <h:form>
-                    
-                <h:link value="Log Exercise" outcome="LoggingExercise" />
-                </h:form>
             </ui:define>
         </ui:composition>
     </h:body>
