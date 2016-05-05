@@ -165,6 +165,9 @@ public class AccountManager implements Serializable {
      * Creates a new instance of AccountManager
      */
     public AccountManager() {
+        statusMessage = "";
+        profileStatusMessage = "";
+        advancedStatusMessage = "";
     }
 
     /**
