@@ -165,6 +165,9 @@ public class AccountManager implements Serializable {
      * Creates a new instance of AccountManager
      */
     public AccountManager() {
+        statusMessage = "";
+        profileStatusMessage = "";
+        advancedStatusMessage = "";
     }
 
     /**
@@ -471,10 +474,44 @@ public class AccountManager implements Serializable {
     }
     
     public String updateProfile() {
+        if (profileStatusMessage.isEmpty()) {
+            int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+            User editUser = userFacade.getUser(user_id);
+            try {
+                editUser.setFirstName(this.selected.getFirstName());
+                editUser.setLastName(this.selected.getLastName());
+                editUser.setAge(this.selected.getAge());
+                editUser.setHeight(this.selected.getHeight());
+                editUser.setWeight(this.selected.getWeight());
+                editUser.setGender(this.selected.getGender());
+                userFacade.edit(editUser);
+            } catch (EJBException e) {
+                String msg = e.getMessage();
+                profileStatusMessage = "Something went wrong while editing your profile.";
+                return "";
+            }
+            return "MyAccount?faces-redirect=true";
+        }
         return "";
     }
     
     public String updateAdvanced() {
+        if (advancedStatusMessage.isEmpty()) {
+            int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+            User editUser = userFacade.getUser(user_id);
+            try {
+                editUser.setEmail(this.selected.getEmail());
+                editUser.setGoalWeight(this.selected.getGoalWeight());
+                editUser.setActivityLevel(this.selected.getActivityLevel());
+                editUser.setActivityGoal(this.selected.getActivityGoal());
+                editUser.setPassword(this.selected.getPassword());
+                userFacade.edit(editUser);
+            } catch (EJBException e) {
+                advancedStatusMessage = "Something went wrong while editing your profile.";
+                return "";
+            }
+            return "MyAccount?faces-redirect=true";
+        }
         return "";
     }
     
