@@ -10,11 +10,9 @@ import com.betteru.sessionbeanpackage.UserFacade;
 import com.betteru.sourcepackage.Progress;
 import com.sendgrid.SendGrid;
 import com.sendgrid.SendGridException;
-
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
-
 import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -24,6 +22,7 @@ import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Named;
+ 
 import static javax.ws.rs.client.Entity.entity;
 
 @Named(value = "accountManager")
@@ -335,8 +334,10 @@ public class AccountManager implements Serializable {
     }
 
     public User getSelected() {
-        selected = userFacade.find(FacesContext.getCurrentInstance().
-                getExternalContext().getSessionMap().get("user_id"));
+        if (selected == null) {
+            selected = userFacade.find(FacesContext.getCurrentInstance().
+                    getExternalContext().getSessionMap().get("user_id"));
+        }
 
         return selected;
     }
@@ -388,7 +389,7 @@ public class AccountManager implements Serializable {
                 userFacade.create(user);    
                 Calendar c = Calendar.getInstance();
                 c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
-                for (int i = 0; i < 7; i++) {
+                for(int i = 0; i < 30; i++) {
                     //...Perform a task...
                     Progress progress = new Progress(user.getId(), (int) ((c.getTimeInMillis() - i * 86400000) / 1000));
                     progress.setCaloriesIn(0);

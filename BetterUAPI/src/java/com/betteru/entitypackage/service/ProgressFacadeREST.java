@@ -6,7 +6,9 @@ package com.betteru.entitypackage.service;
 
 import com.betteru.entitypackage.Progress;
 import com.betteru.entitypackage.ProgressPK;
+import com.betteru.entitypackage.User;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,7 +30,9 @@ import javax.persistence.TypedQuery;
 @Stateless
 @Path("com.betteru.entitypackage.progress")
 public class ProgressFacadeREST extends AbstractFacade<Progress> {
-
+    @EJB
+    private UserFacadeREST uf;
+    
     @PersistenceContext(unitName = "BetterUAPIPU")
     private EntityManager em;
 
@@ -55,8 +59,15 @@ public class ProgressFacadeREST extends AbstractFacade<Progress> {
         //manually add all of the fields
         Progress prog = (Progress) super.find(pk);
         prog.setMiles(entity.getMiles());
-        prog.setCaloriesIn(prog.getCaloriesIn() + entity.getCaloriesIn());
-        prog.setCaloriesOut(prog.getCaloriesOut() + entity.getCaloriesOut());
+        double weight = entity.getWeight();
+        if (weight > 0) {
+            prog.setWeight(weight);
+            User user = uf.find(userId);
+            user.setWeight((int)weight);
+        }
+        
+        prog.setCaloriesIn(entity.getCaloriesIn());
+        prog.setCaloriesOut(entity.getCaloriesOut());
         prog.setSteps(entity.getSteps());
          
     }

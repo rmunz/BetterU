@@ -11,7 +11,6 @@ CREATE TABLE Challenges (
 
 -- Table Progress
 CREATE TABLE Progress (
-    id int NOT NULL,
     Day int  NOT NULL,
     CaloriesIn int,
     CaloriesOut int,

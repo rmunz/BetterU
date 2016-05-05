@@ -4,8 +4,11 @@
  */
 package com.betteru.entitypackage;
 
+import com.betteru.entitypackage.service.ProgressFacadeREST;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Collection;
+import javax.ejb.EJB;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -471,5 +474,6 @@ public class User implements Serializable {
     public String toString() {
         return "com.betteru.entitypackage.User[ id=" + id + " ]";
     }
+
     
 }

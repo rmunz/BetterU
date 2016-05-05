@@ -33,9 +33,12 @@ Copyright © 2016 Timothy Street. All rights reserved.
                     <div id="challenges-list-div">
                         <h1>Current Challenges:</h1>
                         <h:form id="current-challenges-list-form">
-                            <h2>Daily</h2>
-                            <p:dataTable value="#{challengesManager.currentDailyChallenges}" var="dc"> 
-                                <p:column headerText="Challenge Type">
+                            
+                            <p:dataTable value="#{challengesManager.currentDailyChallenges}" var="dc" > 
+                                <f:facet name="header">
+                                    Daily
+                                </f:facet>
+                                <p:column headerText="Type">
                                     <h:outputText value="#{dc.challengeType}"/>
                                 </p:column>
                                 <p:column headerText="Description">
@@ -47,9 +50,11 @@ Copyright © 2016 Timothy Street. All rights reserved.
                             </p:dataTable>
                             <br/>
                             <br/>
-                            <h2>Weekly</h2>
-                            <p:dataTable value="#{challengesManager.currentWeeklyChallenge}" var="wc"> 
-                                <p:column headerText="Challenge Type">
+                            <p:dataTable value="#{challengesManager.currentWeeklyChallenge}" var="wc">
+                                <f:facet name="header">
+                                    Weekly
+                                </f:facet>
+                                <p:column headerText="Type">
                                     <h:outputText value="Weekly"/>
                                 </p:column>
                                 <p:column headerText="Description">
@@ -68,9 +73,9 @@ Copyright © 2016 Timothy Street. All rights reserved.
                                 <c:when test="#{!empty challengesManager.completedUserDailyChallenges}">                                  
                                     <p:dataTable value="#{challengesManager.completedUserDailyChallenges}" var="dc"
                                                  paginator="true"
-                                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink} {RowsPerPageDropdown}"
                                                  rowsPerPageTemplate="5,10">
-                                        <p:column headerText="Challenge Type">
+                                        <p:column headerText="Type">
                                             <h:outputText value="#{dc.challengeType}" />
                                         </p:column>
                                         <p:column headerText="Description">
@@ -79,6 +84,9 @@ Copyright © 2016 Timothy Street. All rights reserved.
                                         <p:column headerText="Points Awarded">
                                             <h:outputText value="#{dc.pointsAwarded}" />
                                         </p:column>
+                                        <f:facet name="footer">
+                                            You have completed #{challengesManager.completedUserDailyChallenges.size()} daily challenges so far.
+                                        </f:facet>
                                     </p:dataTable>                                    
                                 </c:when>
                                 <!-- Otherwise display message indicating no challenges have been completed -->
@@ -97,7 +105,7 @@ Copyright © 2016 Timothy Street. All rights reserved.
                                                  paginator="true"
                                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                  rowsPerPageTemplate="5,10">
-                                        <p:column headerText="Challenge Type">
+                                        <p:column headerText="Type">
                                             <h:outputText value="Weekly"/>
                                         </p:column>
                                         <p:column headerText="Description">
@@ -106,6 +114,9 @@ Copyright © 2016 Timothy Street. All rights reserved.
                                         <p:column headerText="Points Awarded">
                                             <h:outputText value="#{wc.pointsAwarded}"/>
                                          </p:column>
+                                        <f:facet name="footer">
+                                            You have completed #{challengesManager.completedUserWeeklyChallenges.size()} weekly challenges so far.
+                                        </f:facet>
                                     </p:dataTable>
                                 </c:when>
                                 <!-- Otherwise display message indicating no challenges have been completed -->
