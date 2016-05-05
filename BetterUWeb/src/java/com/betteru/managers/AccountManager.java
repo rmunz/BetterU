@@ -10,6 +10,12 @@ import com.betteru.sessionbeanpackage.UserFacade;
 import com.betteru.sourcepackage.Progress;
 import com.sendgrid.SendGrid;
 import com.sendgrid.SendGridException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
@@ -17,6 +23,7 @@ import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
@@ -24,6 +31,8 @@ import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Named;
  
 import static javax.ws.rs.client.Entity.entity;
+import org.apache.commons.codec.binary.Base64;
+import org.primefaces.model.UploadedFile;
 
 @Named(value = "accountManager")
 @SessionScoped
@@ -603,4 +612,135 @@ public class AccountManager implements Serializable {
         return "/index.xhtml?faces-redirect=true";
     }
 
+    
+    private UploadedFile file;
+    private String message = "";
+    
+     // Returns the uploaded file
+    public UploadedFile getFile() {
+        return file;
+    }
+
+    // Obtains the uploaded file
+    public void setFile(UploadedFile file) {
+        this.file = file;
+    }
+
+    // Returns the message
+    public String getMessage() {
+        return message;
+    }
+
+    // Obtains the message
+    public void setMessage(String message) {
+        this.message = message;
+    }
+    
+    public String upload() {
+        if (file.getSize() != 0) {
+            copyFile(file);
+            message = "";
+            return "MyAccount?faces-redirect=true";
+        } else {
+            message = "You need to upload a file first!";
+            return "";
+        }
+    }
+    
+    
+    
+    public String cancel() {
+        message = "";
+        return "MyAccount?faces-redirect=true";
+    }
+
+    public FacesMessage copyFile(UploadedFile file) {
+        try {
+            
+            
+            //deletePhoto();
+            
+            InputStream in = file.getInputstream();
+
+            System.out.println("\n\n\n\n\n\n\n\n HELLO TEST");
+            
+            File tempFile = inputStreamToFile(in, Constants.TEMP_FILE);
+            byte[] bytes = loadFile(tempFile);
+            byte[] encoded = Base64.encodeBase64(bytes);
+            System.out.println(encoded);
+            String encodedString = new String(encoded);
+            
+             System.out.println(encodedString);
+            
+            System.out.println("\n\n\n\n\n\n\n\n Upto");
+            int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+            User editUser = userFacade.getUser(user_id);
+            //System.out.println(user_name);
+            //User user = userFacade.findByUsername(user_name);
+            
+            //this.selected.setPhoto(encodedString);
+            //this.photo = encodedString; 
+            
+            try {
+                //getSelected().setPhoto(encodedString);
+                editUser.setPhoto("data:image/png;base64," + encodedString);
+                userFacade.edit(editUser);
+             
+            } catch (EJBException e) {
+                
+                //statusMessage = "Something went wrong while editing your profile!";
+                //return "";
+                return new FacesMessage("Failure!", "Something went wrong while editing your profile!");
+            }
+            return new FacesMessage("Success!", "File Successfully Uploaded!");
+          
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new FacesMessage("Upload failure!",
+            "There was a problem reading the image file. Please try again with a new photo file.");
+    }
+
+    private File inputStreamToFile(InputStream inputStream, String childName)
+            throws IOException {
+        // Read in the series of bytes from the input stream
+        byte[] buffer = new byte[inputStream.available()];
+        inputStream.read(buffer);
+
+        // Write the series of bytes on file.
+        File targetFile = new File(Constants.ROOT_DIRECTORY, childName);
+
+        OutputStream outStream;
+        outStream = new FileOutputStream(targetFile);
+        outStream.write(buffer);
+        outStream.close();
+
+        // Save reference to the current image.
+        return targetFile;
+    }
+    
+    private static byte[] loadFile(File file) throws IOException {
+        InputStream is = new FileInputStream(file);
+
+        long length = file.length();
+        if (length > Integer.MAX_VALUE) {
+            // File is too large
+        }
+        byte[] bytes = new byte[(int)length];
+
+        int offset = 0;
+        int numRead = 0;
+        while (offset < bytes.length
+               && (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) {
+            offset += numRead;
+        }
+
+        if (offset < bytes.length) {
+            throw new IOException("Could not completely read file "+file.getName());
+        }
+
+        is.close();
+        return bytes;
+    }
 }

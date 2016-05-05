@@ -120,7 +120,7 @@
                             </table>
                             <!-- Account photo -->
                             <div id="photo-wrapper">
-                                <h:graphicImage id="profile-pic" value="#{accountManager.photo}" alt="Profile Picture"/><br/>
+                                <h:graphicImage id="profile-pic" value="#{accountManager.selected.photo}" alt="Profile Picture"/><br/>
                                 <input id="edit-photo-button" class="btn" type="button" 
                                        value="Change Photo"/>
                             </div>
@@ -254,16 +254,16 @@
                             computer and then use the 'Upload Photo' button to change 
                             your picture.
                             <p:fileUpload id="browse-button" mode="simple"
-                                          value="#{fileManager.file}"/>
-                            <h:outputText id="upload-message" value="#{fileManager.message}"/>
+                                          value="#{accountManager.file}"/>
+                            <h:outputText id="upload-message" value="#{accountManager.message}"/>
                         </div>
                         <!-- Divider -->
                         <hr/>
                         <!-- Upload / close button -->
                         <h:commandButton id="close-button" class="btn" 
-                                         value="Cancel" action="#{fileManager.cancel()}" />
+                                         value="Cancel" action="#{accountManager.cancel()}" />
                         <h:commandButton id="upload-button" class="btn" 
-                                         value="Upload Photo" action="#{fileManager.upload()}" />
+                                         value="Upload Photo" action="#{accountManager.upload()}" />
                     </h:form>
                 </div>
 

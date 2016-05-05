@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
@@ -32,7 +33,7 @@ import org.primefaces.model.UploadedFile;
  *
  * @author Mhetar
  */
-public class FileManager {
+public class FileManager implements Serializable{
 
     // Instance Variables (Properties)
     private UploadedFile file;
@@ -102,7 +103,7 @@ public class FileManager {
         try {
             
             
-            deletePhoto();
+            //deletePhoto();
             
             InputStream in = file.getInputstream();
 
@@ -117,17 +118,17 @@ public class FileManager {
              System.out.println(encodedString);
             
             System.out.println("\n\n\n\n\n\n\n\n Upto");
-            String user_name = (String) FacesContext.getCurrentInstance()
-                    .getExternalContext().getSessionMap().get("username");
-
-            User user = userFacade.findByUsername(user_name);
+            int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+            User editUser = userFacade.getUser(user_id);
+            //System.out.println(user_name);
+            //User user = userFacade.findByUsername(user_name);
             
             
             
             try {
                 System.out.println("\n\n\n\n\n\n\n\n IN TRY");
-                user.setPhoto(encodedString);
-                userFacade.edit(user);
+                editUser.setPhoto(encodedString);
+                userFacade.edit(editUser);
             } catch (EJBException e) {
                 System.out.println("\n\n\n\n\n\n\n\n IN CATCH");
                 
