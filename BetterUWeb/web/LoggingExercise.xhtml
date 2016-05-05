@@ -56,15 +56,16 @@ Copyright © 2016 Corey McQuay. All rights reserved.
                             <h3><b>Weight: Optional</b> </h3>
                             <p:inputText id="weight" value="#{exerciseManager.weight}" />
                         </h:panelGrid>
+                        <br/>
                         <img id="intensity" style="width: 30px;" src="resources/images/CaloriesBurnedIcon.png" alt="intensity" />
                         <b>Calories Burned:    </b>
                         <h:outputLabel id="caloriesBurned" value="#{exerciseManager.caloriesOut}" />
-                        
+                        <br/>
                        <!--                        <h:inputHidden id="caloriesBurned" value="#{exerciseManager.caloriesOut}" />-->
 
                         <br />
                         
-                        <h:commandButton id="calcCalories-btn"  action="#{exerciseManager.enterDailyExercise}" value="Log" styleClass="buttonText"/>
+                        <h:commandButton id="calcCalories-btn"  action="#{exerciseManager.enterDailyExercise}" value="Log" styleClass="btn"/>
 
                         <br /><br/><br/>
 

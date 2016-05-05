@@ -47,7 +47,7 @@
                         <h:inputHidden id="calMin" value="#{recommendationManager.caloriesMin}" />
                         <h:inputHidden id="calMax" value="#{recommendationManager.caloriesMax}" />
 
-                        <h:commandButton id="refresh"  action="#{recommendationManager.refresh()}" value="Submit" styleClass="buttonText"/>
+                        <h:commandButton id="refresh"  action="#{recommendationManager.refresh()}" value="Submit" styleClass="btn"/>
                     </h:form>
                     <br /><br /><br /><br />
                     <p:dataTable class="rec-table" var="rec" value="#{recommendationManager.yummlyRecommendations}">
@@ -131,7 +131,7 @@
                         <h:inputText class="input-control" id="caloriesin" value="#{recommendationManager.calorieIntake}"/>
                         <br/>
 
-                        <h:commandButton id="daily-submit"  action="#{recommendationManager.enterDailyIntake()}" value="Submit" styleClass="buttonText"/>
+                        <h:commandButton id="daily-submit"  action="#{recommendationManager.enterDailyIntake()}" value="Submit" styleClass="btn"/>
                     </h:form>
                 </div>
             </ui:define>

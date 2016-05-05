@@ -56,6 +56,11 @@ $(document).ready(function () {
     $("#delete-account-btn").on("click", function () {
         $("#delete-dialog").dialog("open");
     });
+    
+    // Open photo dialog
+    $("#edit-photo-button").on("click", function () {
+        $("#photo-dialog").dialog("open");
+    });
 });
 
 function changeProfileFields(enabled) {
