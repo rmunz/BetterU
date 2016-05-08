@@ -152,9 +152,13 @@ public class Progress implements Serializable {
         return "com.betteru.sourcepackage.Progress[ progressPK=" + progressPK + " ]";
     }
     
+    /**
+     * formats a string for the day according to its epoch time integer
+     * @return date string with the format year-month-day
+     */
     public String getDayString() {
         Date date = new Date((long) this.getProgressPK().getLogDate()* 1000);
-        Format format = new SimpleDateFormat("yyy-MM-dd");
+        Format format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(date);
     }
 }

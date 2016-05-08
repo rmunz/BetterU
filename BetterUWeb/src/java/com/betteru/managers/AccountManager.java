@@ -83,6 +83,7 @@ public class AccountManager implements Serializable {
     private static final String YUMMLY_KEY = "57e811ae63c25bd48802742327682e7d";
     private static final String YUMMLY_URL = "http://api.yummly.com/v1/api/recipes?_app_id=" + YUMMLY_ID + "&_app_key=" + YUMMLY_KEY;
 
+    private int level;
     
     /**
      * The instance variable 'userFacade' is annotated with the @EJB annotation.
@@ -357,6 +358,9 @@ public class AccountManager implements Serializable {
         this.advancedStatusMessage = statusMessage;
     }
 
+    /**
+     * @return the user that is currently in use
+     */
     public User getSelected() {
         if (selected == null) {
             selected = userFacade.find(FacesContext.getCurrentInstance().
@@ -376,8 +380,10 @@ public class AccountManager implements Serializable {
                 getSessionMap().get("username") != null;
     }
     
-    private int level;
-    
+    /**
+     * Calculates the level of the user based on their points
+     * @return int of the level of the user
+     */
     public int getLevel(){
         int points = selected.getPoints();
         
@@ -389,17 +395,20 @@ public class AccountManager implements Serializable {
         this.level = level;
     }
 
+    /**
+     * Initializes a new user account
+     * @return "MyAccount" on success, otherwise ""
+     */
     public String createAccount() {
-
         // Check to see if a user already exists with the username given.
         User aUser = userFacade.findByUsername(username);
-
         if (aUser != null) {
             username = "";
             statusMessage = "Username already exists! Please select a different one!";
             return "";
         }
-
+        
+        //Otherwise, make a user with all the default values
         if (statusMessage.isEmpty()) {
             try {
                 User user = new User();
@@ -424,6 +433,8 @@ public class AccountManager implements Serializable {
                 user.setUnits('I');
                 sendEmail(user, "create");
                 userFacade.create(user);    
+                
+                //create progress entries for the past 30 days for the new user
                 Calendar c = Calendar.getInstance();
                 c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
                 for(int i = 0; i < 30; i++) {
@@ -449,9 +460,13 @@ public class AccountManager implements Serializable {
         return "";
     }
 
+    /**
+     * Send email to user to notify them of account creation or deletions
+     * @param user - the user the email is sent to
+     * @param emailType - create if sending account creation confirmation
+     *                  - delete if sending account deletion confirmation
+     */
     public void sendEmail(User user, String emailType) {
-
-
         SendGrid sendgrid = new SendGrid("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");
 
         SendGrid.Email email = new SendGrid.Email();
@@ -485,6 +500,10 @@ public class AccountManager implements Serializable {
 
     }
 
+    /**
+     * Edit user account (name, height, weight, email) in the DB
+     * @return "Profile" on success, otherwise ""
+     */
     public String updateAccount() {
         if (statusMessage.isEmpty()) {
             int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
@@ -495,7 +514,6 @@ public class AccountManager implements Serializable {
                 editUser.setHeight(this.selected.getHeight());
                 editUser.setWeight(this.selected.getWeight());
                 editUser.setEmail(this.selected.getEmail());
-                //editUser.setPassword(this.selected.getPassword());
                 userFacade.edit(editUser);
             } catch (EJBException e) {
                 username = "";
@@ -507,6 +525,10 @@ public class AccountManager implements Serializable {
         return "";
     }
     
+    /**
+     * Edit user profile (name, age, height, weight, gender) in the DB
+     * @return "MyAccount?faces-redirect=true" on success, otherwise ""
+     */
     public String updateProfile() {
         if (profileStatusMessage.isEmpty()) {
             int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
@@ -529,6 +551,10 @@ public class AccountManager implements Serializable {
         return "";
     }
     
+    /**
+     * Update advanced settings (email, goal weight, activity level, activity goal, password) in the DB
+     * @return "MyAccount?faces-redirect=true" on success, otherwise ""
+     */
     public String updateAdvanced() {
         if (advancedStatusMessage.isEmpty()) {
             int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
@@ -549,6 +575,10 @@ public class AccountManager implements Serializable {
         return "";
     }
     
+    /**
+     * Removes user from the DB
+     * @return "/index.xhtml?faces-redirect=true" on success, otherwise ""
+     */
     public String deleteAccount() {
         if (statusMessage.isEmpty()) {
             int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
@@ -567,6 +597,10 @@ public class AccountManager implements Serializable {
         return "/index.xhtml?faces-redirect=true";
     }
 
+    /**
+     * Password validation
+     * @param event 
+     */
     public void validateInformation(ComponentSystemEvent event) {
         FacesContext fc = FacesContext.getCurrentInstance();
 
@@ -610,6 +644,11 @@ public class AccountManager implements Serializable {
                 getSessionMap().put("user_id", user.getId());
     }
 
+    /**
+     * Verify that the password entered matches the user
+     * @param components
+     * @return true on match
+     */
     private boolean correctPasswordEntered(UIComponent components) {
         UIInput uiInputVerifyPassword = (UIInput) components.findComponent("confirm-password");
         String verifyPassword = uiInputVerifyPassword.getLocalValue() == null ? ""
@@ -625,6 +664,10 @@ public class AccountManager implements Serializable {
         }
     }
 
+    /**
+     * Set the current user to default values to log out
+     * @return "/index.xhtml?faces-redirect=true"
+     */
     public String logout() {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().clear();
         username = firstName = lastName = password = email = statusMessage = "";
@@ -672,6 +715,11 @@ public class AccountManager implements Serializable {
         }
     }
     
+    /**
+     * gets the current meal plan for the user
+     * @return A list of recipe entries according the the user's plan
+     * @throws IOException 
+     */
     public List<RecipeEntry> getMealsEaten() throws IOException{
        String[] dinnerV =  selected.getDinner().split("\\s*,\\s*");
        String[] lunchV =  selected.getLunch().split("\\s*,\\s*");

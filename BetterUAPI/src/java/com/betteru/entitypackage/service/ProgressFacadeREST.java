@@ -60,6 +60,7 @@ public class ProgressFacadeREST extends AbstractFacade<Progress> {
         Progress prog = (Progress) super.find(pk);
         prog.setMiles(entity.getMiles());
         double weight = entity.getWeight();
+        //update user profile weight in accordance with new progress entry
         if (weight > 0) {
             prog.setWeight(weight);
             User user = uf.find(userId);
@@ -98,13 +99,6 @@ public class ProgressFacadeREST extends AbstractFacade<Progress> {
         return super.findAll();
     }
 
-   /* @GET
-    @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_JSON})
-    public List<Progress> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
-        return super.findRange(new int[]{from, to});
-    }*/
-
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
@@ -112,6 +106,12 @@ public class ProgressFacadeREST extends AbstractFacade<Progress> {
         return String.valueOf(super.count());
     }
     
+    /**
+     * returns a week of progress entries as JSON
+     * @param userId - user we want
+     * @param logDate - date of the last day of the week we want
+     * @return JSON of the last week of progress
+     */
     @GET
     @Path("{UserId}/week/{LogDate}")
     @Produces({MediaType.APPLICATION_JSON})
@@ -122,6 +122,12 @@ public class ProgressFacadeREST extends AbstractFacade<Progress> {
         return query.getResultList();
     }
     
+    /**
+     * returns a month of progress entries as JSON
+     * @param userId - user we want
+     * @param logDate - date of the last day of the month we want
+     * @return JSON of the last month of progress
+     */
     @GET
     @Path("{UserId}/month/{LogDate}")
     @Produces({MediaType.APPLICATION_JSON})
