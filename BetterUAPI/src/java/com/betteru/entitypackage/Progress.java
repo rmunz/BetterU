@@ -61,10 +61,7 @@ public class Progress implements Serializable {
     private Integer steps;
     @Column(name = "Weight")
     private Double weight;
-    //@JoinColumn(name = "user_id", referencedColumnName = "UserId")
-    //@ManyToOne
-    //private User user;
-    
+
     public Progress() {
     }
 
@@ -76,16 +73,6 @@ public class Progress implements Serializable {
         this.userId = userId;
         this.logDate = logDate;
     }
-
-    /*
-    public User getUser() {
-            return user;
-    }
-    
-    public void setUser(User user) {
-            this.user = user;
-    }
-    */
     
     public Integer getUserId() {
         return userId;
