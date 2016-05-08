@@ -74,7 +74,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") Integer id, User entity) {
-        
+        //manually update user fields
         User user = super.find(id);
         user.setActivityGoal(entity.getActivityGoal());
         user.setActivityLevel(entity.getActivityLevel());
@@ -105,6 +105,8 @@ public class UserFacadeREST extends AbstractFacade<User> {
         user.setUsername(entity.getUsername());
         user.setWCSkipped(entity.getWCSkipped());
         user.setWeeklyChallengeIndex(entity.getWeeklyChallengeIndex());
+        
+        //update weight entry for that day in the progress db
         int weight = entity.getWeight();
         if (weight > 0) {
             user.setWeight(weight);

@@ -474,7 +474,7 @@ public class User implements Serializable {
         return "com.betteru.sourcepackage.User[ id=" + id + " ]";
     }
     
-        /**
+    /**
      * Sets the BMR to the appropriate value according to gender, height, height, and age
      */
     public void calculateBMR() {
@@ -490,6 +490,11 @@ public class User implements Serializable {
 
     }
     
+    /**
+     * calculates the target calories for a user according to their 
+     * current weight, activity goal and goal weight
+     * @return integer of target calories
+     */
     public Integer calcTargetCals() {
         int baseline = 0;
         switch (this.activityLevel) {

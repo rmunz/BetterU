@@ -65,8 +65,8 @@ public class RecommendationManager implements Serializable {
     private int caloriesMin = 50;
     private int caloriesMax = 1000;
     private int calorieIntake;
-    private int caloriePercentage = 60; 
-    private String checkOver = "orange";
+    private int caloriePercentage; 
+    private String checkOver;
     private String[] selectedAllergy;
     private String statusMessage;
 
@@ -356,7 +356,8 @@ public class RecommendationManager implements Serializable {
     }
     
     public int getGoalPercentage(int target) {
-        caloriePercentage = (getToday().getCaloriesIn() - getToday().getCaloriesOut())/ target; 
+        caloriePercentage = 1000 / target; 
+        
         return caloriePercentage;
     }
 
@@ -365,6 +366,12 @@ public class RecommendationManager implements Serializable {
     }
 
     public String getCheckOver() {
+        if(caloriePercentage > 100) {
+            checkOver = "orange";
+        }
+        else {
+            checkOver="blue";
+        }
         return checkOver;
     }
     
@@ -441,5 +448,7 @@ public class RecommendationManager implements Serializable {
     public void setWorkoutRecommendations(List<WorkoutEntry> workoutRecommendations) {
         this.workoutRecommendations = workoutRecommendations;
     }
+    
+    
 
 }

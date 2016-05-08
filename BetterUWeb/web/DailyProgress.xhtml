@@ -30,12 +30,11 @@ Copyright © 2016 Osman Balci. All rights reserved.
                 <div id="page-title">My Overview Today</div>
                 <div align="center">
                     <div>
-                        <h2>Your Daily Totals</h2>
                         <h:panelGrid columns="3" cellpadding="1" >
                             
                             <column>
-                                <div id="progCir" class="c100 p#{recommendationManager.getGoalPercentage(accountManager.selected.targetCalories)} big #{recommendationManager.checkOver}">
-                                    <span> #{recommendationManager.getGoalPercentage(accountManager.selected.targetCalories)}%</span>
+                                <div id="progCir" class="c100 p#{exerciseManager.caloriePercentage} big #{recommendationManager.checkOver}">
+                                    <span>#{exerciseManager.caloriePercentage}%</span>
                                     <div class="slice">
                                       <div class="bar"></div>
                                       <div class="fill"></div>
@@ -44,6 +43,13 @@ Copyright © 2016 Osman Balci. All rights reserved.
                             </column>
                             
                             <column>
+                                <div id="progCir" class="c100 p#{accountManager.selected.points % 100} big green">
+                                    <span>Level #{accountManager.level}</span>
+                                    <div class="slice">
+                                      <div class="bar"></div>
+                                      <div class="fill"></div>
+                                    </div>
+                                  </div>
                          
                             </column>
                             
@@ -60,7 +66,7 @@ Copyright © 2016 Osman Balci. All rights reserved.
                             </tr>
                             <tr>
                                 <td style="padding-right: 10px; text-align: right;">Calories Burned:</td>
-                                <td id="cOut" class="odometer" style="font-size: 30px;">#{exerciseManager.getToday().caloriesOut}</td>
+                                <td id="cOut" class="odometer" style="font-size: 30px;">0</td>
                             </tr>
                             <tr>
                                 
@@ -79,12 +85,12 @@ Copyright © 2016 Osman Balci. All rights reserved.
                         <script>
                             var calIn  = document.getElementById('cIn');
                             var calOut = document.getElementById('cOut');
-                            var CalRem = document.getElementById('cRem');
-                            var progressCir = document.getElementById('progCir');
+                            var calRem = document.getElementById('cRem');
                             setTimeout(function(){
                                 calIn.innerHTML = #{recommendationManager.getToday().caloriesIn};
                                 calOut.innerHTML = #{exerciseManager.getToday().caloriesOut};
                                 calRem.innerHTML = #{accountManager.selected.targetCalories - recommendationManager.getToday().caloriesIn};
+                                
                             }, 1000);
                         </script>
                     </div>
@@ -101,26 +107,30 @@ Copyright © 2016 Osman Balci. All rights reserved.
                     
                     
                     <br/><br/><br/>
-                    
-                    <div>
-                        <h2>Schedule</h2>
-                        <div>
-                            <h3>Breakfast</h3>
-                            <h:outputText id="breakfastName" value="#{profileViewManager.breakfast}" />
-                        </div>
-                        <div>
-                            <h3>Lunch</h3>
-                            <h:outputText id="lunchName" value="#{profileViewManager.lunch}" />
-                        </div>
-                        <div>
-                            <h3>Dinner</h3>
-                            <h:outputText id="DinnerName" value="#{profileViewManager.dinner}" />
-                        </div>
-                        <div>
-                            <h3>Snack</h3>
-                            <h:outputText id="snackName" value="#{profileViewManager.snack}" />
-                        </div>
-                    </div>
+                    <p:dataTable class="rec-table" var="rec" value="#{accountManager.mealsEaten}">
+
+                        <p:column headerText="Recipie">
+                            <h:outputText value="#{rec.name}" />
+                        </p:column>
+
+                        <p:column headerText="Calories">
+                            <h:outputText value="#{rec.calories}" />
+                        </p:column>
+        
+                        <p:column headerText="Protein">
+                            <h:outputText value="#{rec.protein}" />
+                        </p:column>
+                        
+                        <p:column headerText="Carbs">
+                            <h:outputText value="#{rec.carbs}" />
+                        </p:column>
+                        
+                        <p:column headerText="Fat">
+                            <h:outputText value="#{rec.fat}" />
+                        </p:column>
+                        
+                   
+                    </p:dataTable>
                 </div>
             </ui:define>
         </ui:composition>

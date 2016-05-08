@@ -10,20 +10,36 @@ import com.betteru.sessionbeanpackage.UserFacade;
 import com.betteru.sourcepackage.Progress;
 import com.sendgrid.SendGrid;
 import com.sendgrid.SendGridException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Named;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
  
-import static javax.ws.rs.client.Entity.entity;
+import org.apache.commons.codec.binary.Base64;
+import org.primefaces.model.UploadedFile;
+import org.primefaces.util.ArrayUtils;
 
 @Named(value = "accountManager")
 @SessionScoped
@@ -63,6 +79,12 @@ public class AccountManager implements Serializable {
     private String advancedStatusMessage;
     private User selected;
 
+    private static final String YUMMLY_ID = "f6004e71";
+    private static final String YUMMLY_KEY = "57e811ae63c25bd48802742327682e7d";
+    private static final String YUMMLY_URL = "http://api.yummly.com/v1/api/recipes?_app_id=" + YUMMLY_ID + "&_app_key=" + YUMMLY_KEY;
+
+    private int level;
+    
     /**
      * The instance variable 'userFacade' is annotated with the @EJB annotation.
      * This means that the GlassFish application server, at runtime, will inject
@@ -165,6 +187,9 @@ public class AccountManager implements Serializable {
      * Creates a new instance of AccountManager
      */
     public AccountManager() {
+        statusMessage = "";
+        profileStatusMessage = "";
+        advancedStatusMessage = "";
     }
 
     /**
@@ -333,9 +358,14 @@ public class AccountManager implements Serializable {
         this.advancedStatusMessage = statusMessage;
     }
 
+    /**
+     * @return the user that is currently in use
+     */
     public User getSelected() {
-        selected = userFacade.find(FacesContext.getCurrentInstance().
-                getExternalContext().getSessionMap().get("user_id"));
+        if (selected == null) {
+            selected = userFacade.find(FacesContext.getCurrentInstance().
+                    getExternalContext().getSessionMap().get("user_id"));
+        }
 
         return selected;
     }
@@ -349,18 +379,36 @@ public class AccountManager implements Serializable {
         return FacesContext.getCurrentInstance().getExternalContext().
                 getSessionMap().get("username") != null;
     }
+    
+    /**
+     * Calculates the level of the user based on their points
+     * @return int of the level of the user
+     */
+    public int getLevel(){
+        int points = selected.getPoints();
+        
+        level = (points - (points % 100))/100; 
+        return level; 
+    }
+    
+    public void setLevel(int level) {
+        this.level = level;
+    }
 
+    /**
+     * Initializes a new user account
+     * @return "MyAccount" on success, otherwise ""
+     */
     public String createAccount() {
-
         // Check to see if a user already exists with the username given.
         User aUser = userFacade.findByUsername(username);
-
         if (aUser != null) {
             username = "";
             statusMessage = "Username already exists! Please select a different one!";
             return "";
         }
-
+        
+        //Otherwise, make a user with all the default values
         if (statusMessage.isEmpty()) {
             try {
                 User user = new User();
@@ -385,6 +433,8 @@ public class AccountManager implements Serializable {
                 user.setUnits('I');
                 sendEmail(user, "create");
                 userFacade.create(user);    
+                
+                //create progress entries for the past 30 days for the new user
                 Calendar c = Calendar.getInstance();
                 c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
                 for(int i = 0; i < 30; i++) {
@@ -410,9 +460,13 @@ public class AccountManager implements Serializable {
         return "";
     }
 
+    /**
+     * Send email to user to notify them of account creation or deletions
+     * @param user - the user the email is sent to
+     * @param emailType - create if sending account creation confirmation
+     *                  - delete if sending account deletion confirmation
+     */
     public void sendEmail(User user, String emailType) {
-
-
         SendGrid sendgrid = new SendGrid("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");
 
         SendGrid.Email email = new SendGrid.Email();
@@ -446,6 +500,10 @@ public class AccountManager implements Serializable {
 
     }
 
+    /**
+     * Edit user account (name, height, weight, email) in the DB
+     * @return "Profile" on success, otherwise ""
+     */
     public String updateAccount() {
         if (statusMessage.isEmpty()) {
             int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
@@ -456,7 +514,6 @@ public class AccountManager implements Serializable {
                 editUser.setHeight(this.selected.getHeight());
                 editUser.setWeight(this.selected.getWeight());
                 editUser.setEmail(this.selected.getEmail());
-                editUser.setPassword(this.selected.getPassword());
                 userFacade.edit(editUser);
             } catch (EJBException e) {
                 username = "";
@@ -468,14 +525,60 @@ public class AccountManager implements Serializable {
         return "";
     }
     
+    /**
+     * Edit user profile (name, age, height, weight, gender) in the DB
+     * @return "MyAccount?faces-redirect=true" on success, otherwise ""
+     */
     public String updateProfile() {
+        if (profileStatusMessage.isEmpty()) {
+            int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+            User editUser = userFacade.getUser(user_id);
+            try {
+                editUser.setFirstName(this.selected.getFirstName());
+                editUser.setLastName(this.selected.getLastName());
+                editUser.setAge(this.selected.getAge());
+                editUser.setHeight(this.selected.getHeight());
+                editUser.setWeight(this.selected.getWeight());
+                editUser.setGender(this.selected.getGender());
+                userFacade.edit(editUser);
+            } catch (EJBException e) {
+                String msg = e.getMessage();
+                profileStatusMessage = "Something went wrong while editing your profile.";
+                return "";
+            }
+            return "MyAccount?faces-redirect=true";
+        }
         return "";
     }
     
+    /**
+     * Update advanced settings (email, goal weight, activity level, activity goal, password) in the DB
+     * @return "MyAccount?faces-redirect=true" on success, otherwise ""
+     */
     public String updateAdvanced() {
+        if (advancedStatusMessage.isEmpty()) {
+            int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+            User editUser = userFacade.getUser(user_id);
+            try {
+                editUser.setEmail(this.selected.getEmail());
+                editUser.setGoalWeight(this.selected.getGoalWeight());
+                editUser.setActivityLevel(this.selected.getActivityLevel());
+                editUser.setActivityGoal(this.selected.getActivityGoal());
+                editUser.setPassword(this.selected.getPassword());
+                userFacade.edit(editUser);
+            } catch (EJBException e) {
+                advancedStatusMessage = "Something went wrong while editing your profile.";
+                return "";
+            }
+            return "MyAccount?faces-redirect=true";
+        }
         return "";
     }
     
+    /**
+     * Removes user from the DB
+     * @return "/index.xhtml?faces-redirect=true" on success, otherwise ""
+     */
     public String deleteAccount() {
         if (statusMessage.isEmpty()) {
             int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
@@ -494,6 +597,10 @@ public class AccountManager implements Serializable {
         return "/index.xhtml?faces-redirect=true";
     }
 
+    /**
+     * Password validation
+     * @param event 
+     */
     public void validateInformation(ComponentSystemEvent event) {
         FacesContext fc = FacesContext.getCurrentInstance();
 
@@ -515,7 +622,7 @@ public class AccountManager implements Serializable {
         }
 
         if (!pwd.equals(confirmPassword)) {
-            statusMessage = "Passwords must match!";
+            statusMessage = "";
         } else {
             statusMessage = "";
         }
@@ -537,6 +644,11 @@ public class AccountManager implements Serializable {
                 getSessionMap().put("user_id", user.getId());
     }
 
+    /**
+     * Verify that the password entered matches the user
+     * @param components
+     * @return true on match
+     */
     private boolean correctPasswordEntered(UIComponent components) {
         UIInput uiInputVerifyPassword = (UIInput) components.findComponent("confirm-password");
         String verifyPassword = uiInputVerifyPassword.getLocalValue() == null ? ""
@@ -552,6 +664,10 @@ public class AccountManager implements Serializable {
         }
     }
 
+    /**
+     * Set the current user to default values to log out
+     * @return "/index.xhtml?faces-redirect=true"
+     */
     public String logout() {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().clear();
         username = firstName = lastName = password = email = statusMessage = "";
@@ -564,4 +680,178 @@ public class AccountManager implements Serializable {
         return "/index.xhtml?faces-redirect=true";
     }
 
+    
+    private UploadedFile file;
+    private String message = "";
+    
+     // Returns the uploaded file
+    public UploadedFile getFile() {
+        return file;
+    }
+
+    // Obtains the uploaded file
+    public void setFile(UploadedFile file) {
+        this.file = file;
+    }
+
+    // Returns the message
+    public String getMessage() {
+        return message;
+    }
+
+    // Obtains the message
+    public void setMessage(String message) {
+        this.message = message;
+    }
+    
+    public String upload() {
+        if (file.getSize() != 0) {
+            copyFile(file);
+            message = "";
+            return "MyAccount?faces-redirect=true";
+        } else {
+            message = "You need to upload a file first!";
+            return "";
+        }
+    }
+    
+    /**
+     * gets the current meal plan for the user
+     * @return A list of recipe entries according the the user's plan
+     * @throws IOException 
+     */
+    public List<RecipeEntry> getMealsEaten() throws IOException{
+       String[] dinnerV =  selected.getDinner().split("\\s*,\\s*");
+       String[] lunchV =  selected.getLunch().split("\\s*,\\s*");
+       String[] breakfastV =  selected.getBreakfast().split("\\s*,\\s*");
+       String[] snackV =  selected.getSnack().split("\\s*,\\s*");
+         
+       String[] meals = (String[])ArrayUtils.concat(dinnerV, lunchV, breakfastV, snackV);
+       List<RecipeEntry> recipeResults = new ArrayList();
+       
+       for (int i = 0; i < meals.length; i++) {
+            String recipeId = meals[i];
+            if(recipeId.isEmpty()) {
+                continue; 
+            }
+            RecipeEntry entry = new RecipeEntry(recipeId, ""); 
+            
+            URL urlRecipe = new URL("http://api.yummly.com/v1/api/recipe/" + recipeId + "?_app_id=" + YUMMLY_ID + "&_app_key=" + YUMMLY_KEY);
+            try (InputStream is = urlRecipe.openStream(); JsonReader rdr = Json.createReader(is)) {
+
+                JsonObject obj = rdr.readObject();
+                entry.setName(obj.getString("name"));
+                JsonArray results = obj.getJsonArray("nutritionEstimates");
+                for (JsonObject result : results.getValuesAs(JsonObject.class)) {
+
+                    String tmpName = result.getString("attribute");
+                    if (tmpName.equals("ENERC_KCAL")) {
+                        int calorie = result.getJsonNumber("value").intValue();
+                        entry.setCalories(calorie);
+                    } else if (tmpName.equals("FAT")) {
+                        int fat = result.getJsonNumber("value").intValue();
+                        entry.setFat(fat);
+                    } else if (tmpName.equals("PROCNT")) {
+                        int protein = result.getJsonNumber("value").intValue();
+                        entry.setProtein(protein);
+                    } else if (tmpName.equals("CHOCDF")) {
+                        int carbs = result.getJsonNumber("value").intValue();
+                        entry.setCarbs(carbs);
+                    }
+                }
+                recipeResults.add(entry);
+            }
+        }
+       
+        return recipeResults; 
+    }
+    
+    public String cancel() {
+        message = "";
+        return "MyAccount?faces-redirect=true";
+    }
+
+    public FacesMessage copyFile(UploadedFile file) {
+        try {
+            
+            InputStream in = file.getInputstream();
+         
+            File tempFile = inputStreamToFile(in, Constants.TEMP_FILE);
+            byte[] bytes = loadFile(tempFile);
+            byte[] encoded = Base64.encodeBase64(bytes);
+            //System.out.println(encoded);
+            String encodedString = new String(encoded);
+            
+            System.out.println(encodedString);
+             
+            int user_id = (int) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
+            User editUser = userFacade.getUser(user_id);
+            //System.out.println(user_name);
+            //User user = userFacade.findByUsername(user_name);
+            
+            //this.selected.setPhoto(encodedString);
+            //this.photo = encodedString; 
+            
+            try {
+                //getSelected().setPhoto(encodedString);
+                editUser.setPhoto("data:image/png;base64," + encodedString);
+                userFacade.edit(editUser);
+             
+            } catch (EJBException e) {
+                
+                //statusMessage = "Something went wrong while editing your profile!";
+                //return "";
+                return new FacesMessage("Failure!", "Something went wrong while editing your profile!");
+            }
+            return new FacesMessage("Success!", "File Successfully Uploaded!");
+          
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new FacesMessage("Upload failure!",
+            "There was a problem reading the image file. Please try again with a new photo file.");
+    }
+
+    private File inputStreamToFile(InputStream inputStream, String childName)
+            throws IOException {
+        // Read in the series of bytes from the input stream
+        byte[] buffer = new byte[inputStream.available()];
+        inputStream.read(buffer);
+
+        // Write the series of bytes on file.
+        File targetFile = new File(Constants.ROOT_DIRECTORY, childName);
+
+        OutputStream outStream;
+        outStream = new FileOutputStream(targetFile);
+        outStream.write(buffer);
+        outStream.close();
+
+        // Save reference to the current image.
+        return targetFile;
+    }
+    
+    private static byte[] loadFile(File file) throws IOException {
+        InputStream is = new FileInputStream(file);
+
+        long length = file.length();
+        if (length > Integer.MAX_VALUE) {
+            // File is too large
+        }
+        byte[] bytes = new byte[(int)length];
+
+        int offset = 0;
+        int numRead = 0;
+        while (offset < bytes.length
+               && (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) {
+            offset += numRead;
+        }
+
+        if (offset < bytes.length) {
+            throw new IOException("Could not completely read file "+file.getName());
+        }
+
+        is.close();
+        return bytes;
+    }
 }
