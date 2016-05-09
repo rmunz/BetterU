@@ -77,6 +77,10 @@ INSERT INTO `DailyChallenges` VALUES ('Bike-Crunches-1','Do 3 sets of 15 bike-cr
 /*!40000 ALTER TABLE `DailyChallenges` ENABLE KEYS */;
 UNLOCK TABLES;
 
+--
+-- Table structure for table `WeeklyChallenges`
+--
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `WeeklyChallenges` (
@@ -256,9 +260,14 @@ INSERT INTO `UsersProgress` VALUES (1,1),(14,5),(14,6);
 /*!40000 ALTER TABLE `UsersProgress` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Table structure for table `WeeklyChallenges`
---
+
+
+CREATE EVENT progressEntryCreation
+    ON SCHEDULE
+      EVERY 1 DAY
+      STARTS '2016-05-09 00:00:00' ON COMPLETION PRESERVE ENABLE 
+    DO
+      INSERT INTO BetterU.Progress(UserId, LogDate, CaloriesIn, CaloriesOut, Weight, Miles, Steps) SELECT DISTINCT id, UNIX_TIMESTAMP(CURDATE()), '0', '0', Weight, '0', '0' FROM User WHERE NOT EXISTS (Select 1 FROM Progress WHERE logDate=UNIX_TIMESTAMP(CURDATE()) AND UserId=id);
 
 
 

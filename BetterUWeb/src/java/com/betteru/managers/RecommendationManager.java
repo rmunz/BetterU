@@ -27,7 +27,8 @@ import javax.json.JsonReader;
 @ManagedBean(name = "recommendationManager")
 @SessionScoped
 /**
- *
+ * This class manages the recommendations and food queries the user
+ * asks for. 
  * @author ojmhetar
  */
 public class RecommendationManager implements Serializable {
@@ -248,6 +249,12 @@ public class RecommendationManager implements Serializable {
 
     }
 
+    /**
+     * Gets the midnight value of the current day and updates the appropriate
+     * values for the progress entry. (caloriesIn)
+     * 
+     * @return the appropriate page to navigate to 
+     */
     public String enterDailyIntake() {
 
         //Get user Id  
@@ -301,6 +308,12 @@ public class RecommendationManager implements Serializable {
         return "DailyProgress";
     }
 
+    /**
+     * If a progress entry does not exist at a given date, create one
+     * 
+     * @param user_id
+     * @param caloriesIn 
+     */
     public void createProgressEntry(int user_id, int caloriesIn) {
 
         Calendar c = Calendar.getInstance();
@@ -317,6 +330,11 @@ public class RecommendationManager implements Serializable {
 
     }
 
+    /**
+     * Uses Java's calendar library to get the midnight of the current
+     * day and retrieve that entry from the progress table
+     * @return 
+     */
     public Progress getToday() {
         Calendar c = Calendar.getInstance();
         c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
@@ -335,22 +353,37 @@ public class RecommendationManager implements Serializable {
         return entry;
     }
 
+    /**
+     * @return minimum calories on slider
+     */
     public int getCaloriesMin() {
         return caloriesMin;
     }
 
+    /**
+     * @param caloriesMin, set the minimum calories
+     */
     public void setCaloriesMin(int caloriesMin) {
         this.caloriesMin = caloriesMin;
     }
 
+    /**
+     * @return maximum calories on slider
+     */
     public int getCaloriesMax() {
         return caloriesMax;
     }
 
+     /**
+     * @param caloriesMax, set the maximum calories
+     */
     public void setCaloriesMax(int caloriesMax) {
         this.caloriesMax = caloriesMax;
     }
     
+    /**
+     * @return calorie percentage to display on the front 
+     */
     public int getCaloriePercentage() {
         return caloriePercentage;
     }
