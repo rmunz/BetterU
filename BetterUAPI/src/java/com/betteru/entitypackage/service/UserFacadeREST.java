@@ -50,13 +50,13 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public void create(User entity) {
         super.create(entity);
         
-        SendGrid sendgrid = new SendGrid("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");
+        SendGrid sendgrid = new SendGrid("API-KEY-HERE");
         
         SendGrid.Email email = new SendGrid.Email();
         //Sets up the email format to be sent.
         email.addTo(entity.getEmail());
         email.setFrom("BetterU");
-        email.setSubject("TEMPORARY EMAIL: Welcome to BetterU.");
+        email.setSubject("Welcome to BetterU.");
         email.setHtml("Thanks for signing up!");
 
         //Send the email to the user using SendGrid, 

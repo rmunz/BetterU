@@ -103,14 +103,24 @@ public class AccountManager implements Serializable {
     @EJB
     private ProgressFacade pf;
 
+    /**
+     * @return age of the user
+     */
     public Integer getAge() {
         return age;
     }
 
+    /**
+     * Set the age
+     * @param age 
+     */
     public void setAge(Integer age) {
         this.age = age;
     }
 
+    /**
+     * @return the height of the user
+     */
     public Integer getHeight() {
         return height;
     }
@@ -431,6 +441,10 @@ public class AccountManager implements Serializable {
                 user.setTargetCalories(user.calcTargetCals());
                 user.setPoints(0);
                 user.setUnits('I');
+                user.setBreakfast(breakfast);
+                user.setDinner(dinner);
+                user.setSnack(snack);
+                user.setLunch(lunch);
                 sendEmail(user, "create");
                 userFacade.create(user);    
                 
