@@ -5,7 +5,8 @@
 package com.betteru.managers;
 
 /**
- *
+ * This class is a template for the recipe entry.
+ * 
  * @author ojmhetar
  */
 public class RecipeEntry {
@@ -18,11 +19,21 @@ public class RecipeEntry {
     private Integer protein; 
     private Integer carbs;
     
+    /**
+     * takes two params name and calories to create an object
+     * @param name
+     * @param calories 
+     */
     public RecipeEntry(String name, Integer calories) {
         this.name = name; 
         this.calories = calories; 
     }
     
+    /**
+     * 
+     * @param recipeId
+     * @param name 
+     */
     public RecipeEntry(String recipeId, String name) {
         this.name = name;
         this.recipeId = recipeId;   

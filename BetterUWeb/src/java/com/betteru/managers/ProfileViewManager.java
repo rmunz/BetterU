@@ -23,7 +23,8 @@ import org.primefaces.model.chart.LineChartSeries;
 @Named(value = "profileViewManager")
 @SessionScoped
 /**
- *
+ * This class contains the information to display the progress graphs.
+ * 
  * @author Ben
  */
 public class ProfileViewManager implements Serializable {
@@ -126,12 +127,18 @@ public class ProfileViewManager implements Serializable {
         refreshCharts();
     }
     
+    /**
+     * Change the reference time to today
+     */
     public void today() {
         referenceTime = System.currentTimeMillis();
         
         refreshCharts();
     }
     
+    /**
+     * Previous button to change the reference time
+     */
     public void prev(){
         //decrement time
         if (weekly) {
@@ -154,6 +161,11 @@ public class ProfileViewManager implements Serializable {
         refreshCharts();
     }
     
+    /**
+     * Get the progress of the logged in use
+     * 
+     * @return 
+     */
     public List<Progress> getLoggedInUsersProgress() {
         List<Progress> progressList;
         
@@ -170,6 +182,12 @@ public class ProfileViewManager implements Serializable {
         return progressList;
     }
     
+    /**
+     * Create a progress range to display
+     * 
+     * @param time
+     * @return 
+     */
     private long getEndOfWeek(long time) {
         Calendar c = Calendar.getInstance();
         
@@ -188,6 +206,12 @@ public class ProfileViewManager implements Serializable {
         return c.getTimeInMillis()/1000;
     }
     
+    /**
+     * Create a longer progress range to display the monthly view
+     * 
+     * @param time
+     * @return 
+     */
     private long getEndOfMonth(long time) {
         Calendar c = Calendar.getInstance();
         
@@ -206,6 +230,11 @@ public class ProfileViewManager implements Serializable {
         return c.getTimeInMillis()/1000;
     }
     
+    /**
+     * Builds the graph for the weight progress
+     * 
+     * @return 
+     */
     private LineChartModel buildWeightModel() {
         int padding = 10;
         weightModel = new LineChartModel();
@@ -249,6 +278,11 @@ public class ProfileViewManager implements Serializable {
         return weightModel;
     }
     
+    /**
+     * Builds the graph for the Step Model
+     * 
+     * @return 
+     */
     private LineChartModel buildStepModel() {
         int padding = 1000;
         stepModel = new LineChartModel();
@@ -292,6 +326,10 @@ public class ProfileViewManager implements Serializable {
         return stepModel;
     }
     
+    /**
+     * Builds the graph for the mile Model.
+     * @return 
+     */
     private LineChartModel buildMileModel() {
         int padding = 1;
         mileModel = new LineChartModel();
@@ -335,6 +373,11 @@ public class ProfileViewManager implements Serializable {
         return mileModel;
     }
     
+    /**
+     * Builds the graph for the calorie model 
+     * 
+     * @return 
+     */
     private LineChartModel buildCalorieModel() {
         int padding = 500;
         calorieModel = new LineChartModel();

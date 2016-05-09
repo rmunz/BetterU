@@ -35,6 +35,7 @@ Copyright © 2016 Corey McQuay. All rights reserved.
 
                     <br />
 
+<!--                    Begin form for calculating calories burned via intensity and time-->
                     <h:form id="calcCal">
 
                         <h:panelGrid columns="1" style="margin-bottom: 10px">
@@ -49,6 +50,7 @@ Copyright © 2016 Corey McQuay. All rights reserved.
                             <h3><b>Time(In Minutes, 3 Hours Maximum)</b> </h3>
                             <p:inputText id="durationSlider" value="#{exerciseManager.duration}" />
                             <p:slider for="durationSlider" step="1" minValue="0" maxValue="180">
+                                 <!--   use ajax call for this interaction-->
                                 <p:ajax event="slideEnd" listener="#{exerciseManager.onSlideEnd}"  update="caloriesBurned" process="@form" />
                             </p:slider>
 

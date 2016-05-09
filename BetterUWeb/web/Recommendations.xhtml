@@ -25,11 +25,14 @@
             <ui:define name="editableContent">
                 <div id="page-title">Let's Eat!</div>
                 <div align="center">     
+<!--                    Display Target Calories-->
                     <h:outputLabel value ="#{recommmendationManager.statusMessage}" />
                     <h:outputLabel value="Your target for today is #{accountManager.selected.targetCalories} calories."/>
                     <br />
                     <h:outputLabel value="Look's like you've got #{accountManager.selected.targetCalories - recommendationManager.getToday().caloriesIn} calories to go!"  />
                     <br /><br /><br />
+                    
+<!--                    Begin Recommendation form from yummly -->
                     <h:form class="form-recommendation">
                         
                         What are your allergies?
@@ -50,6 +53,7 @@
                         <h:commandButton id="refresh"  action="#{recommendationManager.refresh()}" value="Submit" styleClass="btn"/>
                     </h:form>
                     <br /><br /><br /><br />
+<!--                    display results in a data table-->
                     <p:dataTable class="rec-table" var="rec" value="#{recommendationManager.yummlyRecommendations}">
 
                         <p:column headerText="Recipie">
@@ -92,7 +96,7 @@
                     <br /><br />
                     
                     
-                    <!--How to update the data table when button is hit? -->
+                    <!--Display the results for the table -->
                     <p:dataTable class="rec-table" var="rec" value="#{recommendationManager.usdaRecommendations}">
 
                         <p:column headerText="Food Group">

@@ -31,7 +31,7 @@ Copyright © 2016 Osman Balci. All rights reserved.
                 <div align="center">
                     <div>
                         <h:panelGrid columns="3" cellpadding="1" >
-                            
+<!--                            Use the libraries to show the circular progress bars-->
                             <column>
                                 <div id="progCir" class="c100 p#{exerciseManager.caloriePercentage} big #{recommendationManager.checkOver}">
                                     <span>#{exerciseManager.caloriePercentage}%</span>
@@ -57,8 +57,9 @@ Copyright © 2016 Osman Balci. All rights reserved.
           
                             </column>
                             
-                            
+
                         </h:panelGrid>
+<!--                        Use a library, odometer, to scroll through the numbers-->
                         <table>
                             <tr>
                                 <td style="padding-right: 10px; text-align: right;">Calories Eaten:</td>
@@ -82,6 +83,7 @@ Copyright © 2016 Osman Balci. All rights reserved.
 
                         </table>
                         
+<!--                        script for javascript interaction-->
                         <script>
                             var calIn  = document.getElementById('cIn');
                             var calOut = document.getElementById('cOut');

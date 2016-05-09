@@ -185,10 +185,11 @@ public class RecommendationManager implements Serializable {
      * @throws IOException ?
      */
     public List<RecipeEntry> getYummlyRecommendations() throws IOException {
+        
+        //Build the string to create the query
         String min = "&nutrition.ENERC_KCAL.min=" + caloriesMin;
         String max = "&nutrition.ENERC_KCAL.max=" + caloriesMax;
 
-        System.out.println("\n\n\n\n\n\n\n\nHERE\n");
         System.out.println(caloriesMin);
         System.out.println(caloriesMax);
         String strURL = YUMMLY_URL + min + max + "&maxResult=5";
@@ -206,6 +207,7 @@ public class RecommendationManager implements Serializable {
 
         List<RecipeEntry> recipeResults = new ArrayList();
 
+        //Open an input stream to read the results of the json from the query
         try (InputStream is = url.openStream(); JsonReader rdr = Json.createReader(is)) {
 
             JsonObject obj = rdr.readObject();
@@ -217,6 +219,7 @@ public class RecommendationManager implements Serializable {
             }
         }
 
+        //Search each recipe id to get more information 
         for (int i = 0; i < recipeResults.size(); i++) {
             RecipeEntry entry = recipeResults.get(i);
             String recipeId = entry.getRecipeId();
@@ -398,6 +401,10 @@ public class RecommendationManager implements Serializable {
         this.caloriePercentage = caloriePercentage;
     }
 
+    /** 
+     * If the calorie percentage is over 100%, return an orange circle
+     * @return 
+     */
     public String getCheckOver() {
         if(caloriePercentage > 100) {
             checkOver = "orange";

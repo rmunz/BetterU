@@ -25,7 +25,9 @@ import org.primefaces.event.SlideEndEvent;
 @ManagedBean(name = "exerciseManager")
 @SessionScoped
 /**
- *
+ * This class manages the exercise that the exercise wishes to enter for 
+ * that day
+ * 
  * @author ojmhetar
  */
 public class ExerciseManager implements Serializable{
@@ -47,6 +49,10 @@ public class ExerciseManager implements Serializable{
         
     }
     
+    /**
+     * Take users input of calories burned to input into progress entry
+     * @return 
+     */
     public String enterDailyExercise(){
           
         //Get user Id
@@ -103,6 +109,13 @@ public class ExerciseManager implements Serializable{
         return "DailyProgress";
     }
     
+    /**
+     * Creates a new progress entry if one does not already exist 
+     * 
+     * @param user_id
+     * @param caloriesOut
+     * @param weight 
+     */
     public void createProgressEntry(int user_id, int caloriesOut, double weight) {
         
         Calendar c = Calendar.getInstance();
@@ -129,6 +142,12 @@ public class ExerciseManager implements Serializable{
         
     }
     
+    /**
+     * Uses the Calendar library to generate an epoch time to retriever
+     * the progress entry for the current day
+     * 
+     * @return 
+     */
     public Progress getToday(){
         Calendar c = Calendar.getInstance();
         c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE), 0, 0, 0);
@@ -187,7 +206,11 @@ public class ExerciseManager implements Serializable{
         this.weight = weight; 
     }
     
-     public void onSlideEnd(SlideEndEvent event) {
+    /**
+     * Ajax call for when the slider is moved
+     * @param event 
+     */
+    public void onSlideEnd(SlideEndEvent event) {
          
           //Get user Id
         Integer user = (Integer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user_id");
@@ -203,6 +226,10 @@ public class ExerciseManager implements Serializable{
     private int caloriePercentage; 
      
     
+    /**
+     * Creates a calorie percentage of the daily requirement 
+     * @return 
+     */
     public int getCaloriePercentage() {
         User userObj = userFacade.find(FacesContext.getCurrentInstance().
                     getExternalContext().getSessionMap().get("user_id"));
