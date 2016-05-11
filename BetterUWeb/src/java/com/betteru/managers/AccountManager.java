@@ -481,7 +481,7 @@ public class AccountManager implements Serializable {
      *                  - delete if sending account deletion confirmation
      */
     public void sendEmail(User user, String emailType) {
-        SendGrid sendgrid = new SendGrid("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");
+        SendGrid sendgrid = new SendGrid("API-KEY-HERE");
 
         SendGrid.Email email = new SendGrid.Email();
         //Sets up the email format to be sent.
